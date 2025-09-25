@@ -1,4 +1,4 @@
 packages: 
-  - web-app/* 
-  - web-api/*
-  - db/*
+  - 'web-app'
+  - 'web-api'
+  - 'db'

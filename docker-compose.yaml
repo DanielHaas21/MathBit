@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - 5433:5433 #5432 is already occupied by a different container on my system
+    volumes:
+      - ~/MathBit/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=S3cret
+      - POSTGRES_USER=mtb_user
+      - POSTGRES_DB=mtb_db

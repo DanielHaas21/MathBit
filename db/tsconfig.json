@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "display": "DB Mathbit Library",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

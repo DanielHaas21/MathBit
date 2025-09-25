@@ -1,13 +1,36 @@
 {
-  "name": "MathBit",
+  "name": "mathbit-monorepo",
+  "private":true,
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "pnpm -r run build",
+    "dev": "pnpm -r run dev",
+    "lint": "pnpm -r run lint",
+    "dev:web-app":"pnpm --filter web-app dev",    
+    "dev:web-api":"pnpm --filter web-api dev",
+    "dev:db":"pnpm --filter db dev",
+    "format": "prettier --write .",
+    "clear": "npx rimraf .\\node_modules .\\web-app\\node_modules .\\web-api\\node_modules .\\db\\node_modules"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.4.1"
+  "packageManager": "pnpm@10.4.1",
+ "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "@next/eslint-plugin-next": "^15.0.0",
+    "eslint": "^9.34.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-unused-imports": "^4.1.0",
+    "prettier": "^3.6.2",
+    "ts-node": "^10.9.2",
+    "typescript-eslint": "^8.42.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "globals": "^16.3.0"
+  }
 }
+

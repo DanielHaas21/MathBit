@@ -1,0 +1,6 @@
+# Ignore all generated files:
+**/generated/**/*
+**/public/**/*
+**/dist/**/*
+../.next/**/*
+pnpm-lock.yaml
