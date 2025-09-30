@@ -8,6 +8,7 @@
     "lint": "pnpm -r run lint",
     "dev:web-app": "pnpm --filter web-app dev",
     "dev:web-api": "pnpm --filter web-api dev",
+    "generate": "pnpm --filter web-api-client generate",
     "dev:db": "pnpm --filter db dev",
     "format": "prettier --write .",
     "clear": "npx rimraf .\\node_modules .\\web-app\\node_modules .\\web-api\\node_modules .\\db\\node_modules"

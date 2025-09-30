@@ -1,4 +1,5 @@
-packages: 
+packages:
   - 'web-app'
   - 'web-api'
+  - 'web-api-client'
   - 'db'
