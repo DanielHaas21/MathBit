@@ -9,8 +9,12 @@ export class UserRepository {
     this.db = getDb();
   }
 
-  async createUser(user: User): Promise<number | undefined> {
-    const result = await this.db.insertInto('user').values(user).returning('id').execute();
+  async createUser(user: Omit<User, 'id' | 'created'>): Promise<number | undefined> {
+    const result = await this.db
+      .insertInto('user')
+      .values(user as User)
+      .returning('id')
+      .execute();
     return result[0]?.id;
   }
 

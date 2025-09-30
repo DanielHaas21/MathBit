@@ -1,10 +1,12 @@
 version: '3.3'
 
+#Externally im exposing 5433 but internally it needs to mapped to 5432 since
+#likes to map this internally
 services:
   postgres:
     image: postgres:14-alpine
     ports:
-      - 5433:5433 #5432 is already occupied by a different container on my system
+      - 5433:5432
     volumes:
       - ~/MathBit/postgres:/var/lib/postgresql/data
     environment:

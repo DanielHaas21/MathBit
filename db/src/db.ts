@@ -14,7 +14,7 @@ export interface Database {
 
 let pool: Pool | null = null;
 
-const initBmsDb = (config?: PoolConfig) => {
+const initDb = (config?: PoolConfig) => {
   pool = new Pool({ ...config });
 };
 
@@ -48,6 +48,7 @@ async function migrateToLatest() {
     }),
   });
 
+  console.log(db);
   console.log('Folder with migrations:');
   console.log(path.join(__dirname, './migrations'));
   console.log('Available migrations:');
@@ -70,4 +71,4 @@ async function migrateToLatest() {
   }
 }
 
-export { initBmsDb, getDb, migrateToLatest };
+export { initDb, getDb, migrateToLatest };

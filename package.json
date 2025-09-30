@@ -1,19 +1,19 @@
 {
   "name": "mathbit-monorepo",
-  "private":true,
+  "private": true,
   "version": "1.0.0",
   "scripts": {
     "build": "pnpm -r run build",
     "dev": "pnpm -r run dev",
     "lint": "pnpm -r run lint",
-    "dev:web-app":"pnpm --filter web-app dev",    
-    "dev:web-api":"pnpm --filter web-api dev",
-    "dev:db":"pnpm --filter db dev",
+    "dev:web-app": "pnpm --filter web-app dev",
+    "dev:web-api": "pnpm --filter web-api dev",
+    "dev:db": "pnpm --filter db dev",
     "format": "prettier --write .",
     "clear": "npx rimraf .\\node_modules .\\web-app\\node_modules .\\web-api\\node_modules .\\db\\node_modules"
   },
   "packageManager": "pnpm@10.4.1",
- "devDependencies": {
+  "devDependencies": {
     "@eslint/js": "^9.34.0",
     "@next/eslint-plugin-next": "^15.0.0",
     "eslint": "^9.34.0",
@@ -30,7 +30,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@types/bcrypt": "^6.0.0",
     "globals": "^16.3.0"
   }
 }
-
