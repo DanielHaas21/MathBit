@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev-colors": "ts-node scripts/watch-colors.ts",
+    "dev-styles": "postcss ./libs/ui/assets/styles/index.css -o ./dist/styles.css --watch",
+    "dev": "pnpm run /^dev-.*/",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "format": "prettier --write 'app/**/*.ts' 'components/**/*.ts' 'libs/**/*.ts' 'modules/**/*.ts'"
+    "format": "prettier --write 'app/**/*.ts' 'libs/**/components/**/*.tsx' 'libs/**/*.ts' 'modules/**/*.ts'"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

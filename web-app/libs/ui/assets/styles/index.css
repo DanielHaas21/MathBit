@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+@import './colors.css';
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Additional utility colors not in design system */
+  --color-neutral-50: #f9fafb;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-300: #d1d5db;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-500: #6b7280;
+  --color-neutral-600: #4b5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1f2937;
+  --color-neutral-900: #111827;
+  --color-neutral-950: #030712;
+}
+
+@base {
+  a {
+    @apply underline text-link-base hover:text-link-hover;
+    text-decoration: none;
+  }
+  /*Default scrollbar*/
+
+  /* Hide scrollbar arrows  */
+  ::-webkit-scrollbar-button {
+    display: none;
+    height: 0;
+    width: 0;
+  }
+
+  /* Scrollbar track */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Scrollbar itself */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* Scrollbar thumb  */
+  ::-webkit-scrollbar-thumb {
+    background-color: #e9eaeb;
+    border-radius: 8px;
+    border: none;
+  }
+
+  /* Firefox support */
+  * {
+    scrollbar-color: #e9eaeb transparent;
+    scrollbar-width: thin;
+  }
+
+  /*Hide scrollbar on Virtuoso table*/
+  .table-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+  .table-scroll-container {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  table {
+    /* table-layout: fixed; */
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .rdp-root {
+    --rdp-accent-background-color: '#9BCBF2';
+  }
+}
