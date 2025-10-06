@@ -1,316 +1,345 @@
 {
-  "openapi": "3.0.0",
-  "components": {
-    "examples": {},
-    "headers": {},
-    "parameters": {},
-    "requestBodies": {},
-    "responses": {},
-    "schemas": {
-      "User": {
-        "description": "Represents a user in the system",
-        "properties": {
-          "id": {
-            "type": "number",
-            "format": "double",
-            "description": "Unique identifier for the user"
-          },
-          "username": {
-            "type": "string",
-            "description": "User's displayed username"
-          },
-          "firstName": {
-            "type": "string",
-            "description": "User's first name"
-          },
-          "lastName": {
-            "type": "string",
-            "description": "User's last name"
-          },
-          "email": {
-            "type": "string",
-            "description": "User's email address"
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time",
-            "description": "User' creation Date"
-          }
-        },
-        "required": ["username", "firstName", "lastName", "email"],
-        "type": "object",
-        "additionalProperties": false
-      },
-      "CreateUser": {
-        "description": "Represents the data required to create a new user",
-        "properties": {
-          "username": {
-            "type": "string",
-            "description": "User's displayed username"
-          },
-          "firstName": {
-            "type": "string",
-            "description": "User's first name"
-          },
-          "lastName": {
-            "type": "string",
-            "description": "User's last name"
-          },
-          "email": {
-            "type": "string",
-            "description": "User's email address"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password"
-          }
-        },
-        "required": ["username", "firstName", "lastName", "email", "password"],
-        "type": "object",
-        "additionalProperties": false
-      },
-      "LoginResponse": {
-        "description": "Represents a login response",
-        "properties": {
-          "token": {
-            "type": "string",
-            "description": "The access token."
-          },
-          "refreshToken": {
-            "type": "string",
-            "description": "The access token."
-          },
-          "errorCode": {
-            "type": "string",
-            "description": "The login error code."
-          }
-        },
-        "type": "object",
-        "additionalProperties": false
-      },
-      "Error": {
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "stack": {
-            "type": "string"
-          }
-        },
-        "required": ["name", "message"],
-        "type": "object",
-        "additionalProperties": false
-      },
-      "LoginRequest": {
-        "description": "Represents a login request using username and password.",
-        "properties": {
-          "username": {
-            "type": "string",
-            "description": "The login username."
-          },
-          "password": {
-            "type": "string",
-            "description": "The login password."
-          }
-        },
-        "required": ["username", "password"],
-        "type": "object",
-        "additionalProperties": false
-      }
-    },
-    "securitySchemes": {
-      "jwt": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
-    }
-  },
-  "info": {
-    "title": "web-api",
-    "version": "1.0.0",
-    "description": "Api description. <a href=\"../swagger.json\">swagger.json</a>",
-    "license": {
-      "name": "ISC"
-    },
-    "contact": {}
-  },
-  "paths": {
-    "/users": {
-      "post": {
-        "operationId": "CreateUser",
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  ],
-                  "nullable": true
-                }
-              }
-            }
-          }
-        },
-        "description": "Creates a new user.\r\nThis endpoint accepts user data and creates a new user in the system.",
-        "tags": ["Users"],
-        "security": [],
-        "parameters": [],
-        "requestBody": {
-          "description": "The user data to create",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUser",
-                "description": "The user data to create"
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "operationId": "GetAllUsers",
-        "responses": {
-          "200": {
-            "description": "The created user data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "users": {
-                      "items": {
-                        "$ref": "#/components/schemas/User"
-                      },
-                      "type": "array"
-                    }
-                  },
-                  "required": ["users"],
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "description": "Creates a new user.\r\nThis endpoint accepts user data and creates a new user in the system.",
-        "tags": ["Users"],
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
-        "parameters": []
-      }
-    },
-    "/users/{id}": {
-      "get": {
-        "operationId": "GetUserById",
-        "responses": {
-          "200": {
-            "description": "The user data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  ],
-                  "nullable": true
-                }
-              }
-            }
-          }
-        },
-        "description": "Retrieves a user by their ID.",
-        "tags": ["Users"],
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
-        "parameters": [
-          {
-            "description": "The ID of the user to retrieve",
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "format": "double",
-              "type": "number"
-            }
-          }
-        ]
-      }
-    },
-    "/auth/login": {
-      "post": {
-        "operationId": "Login",
-        "responses": {
-          "200": {
-            "description": "Login successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LoginResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid username or password",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "tags": ["Auth"],
-        "security": [],
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/logout": {
-      "post": {
-        "operationId": "Logout",
-        "responses": {
-          "200": {
-            "description": "Logout successful"
-          }
-        },
-        "tags": ["Auth"],
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
-        "parameters": []
-      }
-    }
-  },
-  "servers": [
-    {
-      "url": "/"
-    }
-  ]
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"User": {
+				"description": "Represents a user in the system",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": "Unique identifier for the user"
+					},
+					"username": {
+						"type": "string",
+						"description": "User's displayed username"
+					},
+					"firstName": {
+						"type": "string",
+						"description": "User's first name"
+					},
+					"lastName": {
+						"type": "string",
+						"description": "User's last name"
+					},
+					"email": {
+						"type": "string",
+						"description": "User's email address"
+					},
+					"created": {
+						"type": "string",
+						"format": "date-time",
+						"description": "User' creation Date"
+					}
+				},
+				"required": [
+					"username",
+					"firstName",
+					"lastName",
+					"email"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateUser": {
+				"description": "Represents the data required to create a new user",
+				"properties": {
+					"username": {
+						"type": "string",
+						"description": "User's displayed username"
+					},
+					"firstName": {
+						"type": "string",
+						"description": "User's first name"
+					},
+					"lastName": {
+						"type": "string",
+						"description": "User's last name"
+					},
+					"email": {
+						"type": "string",
+						"description": "User's email address"
+					},
+					"password": {
+						"type": "string",
+						"description": "User's password"
+					}
+				},
+				"required": [
+					"username",
+					"firstName",
+					"lastName",
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginResponse": {
+				"description": "Represents a login response",
+				"properties": {
+					"token": {
+						"type": "string",
+						"description": "The access token."
+					},
+					"refreshToken": {
+						"type": "string",
+						"description": "The access token."
+					},
+					"errorCode": {
+						"type": "string",
+						"description": "The login error code."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Error": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stack": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginRequest": {
+				"description": "Represents a login request using username and password.",
+				"properties": {
+					"username": {
+						"type": "string",
+						"description": "The login username."
+					},
+					"password": {
+						"type": "string",
+						"description": "The login password."
+					}
+				},
+				"required": [
+					"username",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"info": {
+		"title": "web-api",
+		"version": "1.0.0",
+		"description": "Api description. <a href=\"../swagger.json\">swagger.json</a>",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"paths": {
+		"/users": {
+			"post": {
+				"operationId": "CreateUser",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/User"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new user.\r\nThis endpoint accepts user data and creates a new user in the system.",
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "The user data to create",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUser",
+								"description": "The user data to create"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllUsers",
+				"responses": {
+					"200": {
+						"description": "The created user data",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"users": {
+											"items": {
+												"$ref": "#/components/schemas/User"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"users"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new user.\r\nThis endpoint accepts user data and creates a new user in the system.",
+				"tags": [
+					"Users"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/users/{id}": {
+			"get": {
+				"operationId": "GetUserById",
+				"responses": {
+					"200": {
+						"description": "The user data",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/User"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a user by their ID.",
+				"tags": [
+					"Users"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "The ID of the user to retrieve",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Login successful",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LoginResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid username or password",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/logout": {
+			"post": {
+				"operationId": "Logout",
+				"responses": {
+					"200": {
+						"description": "Logout successful"
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
 }

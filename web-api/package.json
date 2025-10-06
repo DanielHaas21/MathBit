@@ -5,8 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "generate": "tsoa spec && tsoa routes",
-    "gen": "tsoa spec && tsoa routes",
+    "generate": "ts-node src/generate.ts",
     "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
     "format": "prettier --write 'src/**/*.ts'",
     "lint": "eslint .",
