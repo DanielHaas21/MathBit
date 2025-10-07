@@ -1,54 +1,39 @@
 import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { IconDefinition, library } from '@fortawesome/fontawesome-svg-core';
-
+import { IconName, RotateProp } from '@fortawesome/fontawesome-svg-core';
 import { cn } from '../utils';
-import { IconName } from '../icons/names';
 
-import icons from '../icons/icons.json';
-library.add(icons as IconDefinition[]);
-
-const iconVariants = cva(
-  `
-  `,
-  {
-    variants: {
-      size: {
-        xs: 'text-xs',
-        sm: 'text-sm',
-        md: 'text-md',
-        lg: 'text-lg',
-        xl: 'text-xl',
-        '2xl': 'text-2xl'
-      },
-      rotate: {
-        0: '',
-        90: 'fa-rotate-90',
-        180: 'fa-rotate-180',
-        270: 'fa-rotate-270'
-      }
+const iconVariants = cva('', {
+  variants: {
+    size: {
+      xs: 'text-xs',
+      sm: 'text-sm',
+      md: 'text-base',
+      lg: 'text-lg',
+      xl: 'text-xl',
+      '2xl': 'text-2xl',
     },
-    defaultVariants: {
-      size: 'md'
-    }
-  }
-);
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
 
 type IconVariants = VariantProps<typeof iconVariants>;
 
-export interface IconProps
-  extends Omit<FontAwesomeIconProps, 'rotate' | 'size' | 'icon'>,
-    IconVariants {
+export interface IconProps extends Omit<FontAwesomeIconProps, 'icon' | 'size'>, IconVariants {
   name: IconName;
+  type?: 'fas' | 'far' | 'fab';
+  rotate?: RotateProp | undefined;
   className?: string;
 }
 
-export const Icon = (props: IconProps) => {
-  const { name, className, size, rotate, ...other } = props;
+export const Icon = ({ name, type = 'far', size, rotate, className, ...other }: IconProps) => {
   return (
     <FontAwesomeIcon
-      icon={['far', name]}
-      className={cn(iconVariants({ className, size, rotate }))}
+      icon={[type, name]}
+      rotation={rotate}
+      className={cn(iconVariants({ size }), className)}
       {...other}
     />
   );

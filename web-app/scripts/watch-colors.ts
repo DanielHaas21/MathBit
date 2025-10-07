@@ -1,4 +1,4 @@
-/* This script was copilot generated for my colors setup */
+/* This script was by copilot generated for my colors setup */
 
 /* eslint-disable no-console */
 import fs from 'fs';

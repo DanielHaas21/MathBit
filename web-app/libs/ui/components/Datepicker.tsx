@@ -50,7 +50,7 @@ export const Datepicker = React.forwardRef<HTMLInputElement, DatepickerProps>(
       triggerAnchor = 'left',
       disableAfter,
       disableBefore,
-      placeholder
+      placeholder,
     },
     ref
   ) => {
@@ -231,31 +231,31 @@ export const Datepicker = React.forwardRef<HTMLInputElement, DatepickerProps>(
         label: 'Yesterday',
         range: {
           from: new Date(Date.now() - 24 * 60 * 60 * 1000),
-          to: new Date(Date.now() - 24 * 60 * 60 * 1000)
-        }
+          to: new Date(Date.now() - 24 * 60 * 60 * 1000),
+        },
       },
       {
         label: 'Last 7 Days',
-        range: { from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), to: new Date() }
+        range: { from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), to: new Date() },
       },
       {
         label: 'Last 30 Days',
-        range: { from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), to: new Date() }
+        range: { from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), to: new Date() },
       },
       {
         label: 'This Month',
         range: {
           from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-          to: new Date()
-        }
+          to: new Date(),
+        },
       },
       {
         label: 'Last Month',
         range: {
           from: new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
-          to: new Date(new Date().getFullYear(), new Date().getMonth(), 0)
-        }
-      }
+          to: new Date(new Date().getFullYear(), new Date().getMonth(), 0),
+        },
+      },
     ];
 
     /*
@@ -290,7 +290,7 @@ export const Datepicker = React.forwardRef<HTMLInputElement, DatepickerProps>(
             ? pendingRangeDate.from || pendingRangeDate.to
               ? isDateInRange(date, pendingRangeDate) && date.getDay() === 0
               : isDateInRange(date, rangeDate) && date.getDay() === 0
-            : isDateInRange(date, rangeDate) && date.getDay() === 0
+            : isDateInRange(date, rangeDate) && date.getDay() === 0,
       };
     }, [mode, withConfirmButtons, pendingRangeDate, rangeDate]);
 
@@ -310,7 +310,7 @@ export const Datepicker = React.forwardRef<HTMLInputElement, DatepickerProps>(
         firstInWeek: 'rounded-l-full hover:!rounded-l-full',
         lastInWeek: 'rounded-r-full hover:!rounded-r-full',
         rangeStart: 'rounded-l-full !bg-white-200 hover:!rounded-l-full',
-        rangeEnd: 'rounded-r-full bg-white-200 hover:!rounded-r-full'
+        rangeEnd: 'rounded-r-full bg-white-200 hover:!rounded-r-full',
       },
       classNames: {
         day: 'hover:outline hover:outline-link-base hover:rounded-full',
@@ -322,11 +322,11 @@ export const Datepicker = React.forwardRef<HTMLInputElement, DatepickerProps>(
               ? 'grid grid-cols-3 gap-4'
               : MonthRangeConfig === 4
                 ? 'grid grid-cols-2 gap-6'
-                : 'flex gap-6' // fallback for 1-2
+                : 'flex gap-6', // fallback for 1-2
       },
       numberOfMonths: MonthRangeConfig,
       locale: cs,
-      showOutsideDays: true
+      showOutsideDays: true,
     };
 
     return (
@@ -428,7 +428,7 @@ export const Datepicker = React.forwardRef<HTMLInputElement, DatepickerProps>(
               ' ',
               '-',
               '.',
-              '/'
+              '/',
             ];
             if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
               e.preventDefault();
@@ -502,7 +502,7 @@ export const Datepicker = React.forwardRef<HTMLInputElement, DatepickerProps>(
                 <DayPicker
                   disabled={[
                     ...(disableBefore ? [{ before: disableBefore }] : []),
-                    ...(disableAfter ? [{ after: disableAfter }] : [])
+                    ...(disableAfter ? [{ after: disableAfter }] : []),
                   ]}
                   {...commonDayPickerProps}
                   mode="single"

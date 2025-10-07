@@ -1,0 +1,11 @@
+name: haskell-engine
+version: 0.1.0.0
+dependencies:
+  - base >= 4.7 && < 5
+  - servant
+  - servant-server
+  - warp
+executables:
+  haskell-engine:
+    main: main.hs
+    source-dirs: src

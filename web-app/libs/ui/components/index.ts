@@ -23,7 +23,5 @@ export * from './Modal';
 export * from './Widget';
 export * from './KeyValuePair';
 export * from './Tooltip';
-export * from './SignaturePad';
 export * from './RadioBool';
-export * from './DocumentUpload';
 export * from './Avatar';

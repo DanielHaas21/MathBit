@@ -5,7 +5,7 @@ import path from 'node:path';
 /*
 
 This script executes tsoa route generation; after that it checks if a schema.json file exists on the api client 
-If it does th scripts ends, if not it reads generated/swagger/swagger.json and writes that as a new schema.json 
+If it does the script ends, if not it reads ./generated/swagger/swagger.json and writes that as a new schema.json 
 This schema is needed fro generating the api client routes
 
 */
