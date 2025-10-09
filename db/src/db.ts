@@ -3,12 +3,16 @@ import { Pool, PoolConfig } from 'pg';
 import * as path from 'path';
 import { promises as fs } from 'fs';
 import { User } from './models/User';
+import { MathProblem } from './models/MathProblem';
+import { MathProblemStep } from './models/MathProblemStep';
 
 /**
  * Database schema definition.
  */
 export interface Database {
   user: User;
+  math_problem: MathProblem;
+  math_problem_step: MathProblemStep;
   //   user_login: UserLogin;
 }
 
