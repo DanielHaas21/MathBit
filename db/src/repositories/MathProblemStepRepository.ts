@@ -34,14 +34,14 @@ export class MathProblemStepRepository {
     return result || null;
   }
 
-  async getMathProblemStepsByProblemId(problemId: number): Promise<MathProblemStep[] | null> {
+  async getMathProblemStepsByProblemId(problemId: number): Promise<MathProblemStep[]> {
     const result = await this.db
       .selectFrom('math_problem_step')
       .selectAll()
       .where('problemId', '=', problemId)
       .execute();
 
-    return result || null;
+    return result;
   }
 
   async getMathProblemStepByStepIndex(

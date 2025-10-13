@@ -1,6 +1,7 @@
 import { Kysely } from 'kysely';
 import { Database, getDb } from '../db';
 import { MathProblem } from '../models/MathProblem';
+import { MathProblemQuery } from '../types/MathProblemQuery';
 
 export class MathProblemRepository {
   private db: Kysely<Database>;
@@ -13,14 +14,26 @@ export class MathProblemRepository {
     userId: number,
     problem: Omit<MathProblem, 'id' | 'created' | 'userId'>
   ): Promise<number | undefined> {
+    // Count existing problems to generate default name, with an incermenting value
+    const countResult = await this.db
+      .selectFrom('math_problem')
+      .select(({ fn }) => [fn.count<number>('id').as('count')])
+      .where('userId', '=', userId)
+      .executeTakeFirst();
+
+    const count = countResult?.count ?? 0;
+    const defaultName = `Problem #${count + 1}`;
+
     const result = await this.db
       .insertInto('math_problem')
       .values({
         ...(problem as MathProblem),
-        userId: userId, // User without an id cannot exist
+        userId: userId,
+        name: problem.name ?? defaultName,
       })
       .returning('id')
       .execute();
+
     return result[0]?.id;
   }
 
@@ -34,25 +47,14 @@ export class MathProblemRepository {
     return result || null;
   }
 
-  async getMathProblemsByUserId(userId: number): Promise<MathProblem[] | null> {
-    const result = await this.db
-      .selectFrom('math_problem')
-      .selectAll()
-      .where('userId', '=', userId)
-      .execute();
+  async getMathProblems(filters: MathProblemQuery, offset: number = 0, limit: number = 20) {
+    let query = this.db.selectFrom('math_problem').selectAll();
 
-    return result || null;
-  }
+    if (filters.userId) query = query.where('userId', '=', filters.userId);
+    if (filters.bookmark) query = query.where('bookmark', '=', true);
+    if (filters.name) query = query.where('name', 'like', `%${filters.name}%`);
 
-  async getMathProblemByBookmark(userId: number): Promise<MathProblem[] | null> {
-    const result = await this.db
-      .selectFrom('math_problem')
-      .selectAll()
-      .where('userId', '=', userId)
-      .where('bookmark', '=', true)
-      .execute();
-
-    return result || null;
+    return await query.limit(limit).offset(offset).execute();
   }
 
   async updateMathProblem(id: number, problem: Partial<MathProblem>): Promise<void> {

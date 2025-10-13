@@ -45,4 +45,8 @@ export class UserRepository {
   async updateUser(id: number, user: Partial<User>): Promise<void> {
     await this.db.updateTable('user').set(user).where('id', '=', id).execute();
   }
+
+  async deleteUser(id: number): Promise<void> {
+    await this.db.deleteFrom('user').where('id', '=', id).execute();
+  }
 }

@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "generate": "ts-node src/generate.ts",
+    "gen": "tsoa spec && tsoa routes",
     "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
     "format": "prettier --write 'src/**/*.ts'",
     "lint": "eslint .",

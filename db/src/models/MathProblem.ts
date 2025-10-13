@@ -3,6 +3,7 @@ export interface MathProblem {
   userId: number;
   originalExpression: string;
   latex?: string;
+  name?: string;
   simplifiedExpression?: string;
   bookmark?: boolean;
   created?: Date;

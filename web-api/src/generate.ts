@@ -41,16 +41,16 @@ processTSOA.on('exit', async (code) => {
   console.log('Checking for API client schema.json file...');
 
   const schemaExists = await fileExists(APIclientPath);
+  const swaggerContent = await fs.readFile(SwaggerPath, 'utf-8');
 
   if (schemaExists) {
-    console.log('schema.json already exists. Skipping copy.');
+    console.log('schema.json already exists. Rewriting file...');
+    await fs.writeFile(APIclientPath, swaggerContent, 'utf-8');
+    console.log('schema.json file successfully overwritten!');
   } else {
     console.log('Creating new schema.json file...');
-    const swaggerContent = await fs.readFile(SwaggerPath, 'utf-8');
-
     await fs.mkdir(path.dirname(APIclientPath), { recursive: true });
     await fs.writeFile(APIclientPath, swaggerContent, 'utf-8');
-
     console.log('schema.json file successfully created!');
   }
 

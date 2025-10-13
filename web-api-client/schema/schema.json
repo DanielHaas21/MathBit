@@ -80,6 +80,379 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"UpadteUser": {
+				"description": "Represents the data required to update user",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": "Unique identifier for the user"
+					},
+					"username": {
+						"type": "string",
+						"description": "User's displayed username"
+					},
+					"firstName": {
+						"type": "string",
+						"description": "User's first name"
+					},
+					"lastName": {
+						"type": "string",
+						"description": "User's last name"
+					},
+					"password": {
+						"type": "string",
+						"description": "User's password"
+					},
+					"email": {
+						"type": "string",
+						"description": "User's email address"
+					}
+				},
+				"required": [
+					"username",
+					"firstName",
+					"lastName",
+					"password",
+					"email"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateUserRequest": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UpadteUser"
+					}
+				},
+				"required": [
+					"id",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MathProblemStep": {
+				"description": "Represents a Math problem step in the system",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": "Id of the math problem step"
+					},
+					"problemId": {
+						"type": "number",
+						"format": "double",
+						"description": "Id of the problem"
+					},
+					"stepIndex": {
+						"type": "number",
+						"format": "double",
+						"description": "Index of the step"
+					},
+					"description": {
+						"type": "string",
+						"description": "Step description"
+					},
+					"expression": {
+						"type": "string",
+						"description": "Expression of the step"
+					},
+					"latex": {
+						"type": "string",
+						"description": "Saved LaTeX epxression"
+					},
+					"created": {
+						"type": "string",
+						"format": "date-time",
+						"description": "Created timestamp"
+					}
+				},
+				"required": [
+					"problemId",
+					"stepIndex",
+					"description",
+					"expression"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateMathProblemStep": {
+				"description": "Represents the data requiered to create a math problem step",
+				"properties": {
+					"problemId": {
+						"type": "number",
+						"format": "double",
+						"description": "Id of the problem"
+					},
+					"stepIndex": {
+						"type": "number",
+						"format": "double",
+						"description": "Index of the step"
+					},
+					"description": {
+						"type": "string",
+						"description": "Step description"
+					},
+					"expression": {
+						"type": "string",
+						"description": "Expression of the step"
+					},
+					"latex": {
+						"type": "string",
+						"description": "Saved LaTeX epxression"
+					}
+				},
+				"required": [
+					"problemId",
+					"stepIndex",
+					"description",
+					"expression"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateMathProblemStepRequest": {
+				"properties": {
+					"problemId": {
+						"type": "number",
+						"format": "double"
+					},
+					"step": {
+						"$ref": "#/components/schemas/CreateMathProblemStep"
+					}
+				},
+				"required": [
+					"problemId",
+					"step"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateMathProblemStep": {
+				"description": "Represents the data requiered to update a math problem step",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": "Id of the math problem step"
+					},
+					"stepIndex": {
+						"type": "number",
+						"format": "double",
+						"description": "Index of the step"
+					},
+					"description": {
+						"type": "string",
+						"description": "Step description"
+					},
+					"expression": {
+						"type": "string",
+						"description": "Expression of the step"
+					},
+					"latex": {
+						"type": "string",
+						"description": "Saved LaTeX epxression"
+					}
+				},
+				"required": [
+					"stepIndex",
+					"description",
+					"expression"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateMathProblemStepRequest": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"step": {
+						"$ref": "#/components/schemas/UpdateMathProblemStep"
+					}
+				},
+				"required": [
+					"id",
+					"step"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MathProblem": {
+				"description": "Represents a Math problem in the system",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": "Id of the math problem"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double",
+						"description": "Id of the user"
+					},
+					"name": {
+						"type": "string",
+						"description": "Name of the math problem created when saving one"
+					},
+					"originalExpression": {
+						"type": "string",
+						"description": "original input expression"
+					},
+					"latex": {
+						"type": "string",
+						"description": "Saved LaTeX epxression"
+					},
+					"simplifiedExpression": {
+						"type": "string",
+						"description": "Final simplified expression"
+					},
+					"bookmark": {
+						"type": "boolean",
+						"description": "Bookmarked check"
+					},
+					"created": {
+						"type": "string",
+						"format": "date-time",
+						"description": "Created timestamp"
+					},
+					"updated": {
+						"type": "string",
+						"format": "date-time",
+						"description": "Last updated timestamp"
+					}
+				},
+				"required": [
+					"userId",
+					"originalExpression"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateMathProblem": {
+				"description": "Represents the data requiered to create a new math problem",
+				"properties": {
+					"originalExpression": {
+						"type": "string",
+						"description": "Original input expression"
+					},
+					"name": {
+						"type": "string",
+						"description": "Name of the math problem created when saving one"
+					},
+					"latex": {
+						"type": "string",
+						"description": "Saved LaTeX epxression"
+					},
+					"simplifiedExpression": {
+						"type": "string",
+						"description": "Final simplified expression"
+					},
+					"bookmark": {
+						"type": "boolean",
+						"description": "Bookmarked check"
+					}
+				},
+				"required": [
+					"originalExpression"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateMathProblemRequest": {
+				"properties": {
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"problem": {
+						"$ref": "#/components/schemas/CreateMathProblem"
+					}
+				},
+				"required": [
+					"userId",
+					"problem"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MathProblemQuery": {
+				"description": "Query for a math problem search",
+				"properties": {
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"bookmark": {
+						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateMathProblem": {
+				"description": "Represents the data requiered to update a math problem",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": "Id of the math problem"
+					},
+					"originalExpression": {
+						"type": "string",
+						"description": "Original input expression"
+					},
+					"name": {
+						"type": "string",
+						"description": "Name of the math problem created when saving one"
+					},
+					"latex": {
+						"type": "string",
+						"description": "Saved LaTeX epxression"
+					},
+					"simplifiedExpression": {
+						"type": "string",
+						"description": "Final simplified expression"
+					},
+					"bookmark": {
+						"type": "boolean",
+						"description": "Bookmarked check"
+					},
+					"updated": {
+						"type": "string",
+						"format": "date-time",
+						"description": "Last updated timestamp"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateMathProblemRequest": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"problem": {
+						"$ref": "#/components/schemas/UpdateMathProblem"
+					}
+				},
+				"required": [
+					"id",
+					"problem"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"LoginResponse": {
 				"description": "Represents a login response",
 				"properties": {
@@ -230,6 +603,36 @@
 					}
 				],
 				"parameters": []
+			},
+			"put": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Updates a User.\r\nThis endpoint accepts a body to update a user in the system",
+				"tags": [
+					"Users"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "Update request; consists of id, and user data",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateUserRequest",
+								"description": "Update request; consists of id, and user data"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/users/{id}": {
@@ -273,6 +676,473 @@
 						}
 					}
 				]
+			},
+			"delete": {
+				"operationId": "DeleteUser",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Deletes a User.\r\nThis endpoint accepts an id to delete a user in the system",
+				"tags": [
+					"Users"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "id of the user",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/math_problem_steps": {
+			"post": {
+				"operationId": "CreateMathProblemStep",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/MathProblemStep"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a Math problem step.\r\nThis endpoint accepts math problem step data and creates a new math problem step in the system.",
+				"tags": [
+					"MathProblemSteps"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "Create request; consists of problemId, and step data",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateMathProblemStepRequest",
+								"description": "Create request; consists of problemId, and step data"
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"operationId": "UpdateMathProblemStep",
+				"responses": {
+					"201": {
+						"description": "Updated"
+					}
+				},
+				"description": "Updates a Math problem step.\r\nThis endpoint accepts a body to update a math problem step in the system",
+				"tags": [
+					"MathProblemSteps"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "Update request; consists of id, and step data",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateMathProblemStepRequest",
+								"description": "Update request; consists of id, and step data"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/math_problem_steps/by-problem/{problemId}": {
+			"get": {
+				"operationId": "GetMathProblemStepsByProblemId",
+				"responses": {
+					"200": {
+						"description": "The retrieved math problem data",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"data": {
+											"items": {
+												"$ref": "#/components/schemas/MathProblemStep"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"data"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a Math problem step.\r\nThis endpoint accepts an id to retrieve a math problem step in the system",
+				"tags": [
+					"MathProblemSteps"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "id of the problem",
+						"in": "path",
+						"name": "problemId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/math_problem_steps/{id}": {
+			"get": {
+				"operationId": "GetMathProblemStepById",
+				"responses": {
+					"200": {
+						"description": "The retrieved math problem step data",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/MathProblemStep"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a Math problem step.\r\nThis endpoint accepts an id to retrieve a math problem step in the system",
+				"tags": [
+					"MathProblemSteps"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "type of the id",
+						"in": "query",
+						"name": "idType",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"enum": [
+								"index",
+								"id"
+							]
+						}
+					},
+					{
+						"description": "in case type is index this is requiered",
+						"in": "query",
+						"name": "problemId",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteMathProblemStep",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Deletes a Math problem steps.\r\nThis endpoint accepts an id to delete a math problem step in the system",
+				"tags": [
+					"MathProblemSteps"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/math_problems": {
+			"post": {
+				"operationId": "CreateMathProblem",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/MathProblem"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a Math problem.\r\nThis endpoint accepts math problem data and creates a new math problem in the system.",
+				"tags": [
+					"MathProblems"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "Update request; consists of userId, and problem data",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateMathProblemRequest",
+								"description": "Update request; consists of userId, and problem data"
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"operationId": "UpdateMathProblem",
+				"responses": {
+					"201": {
+						"description": "Updated"
+					}
+				},
+				"description": "Updates a Math problem.\r\nThis endpoint accepts a body to update a math problem in the system",
+				"tags": [
+					"MathProblems"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "Update request; consists of id, and problem data",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateMathProblemRequest",
+								"description": "Update request; consists of id, and problem data"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/math_problems/{id}": {
+			"get": {
+				"operationId": "GetMathProblemById",
+				"responses": {
+					"200": {
+						"description": "The retrieved math problem data",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/MathProblem"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a Math problem.\r\nThis endpoint accepts an id to retrieve a math problem in the system",
+				"tags": [
+					"MathProblems"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "id of the user",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteMathProblem",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Deletes a Math problem.\r\nThis endpoint accepts an id to delete a math problem in the system",
+				"tags": [
+					"MathProblems"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "id of the problem",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/math_problems/search": {
+			"post": {
+				"operationId": "GetMathProblems",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"offset": {
+											"type": "number",
+											"format": "double"
+										},
+										"data": {
+											"items": {
+												"$ref": "#/components/schemas/MathProblem"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"offset",
+										"data"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves Math problems.\r\nThis endpoint accepts a query to retrieve a math problems in the system",
+				"tags": [
+					"MathProblems"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "offset of each request",
+						"in": "query",
+						"name": "offset",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "fixed limit for each request",
+						"in": "query",
+						"name": "limit",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Math problem query",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MathProblemQuery",
+								"description": "Math problem query"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/auth/login": {

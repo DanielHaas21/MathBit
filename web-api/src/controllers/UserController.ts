@@ -1,9 +1,22 @@
-import { Controller, Get, Post, Body, Route, Tags, SuccessResponse, Path, Security } from 'tsoa';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Route,
+  Tags,
+  SuccessResponse,
+  Path,
+  Security,
+  Delete,
+  Put,
+} from 'tsoa';
 import bcrypt from 'bcrypt';
 import { type CreateUser } from '../dto/CreateUser';
 import { type User } from '../dto/User';
 import { UserRepository, User as DBuser } from 'db';
 import { UserMapper } from '../mappers/UserMapper';
+import { type UpdateUserRequest } from '../dto/Request/UserRequest';
 /**
  * Controller for managing users.
  * Provides endpoints for creating and retrieving users.
@@ -35,7 +48,10 @@ export class UserController extends Controller {
     if (id) {
       const newUser = await this.userRepository.getUserById(id);
       this.setStatus(201);
-      return UserMapper.toCreateModel(newUser!); // can never be null
+      if (!newUser) {
+        throw new Error('User not found');
+      }
+      return UserMapper.toCreateModel(newUser); // can never be null
     }
 
     throw new Error('User not created');
@@ -63,9 +79,35 @@ export class UserController extends Controller {
   @Security('jwt')
   public async getUserById(@Path() id: number): Promise<User | null> {
     const user = await this.userRepository.getUserById(id);
-    if (user) {
-      return UserMapper.toDto(user);
+    if (!user) {
+      throw new Error('User not found');
     }
-    throw new Error('Error mapping user');
+    return UserMapper.toDto(user);
+  }
+
+  /**
+   * Updates a User.
+   * This endpoint accepts a body to update a user in the system
+   *
+   * @param body Update request; consists of id, and user data
+   * @returns {void} no return value
+   */
+  @Put()
+  @Security('jwt')
+  public async updateUser(@Body() body: UpdateUserRequest): Promise<void> {
+    await this.userRepository.updateUser(body.id, body.user);
+  }
+
+  /**
+   * Deletes a User.
+   * This endpoint accepts an id to delete a user in the system
+   *
+   * @param id id of the user
+   * @returns {void} no return value
+   */
+  @Delete('{id}')
+  @Security('jwt')
+  public async deleteUser(@Path() id: number): Promise<void> {
+    await this.userRepository.deleteUser(id);
   }
 }
