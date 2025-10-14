@@ -1,14 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "../tsconfig.json",
-  "display": "Next.js",
   "compilerOptions": {
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "module": "ESNext",
+    "module": "esnext",
     "moduleResolution": "Bundler",
     "allowJs": true,
     "jsx": "preserve",
@@ -19,6 +13,6 @@
       "react": ["./node_modules/@types/react"]
     }
   },
-  "include": ["next-env.d.ts", "remix.config.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["vite.config.ts", "**/*.ts", "**/*.tsx", "./types/**/*.ts", "./scripts/*.ts"],
   "exclude": ["node_modules"]
 }

@@ -1,6 +1,6 @@
 # MathBit - `web-app`
 
-This package contains the frontend remix based app and its libraries, most notably the [ui-toolkit](./ui-toolkit.md)
+This package contains the frontend react-router based app and its libraries, most notably the [ui-toolkit](./ui-toolkit.md)
 
 ### Prerequisites
 

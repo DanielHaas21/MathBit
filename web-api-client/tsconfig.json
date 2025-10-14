@@ -3,7 +3,11 @@
   "display": "API Library",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "web-api-client": ["../web-api-client/src"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

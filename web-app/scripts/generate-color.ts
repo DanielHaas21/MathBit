@@ -100,7 +100,7 @@ function processOverlaysTheme(overlays: Record<string, string>) {
   return cssContent;
 }
 
-export async function generateColorsCSS() {
+export default async function generateColorsCSS() {
   try {
     const colorsPath = path.join(__dirname, '../libs/ui/colors/index.ts');
     const outputPath = path.join(__dirname, '../libs/ui/assets/styles/colors.css');
