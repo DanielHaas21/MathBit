@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.json",
-  "display": "API Library",
+  "display": "API-CLIENT Library",
   "compilerOptions": {
     "outDir": "dist"
   },

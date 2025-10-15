@@ -10,7 +10,6 @@ export default [
       '**/dist/**',
       '**/build/**',
       '**/public/**',
-      '**/.next/**',
       '**/node_modules/**',
       '**/*.config.mjs',
       '**/*.config.js',

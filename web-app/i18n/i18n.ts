@@ -1,23 +1,32 @@
-import i18next from 'i18next'
-import Backend from 'i18next-fs-backend'
-import { initReactI18next } from 'react-i18next'
-import { resolve } from 'path'
+import i18next from 'i18next';
+import { initReactI18next } from 'react-i18next';
 
-export async function initI18n(lng = 'en') {
-  await i18next
-    .use(Backend)
-    .use(initReactI18next)
-    .init({
-      lng,
-      fallbackLng: 'en',
-      supportedLngs: ['en', 'cs'],
-      ns: ['common'],
-      defaultNS: 'common',
-      backend: {
-        loadPath: resolve('./i18n/{{lng}}/{{ns}}.json'),
-      },
-      react: { useSuspense: false },
-    })
+export async function initI18n(lng = 'en', isServer = false) {
+  const options: any = {
+    lng,
+    fallbackLng: 'en',
+    supportedLngs: ['en', 'cs'],
+    ns: ['common'],
+    defaultNS: 'common',
+    react: { useSuspense: false },
+  };
 
-  return i18next
+  if (isServer) {
+    // Node backend
+    const Backend = await import('i18next-fs-backend').then((m) => m.default);
+    const { resolve } = await import('path');
+    options.backend = { loadPath: resolve('./i18n/{{lng}}/{{ns}}.json') };
+    i18next.use(Backend);
+  } else {
+    // Browser backend
+    const Backend = await import('i18next-http-backend').then((m) => m.default);
+    options.backend = { loadPath: '/i18n/{{lng}}/{{ns}}.json' };
+    i18next.use(Backend);
+  }
+
+  i18next.use(initReactI18next);
+
+  await i18next.init(options);
+
+  return i18next;
 }

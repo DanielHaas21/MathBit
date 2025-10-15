@@ -4,8 +4,6 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
-/* This script was by copilot generated for my colors setup */
-
 /**
  * Converts hex color to RGB values string (without rgb() wrapper)
  * Example: '#FF6901' -> '255 105 1'
