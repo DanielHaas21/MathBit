@@ -4,6 +4,9 @@ dotenv.config();
 
 export function getAppConfig() {
   const cfg = {
+    webapp: {
+      url: process.env.WEB_APP_URL,
+    },
     app: {
       port: process.env.APP_PORT ? parseInt(process.env.APP_PORT) : 3001,
       secret: process.env.APP_SECRET || '',
@@ -18,5 +21,3 @@ export function getAppConfig() {
   };
   return cfg;
 }
-
-

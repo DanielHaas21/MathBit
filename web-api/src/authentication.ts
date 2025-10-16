@@ -21,8 +21,8 @@ export function expressAuthentication(request: ExpressRequest, securityName: str
           return reject(err);
         }
         if (decoded) {
-          const data = decoded as { userId: number; username: string };
-          request.userProfile = { id: data.userId, username: data.username };
+          const data = decoded as { id: number; username: string; email: string };
+          request.userProfile = { id: data.id, username: data.username, email: data.email };
           request.token = token;
           return resolve(decoded);
         }

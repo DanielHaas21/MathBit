@@ -1,11 +1,12 @@
 /**
- * Represents a login request using username and password.
+ * Represents a login request using email and password.
+ * Password is compared via bcrypt, both email, and password is correspondent to the to the interface @interface User
  */
 export interface LoginRequest {
   /**
    * The login username.
    */
-  username: string;
+  email: string;
 
   /**
    * The login password.

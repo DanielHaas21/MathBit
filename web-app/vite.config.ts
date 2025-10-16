@@ -11,6 +11,7 @@ export default defineConfig({
       'web-api-client': path.resolve(__dirname, '../web-api-client/src'),
     },
   },
+
   build: {
     commonjsOptions: {
       include: [/node_modules/, /web-api-client/],
@@ -18,6 +19,7 @@ export default defineConfig({
   },
 
   server: {
+    port: 3000,
     fs: {
       allow: ['..'],
     },

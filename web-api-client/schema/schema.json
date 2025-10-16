@@ -492,9 +492,9 @@
 				"additionalProperties": false
 			},
 			"LoginRequest": {
-				"description": "Represents a login request using username and password.",
+				"description": "Represents a login request using email and password.\r\nPassword is compared via bcrypt, both email, and password is correspondent to the to the interface",
 				"properties": {
-					"username": {
+					"email": {
 						"type": "string",
 						"description": "The login username."
 					},
@@ -504,7 +504,7 @@
 					}
 				},
 				"required": [
-					"username",
+					"email",
 					"password"
 				],
 				"type": "object",

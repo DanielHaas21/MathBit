@@ -17,6 +17,7 @@ import { type LoginResponse } from '../dto/LoginResponse';
 import { getAppConfig } from '../appConfig';
 import { UserRepository } from 'db';
 import { type ExpressRequest } from '../types/expressRequest';
+import { UserProfile } from '@/types/userProfile';
 
 const JWT_EXPIRATION = '24h';
 
@@ -34,7 +35,7 @@ export class AuthController extends Controller {
   @SuccessResponse('200', 'Login successful')
   @Response<Error>('400', 'Invalid username or password')
   public async login(@Body() body: LoginRequest): Promise<LoginResponse> {
-    const user = await this.userRepository.getUserByEmail(body.username);
+    const user = await this.userRepository.getUserByEmail(body.email);
     if (!user) {
       return { errorCode: 'Invalid credentials' };
     }
@@ -44,7 +45,7 @@ export class AuthController extends Controller {
       return { errorCode: 'Invalid credentials' };
     }
 
-    const payload = { userId: user.id, username: user.email };
+    const payload: UserProfile = { id: user.id, username: user.username, email: user.email };
     const config = getAppConfig();
     const token = jwt.sign(payload, config.app.secret, { expiresIn: JWT_EXPIRATION });
 

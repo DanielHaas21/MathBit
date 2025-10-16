@@ -1,3 +1,2 @@
-export default function Home() {
-  return <h1>Home Page</h1>;
-}
+import { useEffect } from 'react';
+import { login } from 'web-api-client';
