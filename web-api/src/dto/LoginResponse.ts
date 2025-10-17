@@ -5,11 +5,11 @@ export interface LoginResponse {
   /**
    * The access token.
    */
-  token?: string;
+  refreshToken?: string;
   /**
    * The access token.
    */
-  refreshToken?: string;
+  accessToken?: string;
   /**
    * The login error code.
    */

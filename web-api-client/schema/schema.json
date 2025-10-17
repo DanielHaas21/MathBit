@@ -456,11 +456,11 @@
 			"LoginResponse": {
 				"description": "Represents a login response",
 				"properties": {
-					"token": {
+					"refreshToken": {
 						"type": "string",
 						"description": "The access token."
 					},
-					"refreshToken": {
+					"accessToken": {
 						"type": "string",
 						"description": "The access token."
 					},
@@ -1181,6 +1181,79 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/LoginRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/refresh": {
+			"post": {
+				"operationId": "Refresh",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"errorCode": {},
+												"accessToken": {}
+											},
+											"required": [
+												"accessToken"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"accessToken": {},
+												"errorCode": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"errorCode"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid refresh token",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"refreshToken": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"refreshToken"
+								],
+								"type": "object"
 							}
 						}
 					}

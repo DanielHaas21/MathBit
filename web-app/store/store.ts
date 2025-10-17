@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import UserSlice from './slices/UserState';
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    User: UserSlice,
+  },
 });
 
 // config types

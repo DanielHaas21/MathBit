@@ -7,6 +7,7 @@ import cors from 'cors';
 import { getAppConfig } from './appConfig';
 import { initDb, migrateToLatest } from 'db';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 
 const config = getAppConfig();
 initDb(config.db);
@@ -19,12 +20,16 @@ const app = express();
 
 app.use(
   cors({
-    origin: config.webapp.url, 
-    credentials: true, 
+    origin: config.webapp.url,
+    credentials: true,
   })
 );
 
 app.use(bodyParser.json());
+
+// cookie parser middleware
+app.use(cookieParser());
+
 // Register routes generated from controllers
 RegisterRoutes(app);
 
