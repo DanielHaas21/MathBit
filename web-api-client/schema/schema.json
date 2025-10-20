@@ -467,6 +467,33 @@
 					"errorCode": {
 						"type": "string",
 						"description": "The login error code."
+					},
+					"userProfile": {
+						"properties": {
+							"lastName": {
+								"type": "string",
+								"nullable": true
+							},
+							"firstName": {
+								"type": "string",
+								"nullable": true
+							},
+							"email": {
+								"type": "string",
+								"nullable": true
+							},
+							"username": {
+								"type": "string",
+								"nullable": true
+							},
+							"id": {
+								"type": "number",
+								"format": "double",
+								"nullable": true
+							}
+						},
+						"type": "object",
+						"description": "The login user payload"
 					}
 				},
 				"type": "object",
@@ -1199,16 +1226,6 @@
 									"anyOf": [
 										{
 											"properties": {
-												"errorCode": {},
-												"accessToken": {}
-											},
-											"required": [
-												"accessToken"
-											],
-											"type": "object"
-										},
-										{
-											"properties": {
 												"accessToken": {},
 												"errorCode": {
 													"type": "string"
@@ -1216,6 +1233,16 @@
 											},
 											"required": [
 												"errorCode"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"errorCode": {},
+												"accessToken": {}
+											},
+											"required": [
+												"accessToken"
 											],
 											"type": "object"
 										}
@@ -1239,25 +1266,7 @@
 					"Auth"
 				],
 				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"properties": {
-									"refreshToken": {
-										"type": "string"
-									}
-								},
-								"required": [
-									"refreshToken"
-								],
-								"type": "object"
-							}
-						}
-					}
-				}
+				"parameters": []
 			}
 		},
 		"/auth/logout": {

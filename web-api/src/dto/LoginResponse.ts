@@ -1,3 +1,5 @@
+import { UserProfile } from '@/types/userProfile';
+
 /**
  * Represents a login response
  */
@@ -14,4 +16,14 @@ export interface LoginResponse {
    * The login error code.
    */
   errorCode?: string;
+  /**
+   * The login user payload
+   */
+  userProfile?: {
+    id?: number | null;
+    username?: string | null | undefined;
+    email?: string | null | undefined;
+    firstName?: string | null | undefined;
+    lastName?: string | null | undefined;
+  };
 }

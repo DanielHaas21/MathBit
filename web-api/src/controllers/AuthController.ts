@@ -67,12 +67,12 @@ export class AuthController extends Controller {
 
     req.res?.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      secure: false, // dev-only switch to secure in prod
+      sameSite: 'lax', // dev-only switch to none in prod
       maxAge: 24 * 60 * 60 * 1000 * 7, // 7 days in ms (match REFRESH_TOKEN_EXPIRATION)
     });
 
-    return { accessToken };
+    return { accessToken: accessToken, userProfile: payload };
   }
 
   @Post('refresh')
@@ -80,7 +80,6 @@ export class AuthController extends Controller {
   public async refresh(@Request() req: ExpressRequest) {
     const config = getAppConfig();
 
-    // Try cookie first, fallback to body
     const token = req.cookies?.refreshToken;
 
     if (!token) {
@@ -90,13 +89,17 @@ export class AuthController extends Controller {
 
     try {
       const decoded = jwt.verify(token, config.app.secret) as UserProfile;
-      const newAccessToken = jwt.sign(decoded, config.app.secret, {
+
+      const { iat, exp, ...payload } = decoded as any; // jwt replaces iat and exp by itself
+
+      const newAccessToken = jwt.sign(payload, config.app.secret, {
         expiresIn: ACCESS_TOKEN_EXPIRATION,
       });
 
       return { accessToken: newAccessToken };
     } catch (err) {
       this.setStatus(400);
+      console.log(err);
       return { errorCode: 'Invalid refresh token' };
     }
   }

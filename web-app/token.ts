@@ -1,4 +1,6 @@
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { refresh } from 'web-api-client';
-import axios from 'axios';
+import { store } from '@/store/store';
+import { login as loginState } from '@/store/slices/UserState';
 
-// axios interceptor to handle token refresh
+// interceptor to handle 401 responses and attempt token refresh

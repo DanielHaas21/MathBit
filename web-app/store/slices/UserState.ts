@@ -9,7 +9,7 @@ export interface UserProfile {
 }
 
 export interface UserState {
-  accessToken: string | null;
+  accessToken: string | undefined;
   user: UserProfile | null;
 }
 
@@ -21,7 +21,7 @@ const initialState: UserState = {
     email: undefined,
     username: undefined,
   },
-  accessToken: null,
+  accessToken: undefined,
 };
 
 const UserSlice = createSlice({
@@ -34,7 +34,7 @@ const UserSlice = createSlice({
     },
     logout: (state) => {
       state.user = null;
-      state.accessToken = null;
+      state.accessToken = undefined;
     },
   },
 });

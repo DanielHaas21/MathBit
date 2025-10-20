@@ -1,20 +1,38 @@
-
+import { createMathProblem, getAllUsers, refresh } from 'web-api-client';
+import login from '../../middleware/auth/login';
 import { useEffect } from 'react';
-import { login } from 'web-api-client';
+import getApiConfig from '@/apiConfig';
 
 export default function Home() {
   useEffect(() => {
     async function d() {
-      console.log(
-        await login(
-          { email: 'e.procházková4@example.com', password: 'test' },
-          { baseURL: 'http://localhost:3001' }
-        )
-      );
+      const auth = await login({ email: 'e.procházková4@example.com', password: 'test' });
     }
 
     d();
   }, []);
 
-  return <h1>Home Page</h1>;
+  const test = async () => {
+    async function testRefresh() {
+      try {
+        const response = await refresh(getApiConfig());
+
+        console.log('Refresh response:', response);
+      } catch (err) {
+        console.error('Refresh request failed:', err);
+      }
+    }
+
+    // Run the test
+    testRefresh();
+  };
+  const test2 = async () => {
+    console.log(await getAllUsers(getApiConfig()));
+  };
+  return (
+    <>
+      <button onClick={test}>test ref</button>
+      <button onClick={test2}>test users</button>
+    </>
+  );
 }

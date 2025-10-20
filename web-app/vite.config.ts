@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './app'),
+      '@': path.resolve(__dirname, './'),
       '@libs': path.resolve(__dirname, './libs'),
       'web-api-client': path.resolve(__dirname, '../web-api-client/src'),
     },
@@ -19,7 +19,7 @@ export default defineConfig({
   },
 
   server: {
-    port: 3000,
+    port: 4000,
     fs: {
       allow: ['..'],
     },
