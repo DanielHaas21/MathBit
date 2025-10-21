@@ -2,15 +2,16 @@ import { createMathProblem, getAllUsers, refresh } from 'web-api-client';
 import login from '../../middleware/auth/login';
 import { useEffect } from 'react';
 import getApiConfig from '@/apiConfig';
+import api from '@/interceptor';
 
 export default function Home() {
-  useEffect(() => {
-    async function d() {
-      const auth = await login({ email: 'e.procházková4@example.com', password: 'test' });
-    }
+  // useEffect(() => {
+  //   async function d() {
+  //     const auth = await login({ email: 'e.procházková4@example.com', password: 'test' });
+  //   }
 
-    d();
-  }, []);
+  //   d();
+  // }, []);
 
   const test = async () => {
     async function testRefresh() {
@@ -23,7 +24,6 @@ export default function Home() {
       }
     }
 
-    // Run the test
     testRefresh();
   };
   const test2 = async () => {
