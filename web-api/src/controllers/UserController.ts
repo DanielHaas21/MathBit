@@ -42,7 +42,7 @@ export class UserController extends Controller {
   public async createUser(@Body() user: CreateUser): Promise<User | null> {
     // hash password before saving
     const hashedPassword = await bcrypt.hash(user.password, 10);
-    const dbUser: DBuser = { ...user, password: hashedPassword } as DBuser;
+    const dbUser: DBuser = { ...user, password: hashedPassword };
 
     const id = await this.userRepository.createUser(dbUser);
     if (id) {

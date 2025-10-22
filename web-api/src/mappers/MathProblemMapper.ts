@@ -20,7 +20,7 @@ export class MathProblemMapper {
     };
   }
 
-  static toCreateModel(dto: CreateMathProblem): MathProblemModel | null {
+  static toCreateModel(dto: CreateMathProblem): Partial<MathProblemModel> | null {
     if (!dto) {
       return null;
     }
@@ -29,10 +29,10 @@ export class MathProblemMapper {
       latex: dto.latex,
       simplifiedExpression: dto.simplifiedExpression,
       bookmark: dto.bookmark,
-    } as MathProblemModel;
+    };
   }
 
-  static toUpdateModel(dto: UpdateMathProblem): MathProblemModel | null {
+  static toUpdateModel(dto: UpdateMathProblem): Partial<MathProblemModel> | null {
     if (!dto) {
       return null;
     }
@@ -43,6 +43,6 @@ export class MathProblemMapper {
       simplifiedExpression: dto.simplifiedExpression,
       bookmark: dto.bookmark,
       updated: dto.updated,
-    } as MathProblemModel;
+    };
   }
 }

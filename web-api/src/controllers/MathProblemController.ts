@@ -47,7 +47,7 @@ export class MathProblemController extends Controller {
   @Security('jwt')
   public async createMathProblem(
     @Body() body: CreateMathProblemRequest
-  ): Promise<MathProblem | null> {
+  ): Promise<Partial<MathProblem> | null> {
     const id = await this.MathProblemRepository.createMathProblem(body.userId, body.problem);
     if (id) {
       const newMathProblem = await this.MathProblemRepository.getMathProblemById(id);

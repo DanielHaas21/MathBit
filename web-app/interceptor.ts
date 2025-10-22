@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { refresh } from 'web-api-client';
 import { store } from '@/store/store';
 import { login as loginState, logout as logoutState } from '@/store/slices/UserState';
+import getApiConfig from './apiConfig';
 
 /**
  * This file sets up an axios instance with an interceptor to handle token refresh on 401 responses.
@@ -26,10 +27,7 @@ async function performRefresh(): Promise<string | null> {
 
   refreshPromise = (async () => {
     try {
-      const response: any = await refresh({
-        baseURL: API_BASE,
-        withCredentials: true,
-      } as any);
+      const response = await refresh(getApiConfig(false));
 
       const newToken = response?.accessToken;
       if (newToken) {

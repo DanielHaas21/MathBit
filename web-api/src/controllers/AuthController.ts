@@ -88,9 +88,9 @@ export class AuthController extends Controller {
     }
 
     try {
-      const decoded = jwt.verify(token, config.app.secret) as UserProfile;
+      const decoded = jwt.verify(token, config.app.secret);
 
-      const { iat, exp, ...payload } = decoded as any; // jwt replaces iat and exp by itself
+      const { iat, exp, ...payload } = decoded as UserProfile & jwt.JwtPayload; // jwt replaces iat and exp by itself
 
       const newAccessToken = jwt.sign(payload, config.app.secret, {
         expiresIn: ACCESS_TOKEN_EXPIRATION,

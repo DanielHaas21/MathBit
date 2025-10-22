@@ -27,6 +27,6 @@ export class UserMapper {
       lastName: dto.lastName,
       email: dto.email,
       password: dto.password,
-    } as UserModel;
+    };
   }
 }

@@ -284,6 +284,99 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"Partial_MathProblem_": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": "Id of the math problem"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double",
+						"description": "Id of the user"
+					},
+					"name": {
+						"type": "string",
+						"description": "Name of the math problem created when saving one"
+					},
+					"originalExpression": {
+						"type": "string",
+						"description": "original input expression"
+					},
+					"latex": {
+						"type": "string",
+						"description": "Saved LaTeX epxression"
+					},
+					"simplifiedExpression": {
+						"type": "string",
+						"description": "Final simplified expression"
+					},
+					"bookmark": {
+						"type": "boolean",
+						"description": "Bookmarked check"
+					},
+					"created": {
+						"type": "string",
+						"format": "date-time",
+						"description": "Created timestamp"
+					},
+					"updated": {
+						"type": "string",
+						"format": "date-time",
+						"description": "Last updated timestamp"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"CreateMathProblem": {
+				"description": "Represents the data requiered to create a new math problem",
+				"properties": {
+					"originalExpression": {
+						"type": "string",
+						"description": "Original input expression"
+					},
+					"name": {
+						"type": "string",
+						"description": "Name of the math problem created when saving one"
+					},
+					"latex": {
+						"type": "string",
+						"description": "Saved LaTeX epxression"
+					},
+					"simplifiedExpression": {
+						"type": "string",
+						"description": "Final simplified expression"
+					},
+					"bookmark": {
+						"type": "boolean",
+						"description": "Bookmarked check"
+					}
+				},
+				"required": [
+					"originalExpression"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateMathProblemRequest": {
+				"properties": {
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"problem": {
+						"$ref": "#/components/schemas/CreateMathProblem"
+					}
+				},
+				"required": [
+					"userId",
+					"problem"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"MathProblem": {
 				"description": "Represents a Math problem in the system",
 				"properties": {
@@ -331,53 +424,6 @@
 				"required": [
 					"userId",
 					"originalExpression"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"CreateMathProblem": {
-				"description": "Represents the data requiered to create a new math problem",
-				"properties": {
-					"originalExpression": {
-						"type": "string",
-						"description": "Original input expression"
-					},
-					"name": {
-						"type": "string",
-						"description": "Name of the math problem created when saving one"
-					},
-					"latex": {
-						"type": "string",
-						"description": "Saved LaTeX epxression"
-					},
-					"simplifiedExpression": {
-						"type": "string",
-						"description": "Final simplified expression"
-					},
-					"bookmark": {
-						"type": "boolean",
-						"description": "Bookmarked check"
-					}
-				},
-				"required": [
-					"originalExpression"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"CreateMathProblemRequest": {
-				"properties": {
-					"userId": {
-						"type": "number",
-						"format": "double"
-					},
-					"problem": {
-						"$ref": "#/components/schemas/CreateMathProblem"
-					}
-				},
-				"required": [
-					"userId",
-					"problem"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -961,7 +1007,7 @@
 								"schema": {
 									"allOf": [
 										{
-											"$ref": "#/components/schemas/MathProblem"
+											"$ref": "#/components/schemas/Partial_MathProblem_"
 										}
 									],
 									"nullable": true

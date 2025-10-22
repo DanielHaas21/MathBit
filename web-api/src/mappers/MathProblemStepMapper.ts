@@ -29,10 +29,10 @@ export class MathProblemStepMapper {
       description: dto.description,
       expression: dto.expression,
       latex: dto.latex,
-    } as MathProblemStepModel;
+    };
   }
 
-  static toUpdateModel(dto: UpdateMathProblemStep): MathProblemStepModel | null {
+  static toUpdateModel(dto: UpdateMathProblemStep): Partial<MathProblemStepModel> | null {
     if (!dto) {
       return null;
     }
@@ -42,6 +42,6 @@ export class MathProblemStepMapper {
       description: dto.description,
       expression: dto.expression,
       latex: dto.latex,
-    } as MathProblemStepModel;
+    };
   }
 }
