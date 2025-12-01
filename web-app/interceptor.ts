@@ -18,7 +18,6 @@ export const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,
 });
-
 // track refresh in progress to avoid duplicate requests
 let refreshPromise: Promise<string | null> | null = null;
 

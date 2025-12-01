@@ -1,11 +1,39 @@
 name: haskell-engine
 version: 0.1.0.0
+license: MIT
+author: 'Daniel Haas'
+maintainer: 'Daniel Haas'
+extra-source-files: []
+
 dependencies:
   - base >= 4.7 && < 5
   - servant
   - servant-server
+  - servant-swagger
   - warp
+  - wai
+  - megaparsec
+  - text
+  - containers
+  - mtl
+  - transformers
+  - prettyprinter
+  - aeson
+  - bytestring
+
+library:
+  source-dirs: src
+
 executables:
   haskell-engine:
-    main: main.hs
-    source-dirs: src
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -O2
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-engine
+
+
