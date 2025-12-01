@@ -26,6 +26,8 @@ out/
 build
 dist
 
+#Haskell 
+.stack-work/
 
 # Debug
 npm-debug.log*
