@@ -18,6 +18,9 @@ export function getAppConfig() {
       password: process.env.DB_PASSWORD,
       port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5433,
     },
+    haskellEngine: {
+      url: process.env.HASKELL_ENGINE_URL || 'http://localhost:8080',
+    },
   };
   return cfg;
 }

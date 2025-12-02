@@ -499,6 +499,34 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"MathEngineSolveResponse": {
+				"description": "Represents the respons for solving a math expression.",
+				"properties": {
+					"finalExpression": {
+						"type": "string",
+						"description": "Final LaTeX expression"
+					}
+				},
+				"required": [
+					"finalExpression"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MathEngineSolveRequest": {
+				"description": "Represents the request payload for solving a math expression.",
+				"properties": {
+					"rawExpression": {
+						"type": "string",
+						"description": "Raw LaTeX expression"
+					}
+				},
+				"required": [
+					"rawExpression"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"LoginResponse": {
 				"description": "Represents a login response",
 				"properties": {
@@ -1212,6 +1240,45 @@
 							"schema": {
 								"$ref": "#/components/schemas/MathProblemQuery",
 								"description": "Math problem query"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/math_problems/solve": {
+			"post": {
+				"operationId": "SolveMathExpression",
+				"responses": {
+					"200": {
+						"description": "Solved math expression",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MathEngineSolveResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "\r\nThis endpoint accepts a raw math expresion and returns the solved expression from the Haskell microservice. all in LaTeX format\r\n\r\n**This is also the only endpoint that uses a raw HTTP fetch**",
+				"tags": [
+					"MathProblems"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "Solve request; consists of rawExpression",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MathEngineSolveRequest",
+								"description": "Solve request; consists of rawExpression"
 							}
 						}
 					}
