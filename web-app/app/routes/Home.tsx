@@ -1,8 +1,12 @@
 import { createMathProblem, getAllUsers, refresh } from 'web-api-client';
 import login from '../../middleware/auth/login';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import getApiConfig from '@/apiConfig';
 import api from '@/interceptor';
+import MathInput, { KeyProps } from 'react-math-keyboard';
+import { MathJax, MathJaxContext } from 'better-react-mathjax';
+import { Button, InputBase, MathField } from '@/libs/ui/components';
+
 
 export default function Home() {
   // useEffect(() => {
@@ -13,6 +17,7 @@ export default function Home() {
   //   d();
   // }, []);
 
+  const [latex, setLatex] = useState('');
   const test = async () => {
     async function testRefresh() {
       try {
@@ -26,13 +31,17 @@ export default function Home() {
 
     testRefresh();
   };
-  const test2 = async () => {
-    console.log(await getAllUsers(getApiConfig()));
-  };
+
   return (
     <>
       <button onClick={test}>test ref</button>
-      <button onClick={test2}>test users</button>
+      <Button >test users</Button>
+
+      <MathField initialLatex={latex} onChange={(newLatex) => setLatex(newLatex)} />
+      <MathJaxContext>
+        <MathJax dynamic>{`\\(${latex}\\)`}</MathJax>
+      </MathJaxContext>
+      <p>{latex}</p>
     </>
   );
 }

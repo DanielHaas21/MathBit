@@ -8,3 +8,4 @@ export * from './MenuWrapperItem';
 export * from './Anchor';
 export * from './Digits';
 export * from './TooltipPosition';
+export * from './MathField';

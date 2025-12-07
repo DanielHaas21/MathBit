@@ -8,7 +8,7 @@ import Network.Wai.Handler.Warp (run)
 import Data.Aeson
 import GHC.Generics
 import Servant
-import Api (SolveRequest(..), SolveResponse(..), ErrorResponse(..), jsonError)
+import Api (SolveRequest(..), SolveResponse(..),SolveResponseStep(..) , ErrorResponse(..), jsonError)
 
 type API = "solve" :> ReqBody '[JSON] SolveRequest :> Post '[JSON] SolveResponse
 
@@ -17,13 +17,22 @@ type API = "solve" :> ReqBody '[JSON] SolveRequest :> Post '[JSON] SolveResponse
 server :: Server API
 server = solve where
     solve :: SolveRequest -> Handler SolveResponse
-    solve req =
-        if null (rawExpression req) then
+    solve req = 
+        case rawExpression req of 
+        Nothing -> 
+            throwError $ jsonError 400 "Bad Request" "rawExpression is required"
+        Just expr | null expr ->
             throwError $ jsonError 400 "Bad Request" "rawExpression cannot be empty"
-        else
+        Just expr ->
             pure SolveResponse {
-                finalExpression = "Solved: " <> rawExpression req  -- solving logic will be implemented
-            }
+                    finalExpression = "Solved: " <> expr  -- solving logic will be implemented
+                    , steps = Just [SolveResponseStep {
+                        expressionStep = "Step 1: " <> expr, -- example step notation
+                        explanationStep = "This is the first step."
+                    }]
+                }
+
+
 
 
 api :: Proxy API

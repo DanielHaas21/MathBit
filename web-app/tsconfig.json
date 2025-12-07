@@ -4,6 +4,7 @@
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "Bundler",
+    "typeRoots": ["./types/"],
     "allowJs": true,
     "jsx": "preserve",
     "noEmit": true,
@@ -17,9 +18,10 @@
     "vite.config.ts",
     "**/*.ts",
     "**/*.tsx",
+    "./types/*.d.ts",
     "./types/**/*.ts",
     "./scripts/*.ts",
     "app/index.page.tsx"
-  ],
+, "libs/ui/components/MathField.tsx"  ],
   "exclude": ["node_modules"]
 }

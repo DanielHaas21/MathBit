@@ -1,0 +1,23 @@
+// forked from react-mathquill types
+export type KeyGroupIds =
+  | 'functions'
+  | 'complex'
+  | 'sets'
+  | 'proba'
+  | 'trigo'
+  | 'sequences'
+  | 'minLetters'
+  | 'majLetters'
+  | 'greek'
+  | 'utility'
+  | 'alphabet'
+  | 'basicOperations'
+  | 'otherOperations'
+  | 'numbers'
+  | 'algebra'
+  | 'geometry'
+  | 'words'
+  | 'units'
+  | 'atoms'
+  | 'molecules'
+  | 'physicalQuantities';

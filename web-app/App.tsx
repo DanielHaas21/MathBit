@@ -4,6 +4,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './app/router';
 import { I18nextProvider } from 'react-i18next';
 import { initI18n } from './i18n/i18n';
+import './index.css';
 
 (async () => {
   const i18n = await initI18n('en', false);

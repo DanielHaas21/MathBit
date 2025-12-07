@@ -18,15 +18,26 @@ import Network.Wai
 import Network.Wai.Handler.Warp (run)
 import Servant
 
--- This module contains definitions for the exposed API endpoint, that is in and out data JSON types 
+-- This module contains definitions for the exposed API endpoint, that is in and out data JSON types and Error handling 
 
 data SolveRequest = SolveRequest {
-    rawExpression :: String    
+  rawExpression :: Maybe String    
 } deriving (Show, Generic)
 
-data SolveResponse = SolveResponse {
-    finalExpression :: String    
+data SolveResponseStep = SolveResponseStep {
+  expressionStep :: String, 
+  explanationStep :: String
 } deriving (Show, Generic)
+
+instance ToJSON SolveResponseStep
+
+data SolveResponse = SolveResponse {
+  finalExpression :: String,
+  steps :: Maybe [SolveResponseStep]    
+} deriving (Show, Generic)
+
+instance FromJSON SolveRequest
+instance ToJSON SolveResponse
 
 data ErrorResponse = ErrorResponse
   { errHTTPCode :: Int
@@ -36,14 +47,14 @@ data ErrorResponse = ErrorResponse
 
 instance ToJSON ErrorResponse
 
+-- Servant already has its own ServerError type, but we can create a helper function to put our ErrorResponse into it
 jsonError :: Int -> String -> String -> ServerError
 jsonError code reason msg =
   let body = encode $ ErrorResponse code reason msg
   in err400
       { errReasonPhrase = reason
-      , errBody = body  -- now unambiguous: refers to ServerError.errBody
+      , errBody = body 
       , errHeaders = [("Content-Type", "application/json")]
       }
-instance FromJSON SolveRequest
-instance ToJSON SolveResponse
+
 

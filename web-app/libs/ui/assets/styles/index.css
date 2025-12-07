@@ -73,4 +73,7 @@
   .rdp-root {
     --rdp-accent-background-color: '#9BCBF2';
   }
+  .react-math-keyboard-input {
+    border-radius: 9px !important;
+  }
 }

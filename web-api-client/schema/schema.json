@@ -499,16 +499,41 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"MathEngineSolveStep": {
+				"description": "Represents a single step in the solving process of a math expression.",
+				"properties": {
+					"expressionStep": {
+						"type": "string"
+					},
+					"explanationStep": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"expressionStep",
+					"explanationStep"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"MathEngineSolveResponse": {
 				"description": "Represents the respons for solving a math expression.",
 				"properties": {
 					"finalExpression": {
 						"type": "string",
 						"description": "Final LaTeX expression"
+					},
+					"steps": {
+						"items": {
+							"$ref": "#/components/schemas/MathEngineSolveStep"
+						},
+						"type": "array",
+						"description": "Steps taken to solve the expression"
 					}
 				},
 				"required": [
-					"finalExpression"
+					"finalExpression",
+					"steps"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -1265,11 +1290,7 @@
 				"tags": [
 					"MathProblems"
 				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
+				"security": [],
 				"parameters": [],
 				"requestBody": {
 					"description": "Solve request; consists of rawExpression",
