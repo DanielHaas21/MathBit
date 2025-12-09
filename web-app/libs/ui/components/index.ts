@@ -26,3 +26,5 @@ export * from './Tooltip';
 export * from './RadioBool';
 export * from './Avatar';
 export * from './MathField';
+export * from './FunctionPlot';
+export * from './ClipboardCopy';

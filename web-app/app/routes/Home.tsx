@@ -2,11 +2,17 @@ import { createMathProblem, getAllUsers, refresh } from 'web-api-client';
 import login from '../../middleware/auth/login';
 import { useEffect, useRef, useState } from 'react';
 import getApiConfig from '@/apiConfig';
-import api from '@/interceptor';
-import MathInput, { KeyProps } from 'react-math-keyboard';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
-import { Button, InputBase, MathField } from '@/libs/ui/components';
-
+import {
+  Button,
+  ClipBoardCopy,
+  FunctionPlot,
+  InputBase,
+  KeyValuePair,
+  MathField,
+} from '@/libs/ui/components';
+import { ComputeEngine } from '@cortex-js/compute-engine';
+import { Paper } from '@/libs/ui/layouts';
 
 export default function Home() {
   // useEffect(() => {
@@ -16,7 +22,6 @@ export default function Home() {
 
   //   d();
   // }, []);
-
   const [latex, setLatex] = useState('');
   const test = async () => {
     async function testRefresh() {
@@ -31,17 +36,44 @@ export default function Home() {
 
     testRefresh();
   };
-
+  const test2 = async () => {
+    // console.log(await getAllUsers(getApiConfig()));
+  };
   return (
-    <>
-      <button onClick={test}>test ref</button>
-      <Button >test users</Button>
+    <div className="w-full flex justify-start items-center flex-col h-fit">
+      <div>
+        <Button onClick={test}>test ref/auth</Button>
+        <Button onClick={test2}>test math</Button>
+      </div>
 
-      <MathField initialLatex={latex} onChange={(newLatex) => setLatex(newLatex)} />
-      <MathJaxContext>
-        <MathJax dynamic>{`\\(${latex}\\)`}</MathJax>
-      </MathJaxContext>
-      <p>{latex}</p>
-    </>
+      <Paper thickness="sm" className="border border-white-800 w-[70%]">
+        <Paper.Title>Math Input Section</Paper.Title>
+        <Paper.Content className="grid grid-cols-1 xl:grid-cols-2">
+          <MathField initialLatex={latex} onChange={(newLatex) => setLatex(newLatex)} />
+
+          <div className="fle gap-2 flex-col w-full">
+            <KeyValuePair
+              orientation={'horizontal'}
+              label="LaTeX format:"
+              value={
+                <p>
+                  {latex} {latex && <ClipBoardCopy text={latex}></ClipBoardCopy>}
+                </p>
+              }
+            ></KeyValuePair>
+            <KeyValuePair
+              orientation={'horizontal'}
+              label="Plain Math:"
+              value={
+                <MathJaxContext>
+                  <MathJax>{`\\(${latex}\\)`}</MathJax>
+                </MathJaxContext>
+              }
+            ></KeyValuePair>
+          </div>
+        </Paper.Content>
+      </Paper>
+      <FunctionPlot latex={latex}></FunctionPlot>
+    </div>
   );
 }
