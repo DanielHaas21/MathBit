@@ -21,13 +21,13 @@ server = solve where
         case rawExpression req of 
         Nothing -> 
             throwError $ jsonError 400 "Bad Request" "rawExpression is required"
-        Just expr | null expr ->
+        Just Null ->
             throwError $ jsonError 400 "Bad Request" "rawExpression cannot be empty"
         Just expr ->
             pure SolveResponse {
-                    finalExpression = "Solved: " <> expr  -- solving logic will be implemented
+                    finalExpression = "Solved: "  -- solving logic will be implemented
                     , steps = Just [SolveResponseStep {
-                        expressionStep = "Step 1: " <> expr, -- example step notation
+                        expressionStep = "Step 1: ", -- example step notation
                         explanationStep = "This is the first step."
                     }]
                 }

@@ -15,7 +15,7 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
 
   const options: SelectInputOption[] = [
     { label: 'Functions', value: 'functions' },
-    { label: 'Algebra', value: 'algebra' },
+    // { label: 'Algebra', value: 'algebra' },
     { label: 'Calculus', value: 'sequences' },
     { label: 'Trigonometry', value: 'trigo' },
     { label: 'Geometry', value: 'geometry' },
@@ -78,23 +78,23 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
       id: 'frac',
       label: '\\frac{}{}',
       labelType: 'tex',
-      groups: ['algebra'],
+      groups: ['functions'],
       mathfieldInstructions: { content: '\\frac{}{}', method: 'write' },
     },
-    {
-      id: 'sigma',
-      label: '\\sum',
-      labelType: 'tex',
-      groups: ['algebra'],
-      mathfieldInstructions: { content: '\\sum', method: 'write' },
-    },
-    {
-      id: 'product',
-      label: '\\prod',
-      labelType: 'tex',
-      groups: ['algebra'],
-      mathfieldInstructions: { content: '\\prod', method: 'write' },
-    },
+    // {
+    //   id: 'sigma',
+    //   label: '\\sum',
+    //   labelType: 'tex',
+    //   groups: ['algebra'],
+    //   mathfieldInstructions: { content: '\\sum', method: 'write' },
+    // },
+    // {
+    //   id: 'product',
+    //   label: '\\prod',
+    //   labelType: 'tex',
+    //   groups: ['algebra'],
+    //   mathfieldInstructions: { content: '\\prod', method: 'write' },
+    // },
     // Calculus tab (sequences)
     {
       id: 'integral',

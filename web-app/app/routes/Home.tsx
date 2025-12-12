@@ -13,6 +13,7 @@ import {
 } from '@/libs/ui/components';
 import { ComputeEngine } from '@cortex-js/compute-engine';
 import { Paper } from '@/libs/ui/layouts';
+import { latexToMathJson } from '@/libs/math';
 
 export default function Home() {
   // useEffect(() => {
@@ -38,6 +39,7 @@ export default function Home() {
   };
   const test2 = async () => {
     // console.log(await getAllUsers(getApiConfig()));
+    console.log(latexToMathJson(latex))
   };
   return (
     <div className="w-full flex justify-start items-center flex-col h-fit">

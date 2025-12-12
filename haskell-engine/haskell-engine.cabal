@@ -16,7 +16,9 @@ library
       Api
       Engine
       Parser
+      Struct.Expr
       Test
+      Validator
   other-modules:
       Paths_haskell_engine
   hs-source-dirs:
@@ -34,6 +36,7 @@ library
     , servant-swagger
     , text
     , transformers
+    , vector
     , wai
     , warp
   default-language: Haskell2010
@@ -59,6 +62,7 @@ executable haskell-engine
     , servant-swagger
     , text
     , transformers
+    , vector
     , wai
     , warp
   default-language: Haskell2010

@@ -10,7 +10,7 @@
 
 module Api where
 
-import Data.Aeson (ToJSON, FromJSON, encode)
+import Data.Aeson (ToJSON, FromJSON, encode, Value)
 
 import Data.ByteString (ByteString)
 import GHC.Generics (Generic)
@@ -20,8 +20,9 @@ import Servant
 
 -- This module contains definitions for the exposed API endpoint, that is in and out data JSON types and Error handling 
 
+-- Arbitrary value since the raw expression is Array of (N) dimensions
 data SolveRequest = SolveRequest {
-  rawExpression :: Maybe String    
+  rawExpression :: Maybe Value  
 } deriving (Show, Generic)
 
 data SolveResponseStep = SolveResponseStep {

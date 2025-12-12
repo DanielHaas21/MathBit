@@ -1,10 +1,6 @@
 {-# LANGUAGE DeriveFunctor #-}
 module Struct.Expr where
  
--- ============================================================
--- 1. Core AST Type
--- ============================================================
-
 data Expr
     = Var String                -- x, y, a, b, f, etc.
     | Num Double                -- numbers
@@ -31,6 +27,5 @@ data Expr
     | Permutation Expr Expr     -- P(n,k)
     | Variation Expr Expr       -- V(n,k)
     | ConstantPi                -- \pi
-    | Angle                     -- \angle
-    | Degree Expr               -- x^\circ
+    | ConstantE                 -- e
     deriving (Show, Eq)
