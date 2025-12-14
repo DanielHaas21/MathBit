@@ -16,7 +16,7 @@ fromMathJSON :: Value -> Parser Expr
 fromMathJSON v = case v of
     Array arr  -> parseArray arr
     String s   -> pure (Var $ T.unpack s) -- either edge or error cases 
-    Number n   -> pure (Num $ realToFrac n)  -- either edge or error cases 
+    Number n   -> pure (Num $ realToFrac n)  -- Numbers
     _          -> fail "Invalid MathJSON expression"
 
 
@@ -30,6 +30,13 @@ parseArray arr
             String op -> parseOp (T.unpack op) (V.tail arr)  
             _         -> fail "Array does not start with string operator"
 
+-- Parses a limit if it has a tuple inside it, tuple is mainly used as a structure block 
+parseLimitTuple :: Vector Value -> Parser (String, Value)
+parseLimitTuple v = case V.toList v of
+    ["Tuple", String var, toVal] ->
+        pure (T.unpack var, toVal)
+    _ ->
+        fail "Invalid limit tuple"
 
 -- Function table for unary functions, that is any that are a form of fn(x) 
 functionTable :: [(String, String)]
@@ -79,11 +86,17 @@ parseOp op args = case op of
 
     -- Limit
     "Limit" -> do
-        [String v, toVal, body] <- expect 3
-        Limit (T.unpack v)
-              <$> fromMathJSON toVal
-              <*> fromMathJSON body
-
+        case V.toList args of
+            [String v, toVal, body] ->
+                Limit (T.unpack v)
+                    <$> fromMathJSON toVal
+                    <*> fromMathJSON body
+            [Array tuple, body] -> do
+                (v, toVal) <- parseLimitTuple tuple
+                Limit v
+                    <$> fromMathJSON toVal
+                    <*> fromMathJSON body
+            _ -> fail "Invalid Limit form"
     -- Combinatorics
     "Combination" -> bin Combination
     "Permutation" -> bin Permutation
@@ -99,6 +112,9 @@ parseOp op args = case op of
     _ | Just name <- lookup op functionTable ->
             unary (Func name)
 
+    "Tuple" -> fail "Tuple is only allowed inside structured operators"
+    "List" -> fail "Lists are not supported in expressions"
+    "Set"  -> fail "Sets are not supported in expressions"
     _ -> fail $ "Unsupported operator: " ++ op
 
     --monad function definitions
