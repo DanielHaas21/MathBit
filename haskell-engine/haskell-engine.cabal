@@ -16,7 +16,12 @@ library
       Api
       Engine
       Parser
+      Rules.Algebra
+      Rules.Calculus
+      Rules.Combinatorics
+      Rules.Trigonometry
       Struct.Expr
+      Struct.Rule
       Test
       Validator
   other-modules:

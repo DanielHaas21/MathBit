@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 module Validator ( 
-    validator, StepData
+    validator, StepData(..)
 )where
 
 import Data.Aeson

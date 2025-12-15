@@ -38,7 +38,7 @@ parseLimitTuple v = case V.toList v of
     _ ->
         fail "Invalid limit tuple"
 
--- Function table for unary functions, that is any that are a form of fn(x) 
+-- Function table for unary functions, that is any that are a form of f(x) 
 functionTable :: [(String, String)]
 functionTable =
     [ ("Sin", "sin")
