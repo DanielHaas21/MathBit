@@ -68,9 +68,6 @@ importers:
 
   web-api:
     dependencies:
-      '@cortex-js/compute-engine':
-        specifier: ^0.30.2
-        version: 0.30.2
       '@tsoa/runtime':
         specifier: ^6.6.0
         version: 6.6.0

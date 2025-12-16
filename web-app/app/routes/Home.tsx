@@ -15,6 +15,7 @@ import { ComputeEngine } from '@cortex-js/compute-engine';
 import { Paper } from '@/libs/ui/layouts';
 import { latexToMathJson } from '@/libs/math';
 import { evaluateLatexNumeric } from '@/libs/math/evaluateExpression';
+import solve from '@/middleware/actions/solve';
 
 export default function Home() {
   // useEffect(() => {
@@ -39,8 +40,10 @@ export default function Home() {
     testRefresh();
   };
   const test2 = async () => {
-    // console.log(await getAllUsers(getApiConfig()));
+    // console.log(await getAllUsers(getApiConfig()));¨
+    
     console.log(latexToMathJson(latex));
+    console.log(await solve(latex));
   };
   return (
     <div className="w-full flex justify-start items-center flex-col h-fit">

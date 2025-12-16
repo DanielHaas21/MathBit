@@ -3,9 +3,9 @@
  */
 export interface MathEngineSolveRequest {
   /**
-   * Raw LaTeX expression
+   * Raw LaTeX expression, typed as unknown since NodeNext doesn't allow runtime imports of ESM modules, which cortex is, otherwise it would be typed as Expression from @cortex-js/compute-engine
    */
-  rawExpression: string;
+  rawExpression: unknown;
 }
 /**
  * Represents a single step in the solving process of a math expression.

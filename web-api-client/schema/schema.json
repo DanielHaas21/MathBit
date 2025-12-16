@@ -542,8 +542,7 @@
 				"description": "Represents the request payload for solving a math expression.",
 				"properties": {
 					"rawExpression": {
-						"type": "string",
-						"description": "Raw LaTeX expression"
+						"description": "Raw LaTeX expression, typed as unknown since NodeNext doesn't allow runtime imports of ESM modules, which cortex is, otherwise it would be typed as Expression from"
 					}
 				},
 				"required": [

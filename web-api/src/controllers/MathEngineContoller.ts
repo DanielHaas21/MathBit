@@ -1,7 +1,6 @@
 import { Controller, Post, Body, Route, Tags } from 'tsoa';
 import { type MathEngineSolveRequest, type MathEngineSolveResponse } from '../model/MathEngine';
 import { getAppConfig } from '../appConfig';
-import { ComputeEngine } from '@cortex-js/compute-engine';
 /**
  * Controller for communicating with the Math solving HTTP microservice .
  * Provides a single endpoint for solving math expressions.
@@ -28,21 +27,16 @@ export class MathEngineController extends Controller {
   async solveMathExpression(
     @Body() body: MathEngineSolveRequest
   ): Promise<MathEngineSolveResponse> {
-    if (body.rawExpression.trim() === '') {
-      throw new Error('rawExpression cannot be empty');
-    }
-
-    const ce = new ComputeEngine();
-    const MathJSON = ce.parse(body.rawExpression).json;
+    const requestBody = JSON.stringify({ rawExpression: body.rawExpression });
 
     const config = getAppConfig();
-
+    
     const response: MathEngineSolveResponse = await fetch(config.haskellEngine.url + '/solve', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: MathJSON,
+      body: requestBody,
     }).then((res) => {
       if (!res.ok) {
         throw new Error(`Haskell engine responded with status ${res.status}`);
