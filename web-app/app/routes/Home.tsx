@@ -14,6 +14,7 @@ import {
 import { ComputeEngine } from '@cortex-js/compute-engine';
 import { Paper } from '@/libs/ui/layouts';
 import { latexToMathJson } from '@/libs/math';
+import { evaluateLatexNumeric } from '@/libs/math/evaluateExpression';
 
 export default function Home() {
   // useEffect(() => {
@@ -39,7 +40,7 @@ export default function Home() {
   };
   const test2 = async () => {
     // console.log(await getAllUsers(getApiConfig()));
-    console.log(latexToMathJson(latex))
+    console.log(latexToMathJson(latex));
   };
   return (
     <div className="w-full flex justify-start items-center flex-col h-fit">
@@ -71,6 +72,11 @@ export default function Home() {
                   <MathJax>{`\\(${latex}\\)`}</MathJax>
                 </MathJaxContext>
               }
+            ></KeyValuePair>
+            <KeyValuePair
+              label="Evaluation:"
+              orientation={'horizontal'}
+              value={evaluateLatexNumeric(latex) === null ? 'None' : evaluateLatexNumeric(latex)}
             ></KeyValuePair>
           </div>
         </Paper.Content>

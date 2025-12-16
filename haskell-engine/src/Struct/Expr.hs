@@ -2,15 +2,16 @@
 
 module Struct.Expr where
  
+--Represent a lingua-franca for the entire parser, engine , Every expression follows this data type 
 data Expr
     = Var String                -- x, y, a, b, f, etc.
     | Num Double                -- numbers
-    | Add Expr Expr
-    | Sub Expr Expr
-    | Mul Expr Expr
-    | Div Expr Expr
-    | Pow Expr Expr
-    | Neg Expr
+    | Add Expr Expr -- +
+    | Sub Expr Expr  
+    | Mul Expr Expr -- * 
+    | Div Expr Expr -- / or Rational
+    | Pow Expr Expr -- ^ 
+    | Neg Expr -- -x 
     | Factorial Expr            -- n! or expression!
     | Abs Expr                  -- |x|
     | Func String Expr          -- sin(x), ln(x), etc.

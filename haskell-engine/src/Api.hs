@@ -25,11 +25,13 @@ data SolveRequest = SolveRequest {
   rawExpression :: Maybe Value  
 } deriving (Show, Generic)
 
-data SolveResponseStep = SolveResponseStep {
-  expressionStep :: String, 
-  explanationStep :: String
-} deriving (Show, Generic)
-
+-- Similar to Step in engine
+data SolveResponseStep = SolveResponseStep
+  { stepBefore :: String -- step before, this approach help create a chain-like pattern
+  , stepAfter  :: String -- step after, this approach help create a chain-like pattern
+  , stepRule   :: String -- Name of the rule, mostly functional, likely wont be shown to the user
+  , stepRuleDescription :: String -- Explains what the rule does
+  } deriving (Show, Generic)
 instance ToJSON SolveResponseStep
 
 data SolveResponse = SolveResponse {
