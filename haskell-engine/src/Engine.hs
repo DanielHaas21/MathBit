@@ -45,7 +45,7 @@ simplifyWithLog expr =
 selectRules :: StepData -> [Rule]
 selectRules meta =
   sortOn (negate . priority) $  -- All rules have a priority prop 
-    Algebra.rules -- Algebra rules are always used, rest is pushed into the algebra rules
+    Algebra.rules -- Algebra rules are always used, rest is concated into the algebra rules
       ++ if hasTrigonometry meta then Trig.rules else []
       ++ if hasCalculus meta      then Calc.rules else []
       ++ if hasCombinatorics meta then Comb.rules else []
@@ -54,32 +54,35 @@ selectRules meta =
 filterRepeatedSteps :: SimplifyLog -> SimplifyLog
 filterRepeatedSteps = map head . groupBy (\s1 s2 -> rule s1 == rule s2 && before s1 == before s2)
 
--- Main rewrite function re
+-- Main rewrite function, takes rule array and expression, returns final expression and log of steps
 rewrite :: [Rule] -> Expr -> (Expr, SimplifyLog)
-rewrite rules expr =
+rewrite rules expr = 
+    -- Recursive helper function with step counter to avoid infinite loops
     let (finalExpr, log) = go expr [] 0
     in (finalExpr, filterRepeatedSteps log)
   where
-    maxSteps = 1000
-    go e log n
-      | n > maxSteps = (e, log)
-      | otherwise =
-          let (e', log1) = rewriteOnce rules e
-          in if e' == e
+    maxSteps = 1000 -- max step cap to avoid loops
+    go e log n -- e is current expr, log is accumulated log, n is step count
+      | n > maxSteps = (e, log) -- return if max steps exceeded
+      | otherwise = 
+          let (e', log1) = rewriteOnce rules e -- rewrite 
+          in if e' == e -- if no change and merge up logs, return
              then (e, log ++ log1)
              else go e' (log ++ log1) (n+1)
 
+-- Happens on each rewrite step, first rewrites children, then applies rules to the current expr
 rewriteOnce :: [Rule] -> Expr -> (Expr, SimplifyLog)
 rewriteOnce rules expr =
   case rewriteChildren rules expr of
-    (expr', log1) ->
-      let exprFolded = foldConstants expr'
-      in case applyRules rules exprFolded of
-          Just (newExpr, step)
+    (expr', log1) -> -- takes rewritten children expr and log  
+      let exprFolded = foldConstants expr' -- fold constants
+      in case applyRules rules exprFolded of  
+          Just (newExpr, step) -- try to apply rules to the folded expr
             | newExpr /= exprFolded -> (newExpr, log1 ++ [step])  -- only log if changed
             | otherwise             -> (exprFolded, log1)        -- skip no-op
           Nothing -> (exprFolded, log1)
 
+-- Rewrites children of the expression based on its constructor
 rewriteChildren :: [Rule] -> Expr -> (Expr, SimplifyLog)
 rewriteChildren rules = \case
   -- N-ary Add
@@ -93,6 +96,7 @@ rewriteChildren rules = \case
     in (foldNary Mul xs, logs)
 
   -- everything else remains the same
+  -- may be removed since negating addition is preferred
   Sub a b ->
     let (a', la) = rewrite rules a
         (b', lb) = rewrite rules b
@@ -162,33 +166,34 @@ foldNary f (x:xs) = foldl f x xs
 
 
 -- This function numerically evaluates pure numbers. That is, a case like 5 + x + 4 -> 9 + x
+-- Here folding means combining numeric constants 
 foldConstants :: Expr -> Expr
 foldConstants = \case
   -- N-ary Add
-  Add a b ->
-    let xs = collectAdd (Add a b)
-        xs' = map foldConstants xs
-        (nums, others) = partitionNums xs'
-        numSum = sum nums
-        allTerms = if numSum /= 0 then Num numSum : others else others
-    in case allTerms of
-         []  -> Num 0
-         [x] -> x
-         xsN -> foldl1 Add xsN
+  Add a b -> -- take all temrs 
+    let xs = collectAdd (Add a b) -- collect all add terms 
+        xs' = map foldConstants xs -- recurse fold constants on each term
+        (nums, others) = partitionNums xs' -- partition into numbers and others
+        numSum = sum nums -- sum
+        allTerms = if numSum /= 0 then Num numSum : others else others -- reassemble
+    in case allTerms of 
+         []  -> Num 0 -- nothing
+         [x] -> x -- single term - no folding needed
+         xsN -> foldl1 Add xsN -- fold back if more than one term
 
   -- N-ary Mul
-  Mul a b ->
-    let xs = collectMul (Mul a b)
-        xs' = map foldConstants xs
-        (nums, others) = partitionNums xs'
-        numProd = product nums
+  Mul a b -> -- take all temrs 
+    let xs = collectMul (Mul a b) -- collect all mul terms 
+        xs' = map foldConstants xs -- recurse fold constants on each term
+        (nums, others) = partitionNums xs' -- partition into numbers and others
+        numProd = product nums -- product
     in if numProd == 0 then Num 0
        else
-         let finalTerms = if numProd /= 1 then Num numProd : others else others
+         let finalTerms = if numProd /= 1 then Num numProd : others else others -- reassemble
          in case finalTerms of
-              []  -> Num 1
-              [x] -> x
-              xsN -> foldl1 Mul xsN
+              []  -> Num 1 -- nothing
+              [x] -> x -- single term - no folding needed
+              xsN -> foldl1 Mul xsN -- fold back if more than one term
 
   -- Negation
   Neg e ->
@@ -247,27 +252,27 @@ foldConstants = \case
   ConstantE  -> ConstantE
 
 
--- Extract numeric constants
+-- Helper to partition numeric and non-numeric expressions
 partitionNums :: [Expr] -> ([Double], [Expr])
 partitionNums [] = ([], [])
 partitionNums (Num x : xs) =
-  let (ns, es) = partitionNums xs in (x:ns, es)
+  let (ns, es) = partitionNums xs in (x:ns, es) -- numeric case
 partitionNums (e:xs) =
-  let (ns, es) = partitionNums xs in (ns, e:es)
+  let (ns, es) = partitionNums xs in (ns, e:es) -- non-numeric case
 
-
+-- Apply rules to an expression, returning the first successful application
 applyRules :: [Rule] -> Expr -> Maybe (Expr, Step)
 applyRules rules expr =
   foldr tryRule Nothing rules
   where
     tryRule r acc =
       case acc of
-        Just _ -> acc
-        Nothing ->
-          case apply r expr of
+        Just _ -> acc -- already found a rule
+        Nothing -> -- try this rule
+          case apply r expr of 
             Just e' ->
-              Just (e', Step expr e' (ruleDescription r) (ruleName r))
+              Just (e', Step expr e' (ruleDescription r) (ruleName r)) -- return new expr and step
             Nothing ->
-              Nothing
+              Nothing -- no rule found
 
       

@@ -11,7 +11,7 @@ import Parser
 import Servant
 import Struct.Expr (Expr(..))
 import Engine (Step(..), simplifyWithLog)
-import Api (SolveRequest(..), SolveResponse(..),SolveResponseStep(..) , ErrorResponse(..), jsonError)
+import Api (SolveRequest(..), SolveResponse(..),SolveResponseStep(..) ,ErrorResponse(..), jsonError)
 import qualified Data.Aeson.Types as AesonTypes
 import qualified Data.ByteString.Lazy.Char8 as BL
 import Control.Monad.IO.Class (liftIO)

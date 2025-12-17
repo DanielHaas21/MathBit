@@ -18,7 +18,6 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
     // { label: 'Algebra', value: 'algebra' },
     { label: 'Calculus', value: 'sequences' },
     { label: 'Trigonometry', value: 'trigo' },
-    { label: 'Geometry', value: 'geometry' },
     { label: 'Combinatorics', value: 'combinatorics' },
   ];
 
@@ -221,22 +220,8 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
       id: 'pi',
       label: '\\pi',
       labelType: 'tex',
-      groups: ['geometry'],
+      groups: ['functions'],
       mathfieldInstructions: { content: '\\pi', method: 'write' },
-    },
-    {
-      id: 'angle',
-      label: '\\angle',
-      labelType: 'tex',
-      groups: ['geometry'],
-      mathfieldInstructions: { content: '\\angle', method: 'write' },
-    },
-    {
-      id: 'degree',
-      label: '^\\circ',
-      labelType: 'tex',
-      groups: ['geometry'],
-      mathfieldInstructions: { content: '^\\circ', method: 'write' },
     },
     {
       id: 'combination',

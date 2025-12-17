@@ -136,8 +136,9 @@ parseOp op args = case op of
     "List" -> fail "Lists are not supported in expressions"
     "Set"  -> fail "Sets are not supported in expressions"
     "ComplexInfinity" -> fail "Complex numbers arent supported"
-    "PreDecrement" -> fail "No idea what this is but its n,ot supported"
-    "Decrement" -> fail "No idea what this is but its n,ot supported"
+    "PreDecrement" -> fail "No idea what this is but its not supported"
+    "PreIncrement" -> fail "No idea what this is but its not supported"
+    "Decrement" -> fail "No idea what this is but its not supported"
     _ -> fail $ "Unsupported operator: " ++ op
 
     

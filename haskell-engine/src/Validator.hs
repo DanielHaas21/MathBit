@@ -90,7 +90,10 @@ validator expr = case expr of
     Variation a b ->
         validator a `merge` validator b `merge`
         emptyStep { hasCombinatorics = True }
+    Factorial a ->
+        validator a `merge` emptyStep { hasCombinatorics = True }
 
+        
     -- Prime notation (calculus-adjacent)
     Prime a _ ->
         (validator a) `merge` emptyStep { hasCalculus = True }
