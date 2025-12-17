@@ -78,8 +78,13 @@ parseOp op args = case op of
     "Multiply" -> nary Mul args
     "Divide"   -> bin Div
     "Power"    -> bin Pow
-    "Negate"   -> unary Neg
 
+    -- negation only happens when theres no explicit number next to a variable, hence gives us neg but that creates a unnecessary layer of complexity  
+    -- Example: we type -x MathJSON gives is Negate x, yet if we type -2x it gives us Multiply ( -2) x   
+    "Negate"   -> do 
+        case V.toList args of 
+            [String v] ->
+                Mul (Num (-1)) <$> fromMathJSON (String v)
     -- "Rational" special case, happens when a variable is in the numerator
     "Rational" -> bin Div
 
