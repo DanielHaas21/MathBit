@@ -10,7 +10,8 @@ import GHC.Generics
 import Parser
 import Servant
 import Struct.Expr (Expr(..))
-import Engine (Step(..), simplifyWithLog)
+import Engine.Engine (simplifyWithLog)
+import Struct.Step (Step(..))
 import Api (SolveRequest(..), SolveResponse(..),SolveResponseStep(..) ,ErrorResponse(..), jsonError)
 import qualified Data.Aeson.Types as AesonTypes
 import qualified Data.ByteString.Lazy.Char8 as BL

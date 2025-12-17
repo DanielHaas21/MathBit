@@ -30,4 +30,4 @@ data Expr
     | Variation Expr Expr       -- V(n,k)
     | ConstantPi                -- \pi
     | ConstantE                 -- e
-    deriving (Show, Eq)
+    deriving (Show, Ord, Eq)

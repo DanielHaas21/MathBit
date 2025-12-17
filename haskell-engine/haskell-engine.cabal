@@ -14,7 +14,9 @@ build-type:     Simple
 library
   exposed-modules:
       Api
-      Engine
+      Engine.Engine
+      Engine.Fold
+      Engine.Normalize
       Parser
       Rules.Algebra
       Rules.Calculus
@@ -22,6 +24,7 @@ library
       Rules.Trigonometry
       Struct.Expr
       Struct.Rule
+      Struct.Step
       Test
       Validator
   other-modules:
