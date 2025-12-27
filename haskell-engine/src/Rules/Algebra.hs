@@ -8,6 +8,7 @@ import Struct.Expr
 import Struct.Rule
 import Data.List (groupBy, partition, sortOn)
 import Data.Function (on)
+import Engine.Fold (foldNary)
 import qualified Data.Map.Strict as M
 
 -- | All algebra rules (n-ary aware)
@@ -21,6 +22,8 @@ rules =
   , sqrtToPow
   , rootToPow
   , distributeMulN
+  , divToMul
+  , powMulDistribN
   ]
 
 -- x^a / x^b -> x^(a-b)
@@ -36,6 +39,7 @@ powPow :: Rule
 powPow = Rule "powPow" "skib"  20 $ \case
   Pow (Pow x a) b -> Just (Pow x (Mul a b))
   _ -> Nothing
+
 
 -- x^0 -> 1
 powZero :: Rule
@@ -67,6 +71,11 @@ negNeg = Rule "negNeg" "skib" 10 $ \case
   _           -> Nothing
 
 
+divToMul :: Rule
+divToMul = Rule "divToMul" "a / b -> a * b^(-1)" 100 $ \case
+  Div a b -> Just (Mul a (Pow b (Num (-1))))
+  _       -> Nothing
+
 -- a*(b + c + ...) -> a*b + a*c + ...
 -- Distributes multiplication over addition for n-ary Add
 distributeMulN :: Rule
@@ -86,10 +95,23 @@ distributeMulN = Rule "distributeMulN" "skib" 5 $ \case
     isAdd (Add _ _) = True
     isAdd _ = False
 
+-- (a*b*c)^n -> a^n * b^n * c^n
+-- Same as DistributeMulN but for powers, takes a collection of mul terms and raises each to the power n 
+powMulDistribN :: Rule
+powMulDistribN = Rule
+  "powMulDistribN"
+  "(∏ a_i)^n -> ∏ a_i^n"
+  90 $ \case
+    Pow e n ->
+      case collectMul e of
+        [_] -> Nothing  -- not actually a product
+        xs  -> Just (foldNary Mul (map (\x -> Pow x n) xs))
+    _ -> Nothing
+
+
 -- ====================================
 -- HELPERS
 -- ====================================
-
 
 partitionNums :: [Expr] -> ([Double], [Expr])
 partitionNums [] = ([], [])

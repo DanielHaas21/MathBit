@@ -86,10 +86,18 @@ insertTerm e m =
   in M.insertWith (+) k c m
 
 splitCoeff :: Expr -> (Double, Expr)
-splitCoeff = \case
-  Mul (Num c) e -> (c, e)
-  Num c         -> (c, Num 1)
-  e             -> (1, e)
+splitCoeff e =
+  let
+    factors = collectMul e
+    (nums, syms) = partitionNums factors
+    coeff = product nums
+    key =
+      case syms of
+        []  -> Num 1
+        [x] -> x
+        xs  -> foldl1 Mul xs
+  in
+    (coeff, key)
 
 rebuild :: Double -> Expr -> Expr
 rebuild c k

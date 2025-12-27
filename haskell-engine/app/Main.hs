@@ -11,6 +11,7 @@ import Parser
 import Servant
 import Struct.Expr (Expr(..))
 import Engine.Engine (simplifyWithLog)
+import Cleanup (cleanupExpr)
 import Struct.Step (Step(..))
 import Api (SolveRequest(..), SolveResponse(..),SolveResponseStep(..) ,ErrorResponse(..), jsonError)
 import qualified Data.Aeson.Types as AesonTypes
@@ -41,13 +42,13 @@ server = solve where
 
                         -- Run simplification with log
                         let (simplifiedExpr, logSteps) = simplifyWithLog expr
-
+                        let cleanedExpr = cleanupExpr simplifiedExpr
                         -- Optionally print log
                         liftIO $ putStrLn "Simplification steps:"
                         mapM_ (liftIO . print) logSteps
 
                         pure SolveResponse
-                            { finalExpression = show simplifiedExpr
+                            { finalExpression = show cleanedExpr
                             , steps = Just $ map toStep logSteps
                             }
 

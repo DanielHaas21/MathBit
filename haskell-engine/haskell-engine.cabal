@@ -14,6 +14,7 @@ build-type:     Simple
 library
   exposed-modules:
       Api
+      Engine.Cleanup
       Engine.Engine
       Engine.Fold
       Engine.Normalize
