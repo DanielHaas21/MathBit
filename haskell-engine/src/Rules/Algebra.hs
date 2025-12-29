@@ -31,7 +31,7 @@ rules =
 divSameBaseN :: Rule
 divSameBaseN = Rule "divSameBaseN" "skib" 20 $ \case
   Div (Pow x a) (Pow y b) | x == y -> Just (Pow x (Sub a b))
-  Div x@(Var _) y@(Var _) | x == y -> Just (Num 1)
+  Div x@(Var _) y@(Var _) | x == y -> Just (Num (R 1))
   _ -> Nothing
 
 -- (x^a)^b -> x^(a*b)
@@ -44,20 +44,20 @@ powPow = Rule "powPow" "skib"  20 $ \case
 -- x^0 -> 1
 powZero :: Rule
 powZero = Rule "powZero" "skib" 10 $ \case
-  Pow (Num 0) _ -> Just (Num 0)
-  Pow _ (Num 0) -> Just (Num 1)
+  Pow (Num (R 0)) _ -> Just (Num (R 0))
+  Pow _ (Num (R 0)) -> Just (Num (R 1))
   _             -> Nothing
 
 -- Sqrt(x) -> x^(1/2)
 sqrtToPow :: Rule
 sqrtToPow = Rule "sqrtToPow" "skib" 10 $ \case
-  Sqrt x -> Just (Pow x (Num 0.5))
+  Sqrt x -> Just (Pow x (Num  (R 0.5)))
   _      -> Nothing
 
 -- Root n x -> x^(1/n)
 rootToPow :: Rule
 rootToPow = Rule "rootToPow" "skib" 10 $ \case
-  Root x n -> Just (Pow x (Div (Num 1) n))
+  Root x n -> Just (Pow x (Div (Num (R 1)) n))
   _        -> Nothing
 
 -- ====================================
@@ -73,7 +73,7 @@ negNeg = Rule "negNeg" "skib" 10 $ \case
 
 divToMul :: Rule
 divToMul = Rule "divToMul" "a / b -> a * b^(-1)" 100 $ \case
-  Div a b -> Just (Mul a (Pow b (Num (-1))))
+  Div a b -> Just (Mul a (Pow b (Num (R (-1)))))
   _       -> Nothing
 
 -- a*(b + c + ...) -> a*b + a*c + ...
@@ -81,17 +81,17 @@ divToMul = Rule "divToMul" "a / b -> a * b^(-1)" 100 $ \case
 distributeMulN :: Rule
 distributeMulN = Rule "distributeMulN" "skib" 5 $ \case
   Mul a b ->
-    let terms = collectMul (Mul a b) -- collect all mul terms
-        maybeAdd = filter isAdd terms -- find any Add terms
+    let terms = collectMul (Mul a b)
+        maybeAdd = filter isAdd terms
     in case maybeAdd of
-         [] -> Nothing  -- no addition found, do nothing
-         (Add x y : _) -> -- found an addition, distribute over it
-           let before = takeWhile (/= Add x y) terms -- before
-               after  = drop (length before + 1) terms -- after
-               expanded = map (\t -> foldl1 Mul (before ++ [t] ++ after)) [x, y] -- map each term in the addition to a new multiplication
-           in Just (foldl1 Add expanded) -- fold back into an addition 
+         [] -> Nothing
+         (Add x y : _) ->
+           let before = takeWhile (/= Add x y) terms
+               after  = drop (length before + 1) terms
+               expanded = map (\t -> foldl1 Mul (before ++ [t] ++ after)) [x, y]
+           in Just (foldl1 Add expanded)
   _ -> Nothing
-  where -- helper to identify Add terms
+  where
     isAdd (Add _ _) = True
     isAdd _ = False
 
@@ -113,10 +113,10 @@ powMulDistribN = Rule
 -- HELPERS
 -- ====================================
 
-partitionNums :: [Expr] -> ([Double], [Expr])
-partitionNums [] = ([], [])
-partitionNums (Num x : xs) =
-  let (ns, es) = partitionNums xs in (x:ns, es)
+partitionNums :: [Expr] -> ([Number],[Expr])
+partitionNums [] = ([],[])
+partitionNums (Num n:xs) =
+  let (ns, es) = partitionNums xs in (n:ns, es)
 partitionNums (e:xs) =
   let (ns, es) = partitionNums xs in (ns, e:es)
 

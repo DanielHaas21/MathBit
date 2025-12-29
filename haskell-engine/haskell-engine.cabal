@@ -14,11 +14,12 @@ build-type:     Simple
 library
   exposed-modules:
       Api
-      Engine.Cleanup
+      Cleanup
       Engine.Engine
       Engine.Fold
       Engine.Normalize
       Parser
+      Print
       Rules.Algebra
       Rules.Calculus
       Rules.Combinatorics

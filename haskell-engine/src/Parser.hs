@@ -4,7 +4,7 @@ module Parser
     ( fromMathJSON )
 where
 
-import Struct.Expr (Expr(..))
+import Struct.Expr (Expr(..), Number(..))
 import Data.Aeson
 import Data.Aeson.Types (Parser)
 import Data.Vector (Vector)
@@ -19,7 +19,7 @@ fromMathJSON :: Value -> Parser Expr
 fromMathJSON v = case v of
     Array arr  -> parseArray arr -- All operators
     String s   -> pure (Var $ T.unpack s) -- Variables
-    Number n   -> pure (Num $ realToFrac n)  -- Numbers
+    Number n -> pure (Num (R (toRational n)))  -- wrap Double into Number
     _          -> fail "Invalid MathJSON expression"
 
 
@@ -85,7 +85,7 @@ parseOp op args = case op of
         case V.toList args of
             [x] -> do
                 expr <- fromMathJSON x
-                return $ Mul (Num (-1)) expr
+                return $ Mul (Num (R (-1))) expr
             _ ->
                 fail "Negate expects exactly one argument"
 

@@ -1,11 +1,15 @@
 {-# LANGUAGE DeriveFunctor #-}
 
 module Struct.Expr where
- 
+data Number
+  = D Double      -- approximate, for non-exact evaluation
+  | R Rational    -- exact, for fractions
+  deriving (Eq, Ord, Show)
+
 --Represent a lingua-franca for the entire parser, engine , Every expression follows this data type 
 data Expr
     = Var String                -- x, y, a, b, f, etc.
-    | Num Double                -- numbers
+    | Num Number                -- numbers
     | Add Expr Expr -- +
     | Sub Expr Expr  
     | Mul Expr Expr -- * 

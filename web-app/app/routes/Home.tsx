@@ -26,6 +26,7 @@ export default function Home() {
   //   d();
   // }, []);
   const [latex, setLatex] = useState('');
+  const [final, setFinal] = useState('');
   const test = async () => {
     async function testRefresh() {
       try {
@@ -40,10 +41,12 @@ export default function Home() {
     testRefresh();
   };
   const test2 = async () => {
-    // console.log(await getAllUsers(getApiConfig()));¨
-    
+    // console.log(await getAllUsers(getApiConfig()));
+
     console.log(latexToMathJson(latex));
-    console.log(await solve(latex));
+    const solved = await solve(latex);
+    setFinal(solved.finalExpression);
+    console.log(solved)
   };
   return (
     <div className="w-full flex justify-start items-center flex-col h-fit">
@@ -81,6 +84,9 @@ export default function Home() {
               orientation={'horizontal'}
               value={evaluateLatexNumeric(latex) === null ? 'None' : evaluateLatexNumeric(latex)}
             ></KeyValuePair>
+            <MathJaxContext>
+              <MathJax>{`\\(${final}\\)`}</MathJax>
+            </MathJaxContext>
           </div>
         </Paper.Content>
       </Paper>

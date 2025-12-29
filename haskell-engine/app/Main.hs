@@ -17,7 +17,8 @@ import Api (SolveRequest(..), SolveResponse(..),SolveResponseStep(..) ,ErrorResp
 import qualified Data.Aeson.Types as AesonTypes
 import qualified Data.ByteString.Lazy.Char8 as BL
 import Control.Monad.IO.Class (liftIO)
-
+import Print (renderLatex)
+import qualified Data.Text as Text
 
 type API = "solve" :> ReqBody '[JSON] SolveRequest :> Post '[JSON] SolveResponse
 
@@ -43,12 +44,13 @@ server = solve where
                         -- Run simplification with log
                         let (simplifiedExpr, logSteps) = simplifyWithLog expr
                         let cleanedExpr = cleanupExpr simplifiedExpr
+                        let prettyExpr = Text.unpack (renderLatex cleanedExpr)
                         -- Optionally print log
                         liftIO $ putStrLn "Simplification steps:"
                         mapM_ (liftIO . print) logSteps
 
                         pure SolveResponse
-                            { finalExpression = show cleanedExpr
+                            { finalExpression = prettyExpr
                             , steps = Just $ map toStep logSteps
                             }
 

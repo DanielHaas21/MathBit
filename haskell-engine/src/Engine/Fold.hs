@@ -5,10 +5,10 @@ module Engine.Fold (foldConstants, foldNary) where
 
 import Struct.Expr
 import Data.List (sortOn,groupBy)
-
+import Data.Ratio (numerator, denominator)
 -- Fold back into a n-ary Add / Mul
 foldNary :: (Expr -> Expr -> Expr) -> [Expr] -> Expr
-foldNary _ [] = Num 0      -- empty Add -> 0 (or 1 for Mul if you adjust)
+foldNary _ [] = Num (R 0)      -- empty Add -> 0 (or 1 for Mul if you adjust)
 foldNary _ [x] = x
 foldNary f (x:xs) = foldl f x xs
 
@@ -17,65 +17,64 @@ foldNary f (x:xs) = foldl f x xs
 foldConstants :: Expr -> Expr
 foldConstants = \case
   -- N-ary Add
-  Add a b -> -- take all temrs 
-    let xs = collectAdd (Add a b) -- collect all add terms 
-        xs' = map foldConstants xs -- recurse fold constants on each term
-        (nums, others) = partitionNums xs' -- partition into numbers and others
-        numSum = sum nums -- sum
-        allTerms = if numSum /= 0 then Num numSum : others else others -- reassemble
-    in case allTerms of 
-         []  -> Num 0 -- nothing
-         [x] -> x -- single term - no folding needed
-         xsN -> foldl1 Add xsN -- fold back if more than one term
+  Add a b ->
+    let xs = collectAdd (Add a b)
+        xs' = map foldConstants xs
+        (nums, others) = partitionNums xs'
+        numSum = foldl addNum (R 0) nums
+        allTerms = if not (isZero numSum) then Num numSum : others else others
+    in case allTerms of
+         []  -> Num (R 0)
+         [x] -> x
+         xsN -> foldl1 Add xsN
 
   -- N-ary Mul
-  Mul a b -> -- take all temrs 
-    let xs = collectMul (Mul a b) -- collect all mul terms 
-        xs' = map foldConstants xs -- recurse fold constants on each term
-        (nums, others) = partitionNums xs' -- partition into numbers and others
-        numProd = product nums -- product
-    in if numProd == 0 then Num 0
-       else
-         let finalTerms = if numProd /= 1 then Num numProd : others else others -- reassemble
-         in case finalTerms of
-              []  -> Num 1 -- nothing
-              [x] -> x -- single term - no folding needed
-              xsN -> foldl1 Mul xsN -- fold back if more than one term
+  Mul a b ->
+    let xs = collectMul (Mul a b)
+        xs' = map foldConstants xs
+        (nums, others) = partitionNums xs'
+        numProd = foldl mulNum (R 1) nums
+        finalTerms = if not (isOne numProd) then Num numProd : others else others
+    in case finalTerms of
+         []  -> Num (R 1)
+         [x] -> x
+         xsN -> foldl1 Mul xsN
 
   -- Negation
   Neg e ->
     let e' = foldConstants e
     in case e' of
-         Num n -> Num (-n)
-         Neg x -> x  -- double negation
+         Num n -> Num (negNum n)
+         Neg x -> x
          _     -> Neg e'
 
-  -- Pow and Div with numeric simplification
+  -- Pow
   Pow a b ->
     let a' = foldConstants a
         b' = foldConstants b
     in case (a', b') of
-         (Num x, Num y) -> Num (x ** y)
+         (Num x, Num y) -> Num (powNum x y)
          _              -> Pow a' b'
 
+  -- Div
   Div a b ->
     let a' = foldConstants a
         b' = foldConstants b
     in case (a', b') of
-         (Num x, Num y) -> Num (x / y)
+         (Num x, Num y) -> Num (divNum x y)
          _              -> Div a' b'
 
   Factorial e ->
     let e' = foldConstants e
     in case e' of
-         Num n | n >= 0, n == fromInteger (round n) ->
-           Num . fromInteger . product $ [1..round n]
+         Num n | isIntegerNum n && n >= (R 0)  ->
+           Num . R . product $ map toRational [1..integerPart n]
          _ -> Factorial e'
 
   Abs e ->
     let e' = foldConstants e
     in case e' of
-         Num n -> Num (abs n)
+         Num n -> Num (absNum n)
          _     -> Abs e'
 
   -- Recurse through other unary operators
@@ -98,14 +97,63 @@ foldConstants = \case
   ConstantPi -> ConstantPi
   ConstantE  -> ConstantE
 
+-- Number helpers
+
+addNum :: Number -> Number -> Number
+addNum (R x) (R y) = R (x + y)
+addNum (D x) (D y) = D (x + y)
+addNum (R x) (D y) = D (fromRational x + y)
+addNum (D x) (R y) = D (x + fromRational y)
+
+mulNum, divNum, powNum :: Number -> Number -> Number
+
+mulNum (R x) (R y) = R (x * y)
+mulNum (D x) (D y) = D (x * y)
+mulNum (R x) (D y) = D (fromRational x * y)
+mulNum (D x) (R y) = D (x * fromRational y)
+
+divNum (R x) (R y) = R (x / y)
+divNum (D x) (D y) = D (x / y)
+divNum (R x) (D y) = D (fromRational x / y)
+divNum (D x) (R y) = D (x / fromRational y)
+
+powNum (R x) (R y)
+  | denominator y == 1 = R (x ^^ numerator y) -- integer powers exact
+  | otherwise          = D (fromRational x ** fromRational y)
+powNum (D x) (D y) = D (x ** y)
+powNum (R x) (D y) = D (fromRational x ** y)
+powNum (D x) (R y) = D (x ** fromRational y)
+
+isZero, isOne :: Number -> Bool
+isZero (R x) = x == 0
+isZero (D x) = x == 0
+isOne  (R x) = x == 1
+isOne  (D x) = x == 1
+
+negNum :: Number -> Number
+negNum (R x) = R (-x)
+negNum (D x) = D (-x)
+
+absNum :: Number -> Number
+absNum (R x) = R (abs x)
+absNum (D x) = D (abs x)
+
+isIntegerNum :: Number -> Bool
+isIntegerNum (R x) = denominator x == 1
+isIntegerNum (D x) = x == fromInteger (round x)
+
+integerPart :: Number -> Integer
+integerPart (R x) = numerator x
+integerPart (D x) = round x
+
 
 -- Helper to partition numeric and non-numeric expressions
-partitionNums :: [Expr] -> ([Double], [Expr])
+partitionNums :: [Expr] -> ([Number], [Expr])
 partitionNums [] = ([], [])
-partitionNums (Num x : xs) =
-  let (ns, es) = partitionNums xs in (x:ns, es) -- numeric case
+partitionNums (Num n : xs) =
+  let (ns, es) = partitionNums xs in (n:ns, es)
 partitionNums (e:xs) =
-  let (ns, es) = partitionNums xs in (ns, e:es) -- non-numeric case
+  let (ns, es) = partitionNums xs in (ns, e:es)
 
 -- Collect all nested Add / Mul for n-ary flattening
 collectAdd :: Expr -> [Expr]
