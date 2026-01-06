@@ -18,6 +18,7 @@ import Data.List (sortOn,groupBy)
 import qualified Data.Map.Strict as M
 import Engine.Normalize (normalize)
 import Engine.Fold (foldNary, foldConstants)
+import Helpers.Collect (collectAdd, collectMul)
 
 -- This is the main Engine that imports Rules and contains all important logic
 
@@ -51,6 +52,7 @@ filterRepeatedSteps = map head . groupBy (\s1 s2 -> rule s1 == rule s2 && before
 
 
 -- Main rewrite function, takes rule array and expression, returns final expression and log of steps
+-- we often use go which is a generic tail recursive function, we can create abstracted arguments and the recursion is the last thing that happens 
 rewrite :: [Rule] -> Expr -> (Expr, SimplifyLog)
 rewrite rules expr = 
     -- Recursive helper function with step counter to avoid infinite loops
@@ -58,27 +60,28 @@ rewrite rules expr =
     in (finalExpr, filterRepeatedSteps log)
   where
     maxSteps = 1000 -- max step cap to avoid loops
-    go e log n -- e is current expr, log is accumulated log, n is step count
+    go e log n -- e is current expr, log is accumulated logs (steps), n is step count
       | n > maxSteps = (e, log) -- return if max steps exceeded
       | otherwise = 
           let (e', log1) = rewriteOnce rules e -- rewrite 
-          in if e' == e -- if no change and merge up logs, return
+          in if e' == e -- if no change(first expr e and next step epxr e' match) and merge up logs, return 
              then (e, log ++ log1)
-             else go e' (log ++ log1) (n+1)
+             else go e' (log ++ log1) (n+1) -- if they dont we increment the step index
 
+-- Each Rewrite 
 rewriteOnce :: [Rule] -> Expr -> (Expr, SimplifyLog)
 rewriteOnce rules expr =
-  case rewriteChildren rules expr of
-    (expr', log1) ->
+  case rewriteChildren rules expr of -- We recurse through the data structure and rewrite each child
+    (expr', log1) -> -- Each expr here is essentially a single element in the expr
       let
-        folded     = foldConstants expr'
-        normalized = normalize folded  
+        folded     = foldConstants expr' -- for each element we try fold/ evaulate its constants
+        normalized = normalize folded   -- and normalize its symbolic properties
       in
-        case applyRules rules normalized of
+        case applyRules rules normalized of -- we then try to apply rules to the normalized part
           Just (newExpr, step)
-            | newExpr /= normalized -> (newExpr, log1 ++ [step])
-            | otherwise             -> (normalized, log1)
-          Nothing -> (normalized, log1)
+            | newExpr /= normalized -> (newExpr, log1 ++ [step]) -- if the normalized is different from the new rule-applied expr we add a next step to the parent
+            | otherwise             -> (normalized, log1) -- if its the same we dont add a step
+          Nothing -> (normalized, log1) -- failsafe
 
 -- Rewrites children of the expression based on its constructor
 rewriteChildren :: [Rule] -> Expr -> (Expr, SimplifyLog)
@@ -140,15 +143,6 @@ rewriteChildren rules = \case
   e@Num{}   -> (e, [])
   ConstantPi -> (ConstantPi, [])
   ConstantE  -> (ConstantE, [])
-
--- Collect all nested Add / Mul for n-ary flattening
-collectAdd :: Expr -> [Expr]
-collectAdd (Add x y) = collectAdd x ++ collectAdd y
-collectAdd e         = [e]
-
-collectMul :: Expr -> [Expr]
-collectMul (Mul x y) = collectMul x ++ collectMul y
-collectMul e         = [e]
 
 -- Rewrite a list of expressions and collect logs
 rewriteNary :: [Rule] -> [Expr] -> ([Expr], SimplifyLog)

@@ -6,10 +6,13 @@ module Engine.Normalize (normalize) where
 import Struct.Expr
 import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
+import Helpers.Partition (partitionNums)
 import Data.Ratio (numerator, denominator)
+import Helpers.Collect (collectAdd, collectMul)
+import Helpers.FixPoint (fixpoint)
+import Helpers.Numbers (addNum, mulNum, isOne, isZero)
 
-normalize :: Expr -> Expr
-normalize = normalizeExpr
+normalize = fixpoint normalizeExpr
 
 normalizeExpr :: Expr -> Expr
 normalizeExpr = \case
@@ -90,52 +93,3 @@ rebuild c k
   | isOne c         = k
   | otherwise       = Mul (Num c) k
 
--- ----------------
--- Helpers
--- ----------------
-partitionNums :: [Expr] -> ([Number],[Expr])
-partitionNums [] = ([],[])
-partitionNums (Num n:xs) =
-  let (ns, es) = partitionNums xs in (n:ns, es)
-partitionNums (e:xs) =
-  let (ns, es) = partitionNums xs in (ns, e:es)
-
--- Collect all nested Add / Mul for n-ary flattening
-collectAdd :: Expr -> [Expr]
-collectAdd (Add x y) = collectAdd x ++ collectAdd y
-collectAdd e         = [e]
-
-collectMul :: Expr -> [Expr]
-collectMul (Mul x y) = collectMul x ++ collectMul y
-collectMul e         = [e]
-
-isZero, isOne :: Number -> Bool
-isZero (R x) = x == 0
-isZero (D x) = x == 0
-isOne  (R x) = x == 1
-isOne  (D x) = x == 1
-
-addNum :: Number -> Number -> Number
-addNum (R x) (R y) = R (x + y)
-addNum (D x) (D y) = D (x + y)
-addNum (R x) (D y) = D (fromRational x + y)
-addNum (D x) (R y) = D (x + fromRational y)
-
-mulNum, divNum, powNum :: Number -> Number -> Number
-
-mulNum (R x) (R y) = R (x * y)
-mulNum (D x) (D y) = D (x * y)
-mulNum (R x) (D y) = D (fromRational x * y)
-mulNum (D x) (R y) = D (x * fromRational y)
-
-divNum (R x) (R y) = R (x / y)
-divNum (D x) (D y) = D (x / y)
-divNum (R x) (D y) = D (fromRational x / y)
-divNum (D x) (R y) = D (x / fromRational y)
-
-powNum (R x) (R y)
-  | denominator y == 1 = R (x ^^ numerator y) -- integer powers exact
-  | otherwise          = D (fromRational x ** fromRational y)
-powNum (D x) (D y) = D (x ** y)
-powNum (R x) (D y) = D (fromRational x ** y)
-powNum (D x) (R y) = D (x ** fromRational y)

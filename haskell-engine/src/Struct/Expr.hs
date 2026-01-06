@@ -3,13 +3,13 @@
 module Struct.Expr where
 data Number
   = D Double      -- approximate, for non-exact evaluation
-  | R Rational    -- exact, for fractions
+  | R Rational    -- exact, for fractions this covers things like powers and most division problems
   deriving (Eq, Ord, Show)
 
 --Represent a lingua-franca for the entire parser, engine , Every expression follows this data type 
 data Expr
     = Var String                -- x, y, a, b, f, etc.
-    | Num Number                -- numbers
+    | Num Number                -- numbers split into Double and Rational
     | Add Expr Expr -- +
     | Sub Expr Expr  
     | Mul Expr Expr -- * 

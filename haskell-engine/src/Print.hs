@@ -9,6 +9,7 @@ import Prettyprinter.Render.Text (renderStrict)
 import Data.Text (Text)
 import Data.List (intersperse)
 import Data.Ratio (numerator, denominator)
+import Helpers.Numbers (absNum, numberLtZero, negNum,)
 
 renderLatex :: Expr -> Text
 renderLatex =
@@ -103,20 +104,14 @@ parensIf :: Bool -> Doc ann -> Doc ann
 parensIf True  = parens
 parensIf False = id
 
-numberLtZero :: Number -> Bool
-numberLtZero (R r) = r < 0
-numberLtZero (D d) = d < 0
-
-negNum :: Number -> Number
-negNum (R r) = R (-r)
-negNum (D d) = D (-d)
-
-absNum :: Number -> Number
-absNum (R r) = R (abs r)
-absNum (D d) = D (abs d)
 
 prettyNumber :: Number -> Doc ann
 prettyNumber (R r)
-  | denominator r == 1 = pretty (numerator r)
-  | otherwise = pretty (fromRational r :: Double)
-prettyNumber (D d) = pretty d
+  | denominator r == 1 =
+      pretty (numerator r)
+  | otherwise =
+      pretty "\\frac"
+        <> braces (pretty (numerator r))
+        <> braces (pretty (denominator r))
+prettyNumber (D d) =
+  pretty d

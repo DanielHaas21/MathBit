@@ -7,11 +7,13 @@ module Rules.Algebra
 import Struct.Expr
 import Struct.Rule
 import Data.List (groupBy, partition, sortOn)
+import Helpers.Partition (partitionNums)
 import Data.Function (on)
 import Engine.Fold (foldNary)
 import qualified Data.Map.Strict as M
+import Helpers.Collect (collectAdd,collectMul)
 
--- | All algebra rules (n-ary aware)
+--  All algebra rules (n-ary aware)
 rules :: [Rule]
 rules =
   [ 
@@ -113,17 +115,5 @@ powMulDistribN = Rule
 -- HELPERS
 -- ====================================
 
-partitionNums :: [Expr] -> ([Number],[Expr])
-partitionNums [] = ([],[])
-partitionNums (Num n:xs) =
-  let (ns, es) = partitionNums xs in (n:ns, es)
-partitionNums (e:xs) =
-  let (ns, es) = partitionNums xs in (ns, e:es)
 
-collectAdd :: Expr -> [Expr]
-collectAdd (Add x y) = collectAdd x ++ collectAdd y
-collectAdd e         = [e]
 
-collectMul :: Expr -> [Expr]
-collectMul (Mul x y) = collectMul x ++ collectMul y
-collectMul e         = [e]

@@ -18,6 +18,10 @@ library
       Engine.Engine
       Engine.Fold
       Engine.Normalize
+      Helpers.Collect
+      Helpers.FixPoint
+      Helpers.Numbers
+      Helpers.Partition
       Parser
       Print
       Rules.Algebra

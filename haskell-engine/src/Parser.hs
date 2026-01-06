@@ -19,7 +19,7 @@ fromMathJSON :: Value -> Parser Expr
 fromMathJSON v = case v of
     Array arr  -> parseArray arr -- All operators
     String s   -> pure (Var $ T.unpack s) -- Variables
-    Number n -> pure (Num (R (toRational n)))  -- wrap Double into Number
+    Number n -> pure (Num (R (toRational n)))  -- wrap into a Rational Number
     _          -> fail "Invalid MathJSON expression"
 
 
@@ -81,6 +81,7 @@ parseOp op args = case op of
 
     -- negation only happens when theres no explicit number next to a variable, hence gives us neg but that creates a unnecessary layer of complexity  
     -- Example: we type -x MathJSON gives is Negate x, yet if we type -2x it gives us Multiply ( -2) x   
+    -- We therefore convert it into a Mul Rational -1 Var
     "Negate" -> do
         case V.toList args of
             [x] -> do
@@ -89,7 +90,7 @@ parseOp op args = case op of
             _ ->
                 fail "Negate expects exactly one argument"
 
-    -- "Rational" special case, happens when a variable is in the numerator
+    -- "Rational" special case, happens when a variable is in the numerator, functionally same thing as div
     "Rational" -> bin Div
 
     "Factorial"-> unary Factorial

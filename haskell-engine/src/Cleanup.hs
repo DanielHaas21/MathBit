@@ -6,27 +6,11 @@ module Cleanup (cleanupExpr) where
 import Struct.Rule
 import Struct.Expr
 import Struct.Step
-
--- helpers for Number
-negNum :: Number -> Number
-negNum (R x) = R (-x)
-negNum (D x) = D (-x)
-
-numberLtZero :: Number -> Bool
-numberLtZero (R x) = x < 0
-numberLtZero (D x) = x < 0
-
-isOne :: Number -> Bool
-isOne (R x) = x == 1
-isOne (D x) = x == 1
+import Helpers.FixPoint (fixpoint)
+import Helpers.Numbers (negNum, numberLtZero, isOne, isZero)
 
 cleanupExpr :: Expr -> Expr
 cleanupExpr = fixpoint cleanupOnce
-
-fixpoint :: Eq a => (a -> a) -> a -> a
-fixpoint f x =
-  let x' = f x
-  in if x' == x then x else fixpoint f x'
 
 cleanupOnce :: Expr -> Expr
 cleanupOnce =
