@@ -17,6 +17,7 @@ cleanupOnce =
     cleanupNegPowers
   . cleanupPowPow
   . cleanupPowOne
+  . cleanupNegOneOnVar
   . mapChildren cleanupOnce
 
 mapChildren :: (Expr -> Expr) -> Expr -> Expr
@@ -61,10 +62,12 @@ cleanupPowPow = \case
   Pow (Pow a b) c -> Pow a (Mul b c)
   e -> e
 
--- ====================
--- Neg one multiplication with variable
--- ====================
 cleanupNegOneOnVar :: Expr -> Expr
 cleanupNegOneOnVar = \case
-  Mul (Num n) x@(Var _) | numberLtZero n -> Neg x
+  Mul (Num n) x@(Var _) | isNegOne n -> Neg x
   e -> e
+
+-- Helper to detect exactly -1
+isNegOne :: Number -> Bool
+isNegOne (R r) = r == -1
+isNegOne (D d) = d == -1

@@ -54,11 +54,16 @@ prettyPrec ctx = \case
 
   -- ========= MULTIPLICATION =========
   Mul a b ->
-    let doc =
-          prettyPrec PMul a
-          <> prettyMulRhs b
-    in parensIf (ctx > PMul) doc
+    let (negA, a') = extractNeg a
+        doc = prettyPrec PMul a' <> prettyMulRhs b
+    in if negA then pretty "-" <> doc else doc
 
+
+
+  Neg e@(Var _)  -> pretty "-" <> prettyPrec PAtom e
+  Neg e@(Num _)  -> pretty "-" <> prettyPrec PAtom e
+  Neg e          -> pretty "-" <> parens (prettyPrec PAdd e)
+  
   -- ========= DIVISION =========
   Div a b ->
     pretty "\\frac"
@@ -68,8 +73,7 @@ prettyPrec ctx = \case
   -- ========= POWER =========
   Pow a b ->
     prettyPrec PPow a <> pretty "^" <> braces (prettyPrec PAdd b)
-
-
+  
   -- ========= ATOMS =========
   Num n
     | isIntegerNum n -> pretty (roundNumber n)
@@ -115,3 +119,9 @@ prettyNumber (R r)
         <> braces (pretty (denominator r))
 prettyNumber (D d) =
   pretty d
+
+extractNeg :: Expr -> (Bool, Expr)
+extractNeg (Num n) | numberLtZero n = (True, Num (negNum n))
+extractNeg (Div (Num n) d) | numberLtZero n = (True, Div (Num (negNum n)) d)
+extractNeg (Mul (Num n) rest) | numberLtZero n = (True, Mul (Num (negNum n)) rest)
+extractNeg e = (False, e)

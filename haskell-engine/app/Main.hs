@@ -44,7 +44,11 @@ server = solve where
                         -- Run simplification with log
                         let (simplifiedExpr, logSteps) = simplifyWithLog expr
                         let cleanedExpr = cleanupExpr simplifiedExpr
+                        liftIO $ putStrLn "Cleaned AST:"
+                        liftIO $ print cleanedExpr
                         let prettyExpr = Text.unpack (renderLatex cleanedExpr)
+                        liftIO $ putStrLn "Pretty print:"
+                        liftIO $ print prettyExpr
                         -- Optionally print log
                         liftIO $ putStrLn "Simplification steps:"
                         mapM_ (liftIO . print) logSteps
