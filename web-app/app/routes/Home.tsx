@@ -1,4 +1,4 @@
-import { createMathProblem, getAllUsers, refresh } from 'web-api-client';
+import { createMathProblem, getAllUsers, MathEngineSolveStep, refresh } from 'web-api-client';
 import login from '../../middleware/auth/login';
 import { useEffect, useRef, useState } from 'react';
 import getApiConfig from '@/apiConfig';
@@ -27,6 +27,7 @@ export default function Home() {
   // }, []);
   const [latex, setLatex] = useState('');
   const [final, setFinal] = useState('');
+  const [finalSteps, setFinalSteps] = useState<MathEngineSolveStep[]>([]);
   const test = async () => {
     async function testRefresh() {
       try {
@@ -46,8 +47,24 @@ export default function Home() {
     console.log(latexToMathJson(latex));
     const solved = await solve(latex);
     setFinal(solved.finalExpression);
-    console.log(solved)
+    setFinalSteps(solved.steps);
+    console.log(solved);
   };
+
+  const renderedSteps =
+    finalSteps &&
+    finalSteps.map((m, i) => (
+      <>
+        <MathJaxContext>
+          <MathJax>{`\\(${m.stepBefore}\\)`}</MathJax>
+        </MathJaxContext>
+        <MathJaxContext>
+          <MathJax>{`\\(${m.stepAfter}\\)`}</MathJax>
+        </MathJaxContext>
+        <p>Desc: {m.stepRuleDescription}</p>
+      </>
+    ));
+
   return (
     <div className="w-full flex justify-start items-center flex-col h-fit">
       <div>
@@ -87,6 +104,7 @@ export default function Home() {
             <MathJaxContext>
               <MathJax>{`\\(${final}\\)`}</MathJax>
             </MathJaxContext>
+            {renderedSteps}
           </div>
         </Paper.Content>
       </Paper>

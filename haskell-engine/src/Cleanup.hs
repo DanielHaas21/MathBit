@@ -18,6 +18,7 @@ cleanupOnce =
   . cleanupPowPow
   . cleanupPowOne
   . cleanupNegOneOnVar
+  -- . pushNegAdd
   . mapChildren cleanupOnce
 
 mapChildren :: (Expr -> Expr) -> Expr -> Expr
@@ -64,10 +65,17 @@ cleanupPowPow = \case
 
 cleanupNegOneOnVar :: Expr -> Expr
 cleanupNegOneOnVar = \case
-  Mul (Num n) x@(Var _) | isNegOne n -> Neg x
+  Mul (Num n) e | isNegOne n -> Neg e
+  Mul e (Num n) | isNegOne n -> Neg e
   e -> e
 
 -- Helper to detect exactly -1
 isNegOne :: Number -> Bool
 isNegOne (R r) = r == -1
 isNegOne (D d) = d == -1
+
+pushNegAdd :: Expr -> Expr
+pushNegAdd = \case
+  Add a (Neg b) -> Sub a b
+  Add (Neg a) b -> Sub b a
+  e -> e

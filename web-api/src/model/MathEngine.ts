@@ -14,11 +14,15 @@ export interface MathEngineSolveStep {
   /*
    * Expression step
    */
-  expressionStep: String;
+  stepBefore: String;
+  /*
+   * Expression step
+   */
+  stepAfter: String;
   /*
    * Explanation of the step
    */
-  explanationStep: String;
+  stepRuleDescription: String;
 }
 
 /**

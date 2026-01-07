@@ -18,7 +18,7 @@ import qualified Data.Text as T
 fromMathJSON :: Value -> Parser Expr
 fromMathJSON v = case v of
     Array arr  -> parseArray arr -- All operators
-    String s   -> pure (Var $ T.unpack s) -- Variables
+    String s   -> parseSymbol s -- Variables
     Number n -> pure (Num (R (toRational n)))  -- wrap into a Rational Number
     _          -> fail "Invalid MathJSON expression"
 
@@ -31,6 +31,14 @@ parseArray arr
         case V.head arr of
             String op -> parseOp (T.unpack op) (V.tail arr) -- In the parsers goes both string-text version and the array element
             _         -> fail "Array does not start with string operator"
+
+-- This is needed otherwise constants would be treated as var
+parseSymbol :: T.Text -> Parser Expr
+parseSymbol s =
+  case s of
+    "Pi"             -> pure ConstantPi
+    "ExponentialE"   -> pure ConstantE
+    _                -> pure (Var (T.unpack s))
 
 -- Parses a limit if it has a tuple inside it, tuple is mainly used as a structure block 
 parseLimitTuple :: Vector Value -> Parser (String, Value)
@@ -99,10 +107,6 @@ parseOp op args = case op of
     -- Sqrt & Root
     "Sqrt"     -> unary Sqrt
     "Root"     -> tern Root
-
-    -- Constants
-    "Pi"           -> pure ConstantPi
-    "ExponentialE" -> pure ConstantE
 
     -- Calculus, will be expeanded
     "Integrate"     -> unary Integral

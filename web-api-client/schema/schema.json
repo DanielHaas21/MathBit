@@ -502,16 +502,20 @@
 			"MathEngineSolveStep": {
 				"description": "Represents a single step in the solving process of a math expression.",
 				"properties": {
-					"expressionStep": {
+					"stepBefore": {
 						"type": "string"
 					},
-					"explanationStep": {
+					"stepAfter": {
+						"type": "string"
+					},
+					"stepRuleDescription": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"expressionStep",
-					"explanationStep"
+					"stepBefore",
+					"stepAfter",
+					"stepRuleDescription"
 				],
 				"type": "object",
 				"additionalProperties": false

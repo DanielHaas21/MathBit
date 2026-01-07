@@ -60,12 +60,19 @@ server = solve where
 
 -- Convert engine Step to API Step
 toStep :: Step -> SolveResponseStep
-toStep s = SolveResponseStep
-  { stepBefore = show (before s)
-  , stepAfter  = show (after s)
-  , stepRule   = rule s
-  , stepRuleDescription = description s
-  }
+toStep s =
+  let
+    cleanedBefore = cleanupExpr (before s)
+    cleanedAfter  = cleanupExpr (after s)
+    prettyBefore  = Text.unpack (renderLatex cleanedBefore)
+
+    prettyAfter   = Text.unpack (renderLatex cleanedAfter)
+  in SolveResponseStep
+       { stepBefore = prettyBefore
+       , stepAfter  = prettyAfter
+       , stepRule   = rule s
+       , stepRuleDescription = description s
+       }
 
 
 api :: Proxy API

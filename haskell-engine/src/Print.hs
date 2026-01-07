@@ -19,21 +19,16 @@ prettyLatex :: Expr -> Doc ann
 prettyLatex = prettyPrec PAdd 
 
 prettyAddRhs :: Expr -> Doc ann
-prettyAddRhs = \case
-  Mul (Num n) x | numberLtZero n ->
-    pretty "-" <+> prettyPrec PAdd (Mul (Num (negNum n)) x)
-
-  Num n | numberLtZero n ->
-    pretty "-" <+> prettyPrec PAtom (Num (absNum n))
-
-  e -> pretty "+" <+> prettyPrec PAdd e
+prettyAddRhs e = pretty "+" <+> prettyPrec PAdd e
 
   
 prettyMulRhs :: Expr -> Doc ann
 prettyMulRhs e =
   case e of
-    Add{} -> PP.space <> parens (prettyLatex e)
-    _     -> PP.space <> prettyPrec PMul e
+    Add{} -> space <> parens (prettyLatex e)
+    Sub{} -> space <> parens (prettyLatex e)
+    Neg{} -> space <> parens (prettyLatex e)
+    _     -> space <> prettyPrec PMul e
 
 isIntegerNum :: Number -> Bool
 isIntegerNum (R r) = denominator r == 1
@@ -47,22 +42,41 @@ prettyPrec ctx = \case
 
   -- ========= ADDITION =========
   Add a b ->
+    case extractNeg b of
+      (True, b') ->
+        let doc =
+              prettyPrec PAdd a
+              <+> pretty "-"
+              <+> prettyPrec PAdd b'
+        in parensIf (ctx > PAdd) doc
+
+      (False, _) ->
+        let doc =
+              prettyPrec PAdd a
+              <+> pretty "+"
+              <+> prettyPrec PAdd b
+        in parensIf (ctx > PAdd) doc
+
+  Sub a b ->
     let doc =
           prettyPrec PAdd a
-          <+> prettyAddRhs b
+          <+> pretty "-"
+          <+> prettyPrec PAdd b
     in parensIf (ctx > PAdd) doc
 
   -- ========= MULTIPLICATION =========
   Mul a b ->
     let (negA, a') = extractNeg a
         doc = prettyPrec PMul a' <> prettyMulRhs b
-    in if negA then pretty "-" <> doc else doc
+    in (if negA then pretty "-" <> space else mempty) <> doc
 
 
 
-  Neg e@(Var _)  -> pretty "-" <> prettyPrec PAtom e
-  Neg e@(Num _)  -> pretty "-" <> prettyPrec PAtom e
-  Neg e          -> pretty "-" <> parens (prettyPrec PAdd e)
+  Neg e ->
+    case e of
+      Num _ -> pretty "-" <> prettyPrec PAtom e
+      Var _ -> pretty "-" <> prettyPrec PAtom e
+      _     -> pretty "-" <> parens (prettyPrec PAdd e)
   
   -- ========= DIVISION =========
   Div a b ->
@@ -96,6 +110,12 @@ prettyPrec ctx = \case
 
   Root n x ->
     pretty "\\sqrt[" <> prettyLatex n <> pretty "]" <> braces (prettyLatex x)
+
+  Abs s ->
+    pretty "\\left|" <> prettyLatex s <> pretty "\\right|"
+
+  Factorial f ->
+    braces (prettyLatex f) <> pretty "!"
 
   e ->
     error ("Unhandled in pretty printer: " ++ show e)
