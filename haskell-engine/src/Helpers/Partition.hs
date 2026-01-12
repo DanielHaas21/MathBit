@@ -4,6 +4,7 @@ module Helpers.Partition (partitionNums) where
 import Struct.Expr
 
 -- Helper to partition numeric and non-numeric expressions into two seperate index assocaited arrays 
+-- e.g. [2, x, 3, y] -> ([2,3], [x,y])
 partitionNums :: [Expr] -> ([Number], [Expr])
 partitionNums [] = ([], [])
 partitionNums (Num n : xs) =

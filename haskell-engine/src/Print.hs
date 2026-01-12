@@ -66,9 +66,19 @@ prettyPrec ctx = \case
 
   -- ========= MULTIPLICATION =========
   Mul a b ->
-    let (negA, a') = extractNeg a
-        doc = prettyPrec PMul a' <> prettyMulRhs b
-    in (if negA then pretty "-" <> space else mempty) <> doc
+    let
+      (negA, a') = extractNeg a
+
+      left  = prettyPrec PMul a'
+      right = prettyPrec PMul b
+
+      mid
+        | canImplicitMul a' b = mempty
+        | otherwise          = space <> pretty "\\times " <> space
+
+      doc = left <> mid <> right
+    in
+      (if negA then pretty "-" <> space else mempty) <> doc
 
 
 
@@ -86,7 +96,12 @@ prettyPrec ctx = \case
 
   -- ========= POWER =========
   Pow a b ->
-    prettyPrec PPow a <> pretty "^" <> braces (prettyPrec PAdd b)
+    let base =
+          case a of
+            Var _ -> prettyPrec PPow a
+            Num _ -> prettyPrec PPow a
+            _     -> parens (prettyPrec PAdd a)
+    in base <> pretty "^" <> braces (prettyPrec PAdd b)
   
   -- ========= ATOMS =========
   Num n
@@ -141,7 +156,49 @@ prettyNumber (D d) =
   pretty d
 
 extractNeg :: Expr -> (Bool, Expr)
+extractNeg (Neg e) = (True, e)
 extractNeg (Num n) | numberLtZero n = (True, Num (negNum n))
 extractNeg (Div (Num n) d) | numberLtZero n = (True, Div (Num (negNum n)) d)
 extractNeg (Mul (Num n) rest) | numberLtZero n = (True, Mul (Num (negNum n)) rest)
 extractNeg e = (False, e)
+
+-- list of cases where showing mutliplication symbol is preffered and where not 
+canImplicitMul :: Expr -> Expr -> Bool
+canImplicitMul a b =
+  case (a, b) of
+    -- number * symbol-like
+    (Num _, Var _)        -> True
+    (Num _, Pow _ _)      -> True
+    (Num _, Func _ _)     -> True
+    (Num _, Sqrt _)       -> True
+    (Num _, Root _ _)     -> True
+    (Num _, Abs _)        -> True
+
+    -- symbol * symbol-like
+    (Var _, Pow _ _)      -> True
+    (Var _, Func _ _)     -> True
+    (Var _, Sqrt _)       -> True
+    (Var _, Root _ _)     -> True
+    (Var _, Abs _)        -> True
+    (Var _, Var _)        -> False
+
+    -- symbol * parentheses
+    (Var _, Add{})        -> True
+    (Var _, Sub{})        -> True
+
+    -- number * parentheses
+    (Num _, Add{})        -> True
+    (Num _, Sub{})        -> True
+
+    -- power * parentheses (x^2)(x+1) → needs dot
+    (Pow _ _, Add{})      -> False
+    (Pow _ _, Sub{})      -> False
+
+    -- anything with numbers on the right
+    (_, Num _)            -> False
+
+    -- parentheses on the left
+    (Add{}, _)            -> False
+    (Sub{}, _)            -> False
+
+    _                     -> False

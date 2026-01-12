@@ -12,19 +12,20 @@ import Data.Function (on)
 import Engine.Fold (foldNary)
 import qualified Data.Map.Strict as M
 import Helpers.Collect (collectAdd,collectMul)
+import Data.Ratio (numerator, denominator)
 
 --  All algebra rules (n-ary aware)
 rules :: [Rule]
 rules =
   [ 
-  negNeg
+  negNeg 
   , powZero
   , divSameBaseN
   , powPow
   , sqrtToPow
   , rootToPow
-  , distributeMulN
   , divToMul
+  , distributeMulN
   , powMulDistribN
   ]
 
@@ -74,7 +75,7 @@ negNeg = Rule "negNeg" "skib" 10 $ \case
 
 
 divToMul :: Rule
-divToMul = Rule "divToMul" "a / b -> a * b^(-1)" 100 $ \case
+divToMul = Rule "divToMul" "a / b -> a * b^(-1)" 120 $ \case
   Div a b -> Just (Mul a (Pow b (Num (R (-1)))))
   _       -> Nothing
 
@@ -109,11 +110,5 @@ powMulDistribN = Rule
         [_] -> Nothing  -- not actually a product
         xs  -> Just (foldNary Mul (map (\x -> Pow x n) xs))
     _ -> Nothing
-
-
--- ====================================
--- HELPERS
--- ====================================
-
 
 

@@ -9,6 +9,7 @@ import Data.Ratio (numerator, denominator)
 import Helpers.Partition (partitionNums)
 import Helpers.Collect (collectAdd, collectMul)
 import Helpers.Numbers (addNum, mulNum, isOne, isZero, powNum, divNum, absNum)
+
 -- Fold back into a n-ary Add / Mul
 foldNary :: (Expr -> Expr -> Expr) -> [Expr] -> Expr
 foldNary _ [] = Num (R 0)      -- empty Add -> 0 (or 1 for Mul if you adjust)
@@ -26,10 +27,10 @@ foldConstants = \case
         (nums, others) = partitionNums xs' -- we then partition them into the numbers and other
         numSum = foldl addNum (R 0) nums -- Numbers then added up from the left via foldl
         allTerms = if not (isZero numSum) then Num numSum : others else others -- if the sum isnt zero we return it
-    in case allTerms of
-         []  -> Num (R 0)
-         [x] -> x
-         xsN -> foldl1 Add xsN
+    in case allTerms of -- finally we fold it back
+         []  -> Num (R 0) -- if nothing left, return 0
+         [x] -> x -- if only one term left, return it
+         xsN -> foldl1 Add xsN -- else fold it back to n-ary Add
 
   -- N-ary Mul
   Mul a b ->
@@ -38,13 +39,13 @@ foldConstants = \case
         (nums, others) = partitionNums xs' -- we then partition them into the numbers and other
         numProd = foldl mulNum (R 1) nums -- Numbers then multiplied from the left via foldl
         finalTerms = if not (isOne numProd) then Num numProd : others else others  -- if the product isnt zero we return it
-    in case finalTerms of
-         []  -> Num (R 1)
-         [x] -> x
-         xsN -> foldl1 Mul xsN
+    in case finalTerms of -- finally we fold it back
+         []  -> Num (R 1) -- if nothing left, return 1
+         [x] -> x -- if only one term left, return it 
+         xsN -> foldl1 Mul xsN -- else fold it back to n-ary Mul
 
   -- Pow
-  Pow a b ->
+  Pow a b -> -- try to fold constants in base and exponent
     let a' = foldConstants a
         b' = foldConstants b
     in case (a', b') of
@@ -52,21 +53,21 @@ foldConstants = \case
          _              -> Pow a' b'
 
   -- Div
-  Div a b ->
+  Div a b -> -- try to fold constants in numerator and denominator
     let a' = foldConstants a
         b' = foldConstants b
     in case (a', b') of
          (Num x, Num y) -> Num (divNum x y)
          _              -> Div a' b'
 
-  Factorial e ->
+  Factorial e -> -- try to fold constant inside Factorial
     let e' = foldConstants e
     in case e' of
-         Num n | isIntegerNum n && n >= (R 0)  ->
-           Num . R . product $ map toRational [1..integerPart n]
+         Num n | isIntegerNum n && n >= (R 0)  -> -- factorial only defined for non-negative integers
+           Num . R . product $ map toRational [1..integerPart n] -- compute factorial
          _ -> Factorial e'
 
-  Abs e ->
+  Abs e -> -- try to fold constant inside Abs
     let e' = foldConstants e
     in case e' of
          Num n -> Num (absNum n)
@@ -86,16 +87,17 @@ foldConstants = \case
   Permutation n k -> Permutation (foldConstants n) (foldConstants k)
   Variation n k -> Variation (foldConstants n) (foldConstants k)
 
-  -- Atomic
+  -- Atomic expressions remain unchanged
   e@(Var _) -> e
   Num n     -> Num n
   ConstantPi -> ConstantPi
   ConstantE  -> ConstantE
 
+-- check if a Number is an integer
 isIntegerNum :: Number -> Bool
 isIntegerNum (R x) = denominator x == 1
 isIntegerNum (D x) = x == fromInteger (round x)
-
+-- get the integer part of a Number
 integerPart :: Number -> Integer
 integerPart (R x) = numerator x
 integerPart (D x) = round x
