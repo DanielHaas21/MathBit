@@ -55,11 +55,12 @@ export default function Home() {
     finalSteps &&
     finalSteps.map((m, i) => (
       <>
+        <h3>Step {i + 1}:</h3>
         <MathJaxContext>
-          <MathJax>{`\\(${m.stepBefore}\\)`}</MathJax>
+          <MathJax>{`Before: \\(${m.stepBefore}\\)`}</MathJax>
         </MathJaxContext>
         <MathJaxContext>
-          <MathJax>{`\\(${m.stepAfter}\\)`}</MathJax>
+          <MathJax>{`After: \\(${m.stepAfter}\\)`}</MathJax>
         </MathJaxContext>
         <p>Desc: {m.stepRuleDescription}</p>
       </>

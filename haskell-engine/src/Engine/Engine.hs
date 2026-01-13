@@ -14,6 +14,7 @@ import qualified Rules.Algebra as Algebra
 import qualified Rules.Trigonometry as Trig
 import qualified Rules.Calculus as Calc
 import qualified Rules.Combinatorics as Comb
+import qualified Rules.Structural as Structural
 import Data.List (sortOn,groupBy)
 import qualified Data.Map.Strict as M
 import Engine.Normalize (normalize)
@@ -30,17 +31,32 @@ type SimplifyLog = [Step]
 simplify :: Expr -> Expr
 simplify = fst . simplifyWithLog
 
+-- Filters rules by phase Structural - normalization, cancellation-enabling, Rewriting - expansion, distribution, heuristics
+structuralRules :: [Rule] -> [Rule]
+structuralRules =
+  sortOn (negate . priority) . filter ((== Structural) . phase)
+
+algebraicRules :: [Rule] -> [Rule]
+algebraicRules =
+  sortOn (negate . priority) . filter ((== Rewriting) . phase)
+
 --Full simiplifier with step logging
 simplifyWithLog :: Expr -> (Expr, SimplifyLog)
 simplifyWithLog expr =
-    let meta  = validator expr -- first we take metadata for the inital step via the validator
-        rules = selectRules meta -- selected the initial rules based on that
-    in rewrite rules expr -- initiate rewriting and rest of the workflow
+  let
+    meta   = validator expr -- get metadata from validator
+    rules  = selectRules meta -- select rules based on metadata
+
+    (e1, l1) = rewrite (structuralRules rules) expr -- first apply structural rules
+    (e2, l2) = rewrite (algebraicRules rules) e1 -- then apply algebraic rules
+  in
+    (e2, l1 ++ l2)
 
 -- Rule sulect function, returns an array of selected rule functions
 selectRules :: StepData -> [Rule]
 selectRules meta =
   sortOn (negate . priority) $  -- All rules have a priority prop 
+    Structural.rules ++  -- Structural rules are always used, they are used mainly for normalization so that any expression is in a standard form before applying other rules
     Algebra.rules -- Algebra rules are always used, rest is concated into the algebra rules
       ++ if hasTrigonometry meta then Trig.rules else []
       ++ if hasCalculus meta      then Calc.rules else []
@@ -56,8 +72,8 @@ filterRepeatedSteps = map head . groupBy (\s1 s2 -> rule s1 == rule s2 && before
 rewrite :: [Rule] -> Expr -> (Expr, SimplifyLog)
 rewrite rules expr = 
     -- Recursive helper function with step counter to avoid infinite loops
-    let (finalExpr, log) = go expr [] 0
-    in (finalExpr, filterRepeatedSteps log)
+    let (finalExpr, log) = go expr [] 0 -- initial call with empty log and step count 0
+    in (finalExpr, filterRepeatedSteps log) -- filter repeated steps from the log
   where
     maxSteps = 1000 -- max step cap to avoid loops
     go e log n -- e is current expr, log is accumulated logs (steps), n is step count

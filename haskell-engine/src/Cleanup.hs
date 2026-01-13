@@ -9,9 +9,18 @@ import Struct.Step
 import Helpers.FixPoint (fixpoint)
 import Helpers.Numbers (negNum, numberLtZero, isOne, isZero)
 
+-- This module performs various cleanup operations on expressions after normalization and simplification.
+-- These cleanups include:
+-- 1. Removing negative exponents by converting them to division.
+-- 2. Simplifying powers of one.
+-- 3. Flattening nested powers.
+-- 4. Converting multiplications by -1 into negations.
+
+-- Main cleanup function
 cleanupExpr :: Expr -> Expr
 cleanupExpr = fixpoint cleanupOnce
 
+-- Single pass cleanup
 cleanupOnce :: Expr -> Expr
 cleanupOnce =
     cleanupNegPowers
@@ -19,8 +28,9 @@ cleanupOnce =
   . cleanupPowOne
   . cleanupNegOneOnVar
   -- . pushNegAdd
-  . mapChildren cleanupOnce
+  . mapChildren cleanupOnce -- Recursively apply cleanup to children
 
+-- This function maps a function over all children of an expression, over recognized nodes.
 mapChildren :: (Expr -> Expr) -> Expr -> Expr
 mapChildren f = \case
   Add a b -> Add (f a) (f b)
@@ -34,9 +44,7 @@ mapChildren f = \case
 
   e -> e
 
--- ====================
--- Cleanup negative powers
--- ====================
+-- Cleanup negative powers by converting them back to division. We use negative powers since its easier to handle during normalization. 
 cleanupNegPowers :: Expr -> Expr
 cleanupNegPowers = \case
   Mul a (Pow x (Num n)) | numberLtZero n ->
@@ -47,22 +55,19 @@ cleanupNegPowers = \case
 
   e -> e
 
--- ====================
--- Pow 1 simplification
--- ====================
+-- Remove powers of one: x^1 -> x
 cleanupPowOne :: Expr -> Expr
 cleanupPowOne = \case
   Pow a (Num n) | isOne n -> a
   e -> e
 
--- ====================
--- Flatten nested powers
--- ====================
+-- Flatten nested powers: (x^a)^b -> x^(a*b)
 cleanupPowPow :: Expr -> Expr
 cleanupPowPow = \case
   Pow (Pow a b) c -> Pow a (Mul b c)
   e -> e
 
+-- Convert multiplications by -1 into negations: -1 * x -> -x
 cleanupNegOneOnVar :: Expr -> Expr
 cleanupNegOneOnVar = \case
   Mul (Num n) e | isNegOne n -> Neg e

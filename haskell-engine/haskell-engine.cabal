@@ -27,6 +27,7 @@ library
       Rules.Algebra
       Rules.Calculus
       Rules.Combinatorics
+      Rules.Structural
       Rules.Trigonometry
       Struct.Expr
       Struct.Rule

@@ -11,11 +11,11 @@ data Expr
     = Var String                -- x, y, a, b, f, etc.
     | Num Number                -- numbers split into Double and Rational
     | Add Expr Expr -- +
-    | Sub Expr Expr  
-    | Mul Expr Expr -- * 
-    | Div Expr Expr -- / or Rational
+    | Sub Expr Expr -- Only used in cleanup/printing, internally always as Add + Neg or -1 *
+    | Mul Expr Expr -- *  
+    | Div Expr Expr -- / or Rational, used only in cleanup/printing, internally as Pow with negative exponent
     | Pow Expr Expr -- ^ 
-    | Neg Expr -- -x 
+    | Neg Expr -- Also only used in cleanup/printing, internally as Mul by -1
     | Factorial Expr            -- n! or expression!
     | Abs Expr                  -- |x|
     | Func String Expr          -- sin(x), ln(x), etc.

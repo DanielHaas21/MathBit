@@ -11,17 +11,24 @@ import Data.List (intersperse)
 import Data.Ratio (numerator, denominator)
 import Helpers.Numbers (absNum, numberLtZero, negNum,)
 
+-- This is a pretty printer for mathematical expressions in LaTeX format.
+-- It handles operator precedence, parentheses, and special formatting for various mathematical constructs.
+-- It uses the Prettyprinter library for formatting, we only provide an interface to render to Text, so that Pretty knows what to do.
+
+-- Main rendering function
 renderLatex :: Expr -> Text
 renderLatex =
   renderStrict . layoutCompact . prettyLatex
 
+-- Pretty print an expression to LaTeX format
 prettyLatex :: Expr -> Doc ann
 prettyLatex = prettyPrec PAdd 
 
+-- Pretty print with precedence handling
 prettyAddRhs :: Expr -> Doc ann
 prettyAddRhs e = pretty "+" <+> prettyPrec PAdd e
 
-  
+ -- Pretty print multiplication right-hand side with proper spacing and parentheses 
 prettyMulRhs :: Expr -> Doc ann
 prettyMulRhs e =
   case e of
@@ -37,6 +44,7 @@ roundNumber :: Number -> Integer
 roundNumber (R r) = numerator r
 roundNumber (D d) = round d
 
+-- Pretty print with precedence context
 prettyPrec :: Prec -> Expr -> Doc ann
 prettyPrec ctx = \case
 
