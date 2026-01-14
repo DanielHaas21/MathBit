@@ -16,13 +16,13 @@ Packages folder structure
 
 ```
 src
-├───app - remix frontend app
+├───app - router frontend app
 ├───i18n - localization config
 ├───libs
 |   ├───auth - auth helper files
 |   ├───hooks - custom hooks
+|   ├───math - Frontend math functions
 |   ├───ui - ui toolkit, for more see ui-toolkit.md
-├───repositories - functions like SelectAll etc. for each given table
 ├───messages - contains .json localization files
 ├───scripts - contains tailwind and color watch and create scripts
 ├───types

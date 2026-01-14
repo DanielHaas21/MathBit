@@ -15,7 +15,7 @@ No specifc installation requierements
 Packages folder structure
 
 ```
-├───generated -generated api client files
+├───generated - generated api client files
 ├───schema/schema.json - contains open specification that kubb uses for generating
 ├───src/index.ts
 ├───kubb.config.ts - kubb config with plugins 

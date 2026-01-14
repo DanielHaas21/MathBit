@@ -1,6 +1,6 @@
 # MathBit
 
-This is a Maturite project monorepo for a web app that is used for visually teaching and displaying mathmetical expressions running on a haskell engine
+This is a Maturita project monorepo for a web app that is used for visually teaching and displaying mathmetical expressions running on a haskell engine
 
 ### Prerequisites
 
@@ -37,11 +37,11 @@ pnpm build
 
 Project consists of four pnpm packages and one standalone package
 
-- **web-app** Remix based frontend and UI toolkit
+- **web-app** React Router based frontend and UI toolkit
 - **web-api** TSOA/Swagger api specification that generates an SDK
 - **web-api-client** API client that generates typed routes used on the frontend from the Swagger SDK
 - **db** Kysely based db library that contains table, and repository specifications used to make requests to a Postgres db container
-- **haskell-engine** Standalone HTTP-microservice that handles math computations and LaTeX conversions; it exposes a simple GET/POST API
+- **haskell-engine** Standalone HTTP-microservice that handles math computations, it exposes a simple GET/POST API
 
 App folder structure
 
