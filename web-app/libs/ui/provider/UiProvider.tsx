@@ -1,18 +1,25 @@
 'use client';
 import React, { createContext, useContext } from 'react';
 import { ToastProvider } from '../components/Toast/ToastProvider';
+import type { i18n as I18nInstance } from 'i18next';
 
 // I18n context
-const I18nContext = createContext<{ t: (key: string) => string }>({ t: () => '' });
+const I18nContext = createContext<I18nInstance | null>(null);
 
 export const useTranslation = () => {
-  const { t } = useContext(I18nContext);
-  return t;
+  const i18n = useContext(I18nContext);
+  return i18n?.t ?? ((key: string) => key);
+};
+
+export const useI18n = () => {
+  const i18n = useContext(I18nContext);
+  if (!i18n) throw new Error('I18n not initialized');
+  return i18n;
 };
 
 interface UiProviderProps {
   children: React.ReactNode;
-  i18nValue: { t: (key: string) => string }; // value for I18nContext
+  i18nValue: I18nInstance; // value for I18nContext
 }
 
 export function UiProvider({ children, i18nValue }: UiProviderProps) {

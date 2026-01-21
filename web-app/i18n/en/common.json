@@ -1,0 +1,11 @@
+{
+  "pages": {},
+  "ui": {
+    "header": {
+      "login": "Login",
+      "signup": "Sign Up",
+      "logout": "Logout",
+      "settings": "Settings"
+    }
+  }
+}

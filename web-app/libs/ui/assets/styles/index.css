@@ -77,3 +77,7 @@
     border-radius: 9px !important;
   }
 }
+
+body{
+  @apply bg-background-page text-text-black font-sans;
+}

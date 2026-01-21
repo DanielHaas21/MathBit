@@ -1,0 +1,9 @@
+{
+  "pages": {},
+  "ui": {
+    "header": {
+      "login": "Přihlásit se",
+      "signup": "Zaregistrovat se"
+    }
+  }
+}
