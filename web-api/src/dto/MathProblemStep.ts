@@ -18,14 +18,14 @@ export interface MathProblemStep {
    * Step description
    */
   description: string;
-  /**
-   * Expression of the step
+  /*
+   * Expression before the step
    */
-  expression: string;
-  /**
-   * Saved LaTeX epxression
+  stepBefore?: string;
+  /*
+   * Expression after the step
    */
-  latex?: string;
+  stepAfter?: string;
   /**
    * Created timestamp
    */

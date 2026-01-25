@@ -11,9 +11,9 @@ export interface CreateMathProblem {
    */
   name?: string;
   /**
-   * Saved LaTeX epxression
+   * Description of the math problem
    */
-  latex?: string;
+  description?: string;
   /**
    * Final simplified expression
    */

@@ -3,7 +3,7 @@ export interface MathProblemStep {
   problemId: number;
   stepIndex: number;
   description: string;
-  expression: string;
-  latex?: string;
+  stepBefore?: string;
+  stepAfter?: string;
   created?: Date;
 }

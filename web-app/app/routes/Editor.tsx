@@ -1,15 +1,23 @@
-import { createMathProblem, getAllUsers, MathEngineSolveStep, refresh } from 'web-api-client';
+import {
+  createMathProblem,
+  CreateMathProblemRequest,
+  getAllUsers,
+  MathEngineSolveRequest,
+  MathEngineSolveResponse,
+  MathEngineSolveStep,
+  refresh,
+} from 'web-api-client';
 import login from '../../middleware/auth/login';
 import { useEffect, useRef, useState } from 'react';
 import getApiConfig from '@/apiConfig';
-import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import {
   Button,
-  ClipBoardCopy,
   FunctionPlot,
-  InputBase,
-  KeyValuePair,
+  Icon,
   MathField,
+  ResolveValue,
+  SolveStep,
+  InputModal,
 } from '@/libs/ui/components';
 import { ComputeEngine } from '@cortex-js/compute-engine';
 import { BaseLayout, Paper } from '@/libs/ui/layouts';
@@ -17,7 +25,6 @@ import { latexToMathJson } from '@/libs/math';
 import { evaluateLatexNumeric } from '@/libs/math/evaluateExpression';
 import solve from '@/middleware/actions/solve';
 import { Header } from '@/libs/ui/components/Header';
-import { getBrowser, getEditor } from '../navigation';
 
 export default function Editor() {
   // useEffect(() => {
@@ -27,9 +34,6 @@ export default function Editor() {
 
   //   d();
   // }, []);
-  // const [latex, setLatex] = useState('');
-  // const [final, setFinal] = useState('');
-  // const [finalSteps, setFinalSteps] = useState<MathEngineSolveStep[]>([]);
   // const test = async () => {
   //   async function testRefresh() {
   //     try {
@@ -43,86 +47,91 @@ export default function Editor() {
 
   //   testRefresh();
   // };
-  // const test2 = async () => {
-  //   // console.log(await getAllUsers(getApiConfig()));
+  const [latex, setLatex] = useState<string>('');
+  const [final, setFinal] = useState<string>('');
+  const [finalSteps, setFinalSteps] = useState<MathEngineSolveStep[]>([]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  //   console.log(latexToMathJson(latex));
-  //   const solved = await solve(latex);
-  //   setFinal(solved.finalExpression);
-  //   setFinalSteps(solved.steps);
-  //   console.log(solved);
-  // };
+  const solveExpression = async () => {
+    console.log(latexToMathJson(latex));
+    const solved: MathEngineSolveResponse = await solve(latex);
 
-  // const renderedSteps =
-  //   finalSteps &&
-  //   finalSteps.map((m, i) => (
-  //     <>
-  //       <h3>Step {i + 1}:</h3>
-  //       <MathJaxContext>
-  //         <MathJax>{`Before: \\(${m.stepBefore}\\)`}</MathJax>
-  //       </MathJaxContext>
-  //       <MathJaxContext>
-  //         <MathJax>{`After: \\(${m.stepAfter}\\)`}</MathJax>
-  //       </MathJaxContext>
-  //       <p>Desc: {m.stepRuleDescription}</p>
-  //     </>
-  //   ));
+    setFinal(solved.finalExpression);
+    setFinalSteps(solved.steps);
+    console.log(solved);
+  };
 
+  const renderedSteps =
+    finalSteps &&
+    finalSteps.map((m, i) => <SolveStep step={m} index={i} isFinal={false}></SolveStep>);
+
+  const renderFinal = final && (
+    <SolveStep step={final} isFinal={true} index={finalSteps.length}></SolveStep>
+  );
   return (
-    <BaseLayout>
-      <BaseLayout.Menu>
-        <Header
-          route={[
-            { pageTitle: 'Browser', pageRoute: getBrowser() },
-            { pageTitle: 'Editor', pageRoute: getEditor() },
-          ]}
-        />
-      </BaseLayout.Menu>
-      <BaseLayout.Content>s</BaseLayout.Content>
-    </BaseLayout>
-    // <div className="w-full flex justify-start items-center flex-col h-fit">
-    //   <div>
-    //     <Button onClick={test}>test ref/auth</Button>
-    //     <Button onClick={test2}>test math</Button>
-    //   </div>
+    <>
+      <InputModal
+        Open={isOpen}
+        title="Create New Problem"
+        onResolve={async (value: ResolveValue | false) => {
+          setIsOpen(false);
 
-    //   <Paper thickness="sm" className="border border-white-800 w-[70%]">
-    //     <Paper.Title>Math Input Section</Paper.Title>
-    //     <Paper.Content className="grid grid-cols-1 xl:grid-cols-2">
-    //       <MathField initialLatex={latex} onChange={(newLatex) => setLatex(newLatex)} />
+          if (!value) return;
 
-    //       <div className="fle gap-2 flex-col w-full">
-    //         <KeyValuePair
-    //           orientation={'horizontal'}
-    //           label="LaTeX format:"
-    //           value={
-    //             <p>
-    //               {latex} {latex && <ClipBoardCopy text={latex}></ClipBoardCopy>}
-    //             </p>
-    //           }
-    //         ></KeyValuePair>
-    //         <KeyValuePair
-    //           orientation={'horizontal'}
-    //           label="Plain Math:"
-    //           value={
-    //             <MathJaxContext>
-    //               <MathJax>{`\\(${latex}\\)`}</MathJax>
-    //             </MathJaxContext>
-    //           }
-    //         ></KeyValuePair>
-    //         <KeyValuePair
-    //           label="Evaluation:"
-    //           orientation={'horizontal'}
-    //           value={evaluateLatexNumeric(latex) === null ? 'None' : evaluateLatexNumeric(latex)}
-    //         ></KeyValuePair>
-    //         <MathJaxContext>
-    //           <MathJax>{`\\(${final}\\)`}</MathJax>
-    //         </MathJaxContext>
-    //         {renderedSteps}
-    //       </div>
-    //     </Paper.Content>
-    //   </Paper>
-    //   <FunctionPlot latex={latex}></FunctionPlot>
-    // </div>
+          const newProblem = await createMathProblem(
+            {
+              userId: 1,
+              problem: {
+                name: value.name,
+                originalExpression: latex,
+                //stdescription: value.description,
+              },
+            },
+            getApiConfig(true)
+          );
+        }}
+      ></InputModal>
+      <BaseLayout className="overflow-hidden">
+        <BaseLayout.Menu>
+          <Header
+            route={[
+              { pageTitle: 'Browser', pageRoute: '/browser' },
+              { pageTitle: 'Editor', pageRoute: '/browser/editor' },
+            ]}
+          />
+        </BaseLayout.Menu>
+        <BaseLayout.Content>
+          <div className="relative w-full h-full bg-white-800 overflow-hidden">
+            <FunctionPlot
+              latex={latex}
+              xRange={[-100, 100]}
+              className="absolute h-full w-full pointer-events-none"
+            />
+            <Paper
+              thickness="sm"
+              className="border border-white-800 relative left-5 top-10 w-[600px] h-[85%] p-3 flex flex-col"
+            >
+              <Paper.Title className="flex flex-row items-start gap-3">
+                <MathField initialLatex={latex} onChange={(newLatex) => setLatex(newLatex)} />
+                <Button size="lg" className="mt-5 gap-2" onClick={solveExpression}>
+                  <Icon name="paper-plane"></Icon>Solve
+                </Button>
+              </Paper.Title>
+              <Paper.Content className="flex flex-col flex-1 min-h-0">
+                <div className="w-full flex-1 min-h-0 flex flex-col overflow-y-auto">
+                  {renderedSteps}
+                  {renderFinal}
+                </div>
+                <div className="w-full flex-shrink-0 pt-2 flex justify-end gap-4">
+                  <Button className="gap-2">
+                    <Icon name="download"></Icon>Save as new
+                  </Button>
+                </div>
+              </Paper.Content>
+            </Paper>
+          </div>
+        </BaseLayout.Content>
+      </BaseLayout>
+    </>
   );
 }

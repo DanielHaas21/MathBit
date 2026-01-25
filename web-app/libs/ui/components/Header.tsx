@@ -17,7 +17,7 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
   const Dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.User);
 
-  const t = useTranslation();
+  const t = useTranslation("ui");
 
   const isLoggedIn = user.accessToken === undefined ? true : false;
   const userSection = isLoggedIn ? (
@@ -45,19 +45,19 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
       }
     >
       <Dropdown.Item icon="gear" className="text-text-black m-2 hover:bg-brand-blue-50">
-        {t('ui.header.settings')}
+        {t('header.settings')}
       </Dropdown.Item>
       <Dropdown.Item icon="user" className="text-error-text m-2 hover:bg-error-bg">
-        {t('ui.header.logout')}
+        {t('header.logout')}
       </Dropdown.Item>
     </DropdownMenu>
   ) : (
     <div className="flex gap-2 mt-6">
       <Button variant="primary" size="md">
-        {t('ui.header.login')}
+        {t('header.login')}
       </Button>
       <Button variant="primary" outline={'primary'} size="md">
-        {t('ui.header.signup')}
+        {t('header.signup')}
       </Button>
     </div>
   );

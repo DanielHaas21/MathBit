@@ -28,3 +28,6 @@ export * from './Avatar';
 export * from './MathField';
 export * from './FunctionPlot';
 export * from './ClipboardCopy';
+export * from './SolveStep';
+export * from './Header';
+export * from './InputModal';

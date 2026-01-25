@@ -20,7 +20,7 @@ async function solve(expr: string): Promise<MathEngineSolveResponse> {
   const MathJSON = ce.parse(expr).json;
   const response = await solveMathExpression(
     { rawExpression: MathJSON },
-    getApiConfig() as Partial<RequestConfig<SolveMathExpressionMutationRequest>> // Non-auth requests seem to have a different config type, on function level its the same, hence why we cast it 
+    getApiConfig()// Non-auth requests seem to have a different config type, on function level its the same, hence why we cast it 
   );
 
   return response;

@@ -11,6 +11,7 @@
     "generate": "pnpm --filter web-api-client generate",
     "dev:db": "pnpm --filter db dev",
     "format": "prettier --write .",
+    "engine": "cd haskell-engine && stack run",
     "clear": "npx rimraf .\\node_modules .\\web-app\\node_modules .\\web-api\\node_modules .\\db\\node_modules"
   },
   "packageManager": "pnpm@10.4.1",

@@ -34,16 +34,12 @@ const BaseLayoutRoot: React.FC<BaseLayoutProps> = ({ children, className }) => {
 BaseLayoutRoot.displayName = 'BaseLayout';
 
 const Menu: React.FC<BaseLayoutMenuProps> = ({ children, className }) => (
-  <div
-    className={cn('bg-white-50 fixed] min-h-[150px] w-full flex', className)}
-  >
-    {children}
-  </div>
+  <div className={cn('bg-white-50  h-1/7 w-full flex', className)}>{children}</div>
 );
 Menu.displayName = 'BaseLayout.Menu';
 
 const Content: React.FC<BaseLayoutContentProps> = ({ children, className }) => (
-  <div className={cn('w-full flex min-h-[150px]', className)}>{children}</div>
+  <div className={cn('w-full flex h-6/7', className)}>{children}</div>
 );
 Content.displayName = 'BaseLayout.Content';
 

@@ -7,7 +7,7 @@ import { store } from './store/store';
  * @param {boolean} auth - Whether to include Authorization headers with Bearer token and API interceptors, defaults to false
  * @returns {Partial<RequestConfig<LoginMutationRequest>>} Api config object; typed as that since web-api-client expects its own type, which either doesnt contain all fields or contains some discrepencies with actual axios types yet it accepts them
  */
-function getApiConfig(auth: boolean = false): Partial<RequestConfig<LoginMutationRequest>> {
+function getApiConfig<T = unknown>(auth: boolean = false): T {
   const token = store.getState().User.accessToken;
 
   const config = (auth
@@ -35,7 +35,7 @@ function getApiConfig(auth: boolean = false): Partial<RequestConfig<LoginMutatio
          * Custom axios instance to be used for requests
          */
         client: api,
-      }) as unknown as Partial<RequestConfig<LoginMutationRequest>>; // type has to be asserted since unkown conversions cant be annotated directly
+      }) as unknown as T; // type has to be asserted since unkown conversions cant be annotated directly
 
   return config;
 }

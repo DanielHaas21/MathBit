@@ -132,7 +132,7 @@ prettyPrec ctx = \case
     pretty  "\\sqrt" <> braces (prettyLatex x)
 
   Root n x ->
-    pretty "\\sqrt[" <> prettyLatex n <> pretty "]" <> braces (prettyLatex x)
+    pretty "\\sqrt[" <> prettyLatex x <> pretty "]" <> braces (prettyLatex n)
 
   Abs s ->
     pretty "\\left|" <> prettyLatex s <> pretty "\\right|"

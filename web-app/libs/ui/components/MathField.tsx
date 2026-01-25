@@ -16,7 +16,7 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
   const options: SelectInputOption[] = [
     { label: 'Functions', value: 'functions' },
     // { label: 'Algebra', value: 'algebra' },
-    { label: 'Calculus', value: 'sequences' },
+    // { label: 'Calculus', value: 'sequences' },
     { label: 'Trigonometry', value: 'trigo' },
     { label: 'Combinatorics', value: 'combinatorics' },
   ];
@@ -95,76 +95,76 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
     //   mathfieldInstructions: { content: '\\prod', method: 'write' },
     // },
     // Calculus tab (sequences)
-    {
-      id: 'integral',
-      label: '\\int',
-      labelType: 'tex',
-      groups: ['sequences'],
-      mathfieldInstructions: { content: '\\int', method: 'write' },
-    },
-    {
-      id: 'definite_integral',
-      label: '\\int_{}^{}',
-      labelType: 'tex',
-      groups: ['sequences'],
-      mathfieldInstructions: { content: '\\int_{}^{}', method: 'write' },
-    },
-    {
-      id: 'derivative_dx',
-      label: '\\frac{d}{dx}',
-      labelType: 'tex',
-      groups: ['sequences'],
-      mathfieldInstructions: { content: '\\frac{d}{dx}', method: 'write' },
-    },
-    {
-      id: 'derivative_dy',
-      label: '\\frac{dy}{dx}',
-      labelType: 'tex',
-      groups: ['sequences'],
-      mathfieldInstructions: { content: '\\frac{dy}{dx}', method: 'write' },
-    },
-    {
-      id: 'partial_derivative',
-      label: '\\frac{\\partial}{\\partial x}',
-      labelType: 'tex',
-      groups: ['sequences'],
-      mathfieldInstructions: { content: '\\frac{\\partial}{\\partial x}', method: 'write' },
-    },
-    {
-      id: 'limit',
-      label: '\\lim_{x \\to 0}',
-      labelType: 'tex',
-      groups: ['sequences'],
-      mathfieldInstructions: { content: '\\lim_{x \\to 0}', method: 'write' },
-    },
-    {
-      id: 'prime_y1',
-      label: "y'",
-      labelType: 'tex',
-      groups: ['sequences'],
-      mathfieldInstructions: { content: "y'", method: 'write' },
-    },
-    {
-      id: 'prime_y2',
-      label: "y''",
-      labelType: 'tex',
-      groups: ['sequences'],
-      mathfieldInstructions: { content: "y''", method: 'write' },
-    },
-    {
-      id: 'prime_y3',
-      label: "y'''",
-      labelType: 'tex',
-      groups: ['sequences'],
-      mathfieldInstructions: { content: "y'''", method: 'write' },
-    },
-    {
-      id: 'prime_fx',
-      label: "f'(x)",
-      labelType: 'tex',
-      groups: ['sequences'],
-      mathfieldInstructions: { content: "f'(x)", method: 'write' },
-    },
+    // {
+    //   id: 'integral',
+    //   label: '\\int',
+    //   labelType: 'tex',
+    //   groups: ['sequences'],
+    //   mathfieldInstructions: { content: '\\int', method: 'write' },
+    // },
+    // {
+    //   id: 'definite_integral',
+    //   label: '\\int_{}^{}',
+    //   labelType: 'tex',
+    //   groups: ['sequences'],
+    //   mathfieldInstructions: { content: '\\int_{}^{}', method: 'write' },
+    // },
+    // {
+    //   id: 'derivative_dx',
+    //   label: '\\frac{d}{dx}',
+    //   labelType: 'tex',
+    //   groups: ['sequences'],
+    //   mathfieldInstructions: { content: '\\frac{d}{dx}', method: 'write' },
+    // },
+    // {
+    //   id: 'derivative_dy',
+    //   label: '\\frac{dy}{dx}',
+    //   labelType: 'tex',
+    //   groups: ['sequences'],
+    //   mathfieldInstructions: { content: '\\frac{dy}{dx}', method: 'write' },
+    // },
+    // {
+    //   id: 'partial_derivative',
+    //   label: '\\frac{\\partial}{\\partial x}',
+    //   labelType: 'tex',
+    //   groups: ['sequences'],
+    //   mathfieldInstructions: { content: '\\frac{\\partial}{\\partial x}', method: 'write' },
+    // },
+    // {
+    //   id: 'limit',
+    //   label: '\\lim_{x \\to 0}',
+    //   labelType: 'tex',
+    //   groups: ['sequences'],
+    //   mathfieldInstructions: { content: '\\lim_{x \\to 0}', method: 'write' },
+    // },
+    // {
+    //   id: 'prime_y1',
+    //   label: "y'",
+    //   labelType: 'tex',
+    //   groups: ['sequences'],
+    //   mathfieldInstructions: { content: "y'", method: 'write' },
+    // },
+    // {
+    //   id: 'prime_y2',
+    //   label: "y''",
+    //   labelType: 'tex',
+    //   groups: ['sequences'],
+    //   mathfieldInstructions: { content: "y''", method: 'write' },
+    // },
+    // {
+    //   id: 'prime_y3',
+    //   label: "y'''",
+    //   labelType: 'tex',
+    //   groups: ['sequences'],
+    //   mathfieldInstructions: { content: "y'''", method: 'write' },
+    // },
+    // {
+    //   id: 'prime_fx',
+    //   label: "f'(x)",
+    //   labelType: 'tex',
+    //   groups: ['sequences'],
+    //   mathfieldInstructions: { content: "f'(x)", method: 'write' },
+    // },
     // Trigonometry tab
     {
       id: 'sin',
@@ -249,7 +249,7 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
   const keysForTab = allKeys.filter((k) => k.groups?.includes(tab));
 
   return (
-    <div className="flex flex-row justify-between p-4 w-fit gap-2 [&>div:first-child>span]:!border-xl ">
+    <div className="flex flex-col justify-between p-4 w-fit gap-2 [&>div:first-child>span]:!border-xl ">
       <MathInput
         style={{
           minWidth: '300px',
@@ -265,6 +265,7 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
       />
       <div>
         <Select
+          size="md"
           options={options}
           value={tab}
           onChange={(value) => {

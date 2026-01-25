@@ -2,8 +2,8 @@ export interface MathProblem {
   id?: number;
   userId: number;
   originalExpression: string;
-  latex?: string;
   name?: string;
+  description?: string;
   simplifiedExpression?: string;
   bookmark?: boolean;
   created?: Date;

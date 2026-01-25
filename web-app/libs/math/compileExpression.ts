@@ -6,17 +6,19 @@ import { ComputeEngine } from '@cortex-js/compute-engine';
  * @param jsonExpr
  * @returns Real number or NaN if evaluation fails
  */
+
 export function compileExpression(jsonExpr: any): (x: number) => number {
   const ce = new ComputeEngine();
+
   const boxed = ce.box(jsonExpr);
+  const fn = boxed.compile(); //  IMPORTANT
 
   return (x: number) => {
-    const evaluated = boxed
-      .subs({ x: ce.number(x) })
-      .evaluate()
-      .N();
-
-    const val = evaluated.re;
-    return typeof val === 'number' ? val : NaN;
+    try {
+      const y = fn({ x });
+      return typeof y === 'number' && Number.isFinite(y) ? y : NaN;
+    } catch {
+      return NaN;
+    }
   };
 }

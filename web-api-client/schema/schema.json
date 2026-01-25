@@ -158,13 +158,11 @@
 						"type": "string",
 						"description": "Step description"
 					},
-					"expression": {
-						"type": "string",
-						"description": "Expression of the step"
+					"stepBefore": {
+						"type": "string"
 					},
-					"latex": {
-						"type": "string",
-						"description": "Saved LaTeX epxression"
+					"stepAfter": {
+						"type": "string"
 					},
 					"created": {
 						"type": "string",
@@ -175,8 +173,7 @@
 				"required": [
 					"problemId",
 					"stepIndex",
-					"description",
-					"expression"
+					"description"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -198,20 +195,17 @@
 						"type": "string",
 						"description": "Step description"
 					},
-					"expression": {
-						"type": "string",
-						"description": "Expression of the step"
+					"stepBefore": {
+						"type": "string"
 					},
-					"latex": {
-						"type": "string",
-						"description": "Saved LaTeX epxression"
+					"stepAfter": {
+						"type": "string"
 					}
 				},
 				"required": [
 					"problemId",
 					"stepIndex",
-					"description",
-					"expression"
+					"description"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -250,19 +244,16 @@
 						"type": "string",
 						"description": "Step description"
 					},
-					"expression": {
-						"type": "string",
-						"description": "Expression of the step"
+					"stepBefore": {
+						"type": "string"
 					},
-					"latex": {
-						"type": "string",
-						"description": "Saved LaTeX epxression"
+					"stepAfter": {
+						"type": "string"
 					}
 				},
 				"required": [
 					"stepIndex",
-					"description",
-					"expression"
+					"description"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -304,9 +295,9 @@
 						"type": "string",
 						"description": "original input expression"
 					},
-					"latex": {
+					"description": {
 						"type": "string",
-						"description": "Saved LaTeX epxression"
+						"description": "Description of the math problem"
 					},
 					"simplifiedExpression": {
 						"type": "string",
@@ -341,9 +332,9 @@
 						"type": "string",
 						"description": "Name of the math problem created when saving one"
 					},
-					"latex": {
+					"description": {
 						"type": "string",
-						"description": "Saved LaTeX epxression"
+						"description": "Description of the math problem"
 					},
 					"simplifiedExpression": {
 						"type": "string",
@@ -398,9 +389,9 @@
 						"type": "string",
 						"description": "original input expression"
 					},
-					"latex": {
+					"description": {
 						"type": "string",
-						"description": "Saved LaTeX epxression"
+						"description": "Description of the math problem"
 					},
 					"simplifiedExpression": {
 						"type": "string",
@@ -461,9 +452,9 @@
 						"type": "string",
 						"description": "Name of the math problem created when saving one"
 					},
-					"latex": {
+					"description": {
 						"type": "string",
-						"description": "Saved LaTeX epxression"
+						"description": "Description of the math problem"
 					},
 					"simplifiedExpression": {
 						"type": "string",

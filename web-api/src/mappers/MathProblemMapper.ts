@@ -12,7 +12,8 @@ export class MathProblemMapper {
       id: model.id,
       userId: model.userId,
       originalExpression: model.originalExpression,
-      latex: model.latex,
+      description: model.description,
+      name: model.name,
       simplifiedExpression: model.simplifiedExpression,
       bookmark: model.bookmark,
       created: model.created,
@@ -26,7 +27,8 @@ export class MathProblemMapper {
     }
     return {
       originalExpression: dto.originalExpression,
-      latex: dto.latex,
+      description: dto.description,
+      name: dto.name,
       simplifiedExpression: dto.simplifiedExpression,
       bookmark: dto.bookmark,
     };
@@ -39,7 +41,8 @@ export class MathProblemMapper {
     return {
       id: dto.id,
       originalExpression: dto.originalExpression,
-      latex: dto.latex,
+      description: dto.description,
+      name: dto.name,
       simplifiedExpression: dto.simplifiedExpression,
       bookmark: dto.bookmark,
       updated: dto.updated,

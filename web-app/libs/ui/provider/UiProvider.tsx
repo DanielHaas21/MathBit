@@ -1,14 +1,20 @@
 'use client';
 import React, { createContext, useContext } from 'react';
 import { ToastProvider } from '../components/Toast/ToastProvider';
-import type { i18n as I18nInstance } from 'i18next';
+import type { i18n as I18nInstance, TOptionsBase } from 'i18next';
 
 // I18n context
 const I18nContext = createContext<I18nInstance | null>(null);
 
-export const useTranslation = () => {
+export const useTranslation = (root: string) => {
   const i18n = useContext(I18nContext);
-  return i18n?.t ?? ((key: string) => key);
+  return (key: string, options?: unknown) =>
+    i18n
+      ? (i18n.t(
+          `${root}.${key}`,
+          options as TOptionsBase & Record<string, unknown>
+        ) as React.ReactNode)
+      : `${root}.${key}`;
 };
 
 export const useI18n = () => {

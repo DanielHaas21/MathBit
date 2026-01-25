@@ -13,8 +13,8 @@ export class MathProblemStepMapper {
       problemId: model.problemId,
       stepIndex: model.stepIndex,
       description: model.description,
-      expression: model.expression,
-      latex: model.latex,
+      stepBefore: model.stepBefore,
+      stepAfter: model.stepAfter,
       created: model.created,
     };
   }
@@ -27,8 +27,8 @@ export class MathProblemStepMapper {
       problemId: dto.problemId,
       stepIndex: dto.stepIndex,
       description: dto.description,
-      expression: dto.expression,
-      latex: dto.latex,
+      stepBefore: dto.stepBefore,
+      stepAfter: dto.stepAfter,
     };
   }
 
@@ -40,8 +40,8 @@ export class MathProblemStepMapper {
       id: dto.id,
       stepIndex: dto.stepIndex,
       description: dto.description,
-      expression: dto.expression,
-      latex: dto.latex,
+      stepBefore: dto.stepBefore,
+      stepAfter: dto.stepAfter,
     };
   }
 }
