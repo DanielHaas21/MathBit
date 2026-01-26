@@ -1,13 +1,226 @@
+import getApiConfig from '@/apiConfig';
+import {
+  BrowserItem,
+  Button,
+  Datepicker,
+  Icon,
+  InputField,
+  InputWrapper,
+  Label,
+  WarningModal,
+} from '@/libs/ui/components';
 import { Header } from '@/libs/ui/components/Header';
-import { BaseLayout } from '@/libs/ui/layouts';
+import { BaseLayout, Paper } from '@/libs/ui/layouts';
+import { useTranslation } from '@/libs/ui/provider/UiProvider';
+import { RangeDate } from '@/libs/ui/types/RangeDate';
+import { RootState } from '@/store/store';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { deleteMathProblem, getMathProblems, MathProblem, refresh } from 'web-api-client';
 
 export default function Browser() {
+  const user = useSelector((state: RootState) => state.User);
+  const t = useTranslation('pages.browser');
+  const navigate = useNavigate();
+
+  const divRef = useRef<HTMLDivElement | null>(null);
+  const [problems, setProblems] = useState<MathProblem[]>([]);
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [searchFilter, setSearchFilter] = useState('');
+  const [pendingId, setPendingId] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [date, setDate] = useState<RangeDate>({});
+  const [page, setPage] = useState(0);
+  const pageSize = 20;
+  const lastQueryRef = useRef<{
+    searchFilter: string;
+    page: number;
+  } | null>(null);
+
+  const handleInfiniteScroll = (
+    e: React.UIEvent<HTMLElement, UIEvent>,
+    loading: boolean,
+    callback: () => void
+  ) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+
+    if (loading || scrollHeight === clientHeight) return;
+    const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100;
+
+    if (scrollPercent > 80) {
+      callback();
+    }
+  };
+
+  useEffect(() => {
+    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+
+    debounceTimeout.current = setTimeout(() => {
+      setSearchFilter(searchInput);
+      setPage(0);
+      if (divRef.current) {
+        divRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 500);
+  }, [searchInput]);
+
+  useEffect(() => {
+    if (!user.accessToken || !user.user?.id) {
+      return;
+    }
+
+    const currentQuery = {
+      searchFilter,
+      page,
+    };
+
+    // Prevent duplicate fetch for same query
+    if (
+      lastQueryRef.current &&
+      lastQueryRef.current.searchFilter === currentQuery.searchFilter &&
+      lastQueryRef.current.page === currentQuery.page
+    ) {
+      return;
+    }
+
+    lastQueryRef.current = currentQuery;
+
+    setLoading(true);
+    const fetch = async () => {
+      try {
+        console.log(page);
+        const response = await getMathProblems(
+          {
+            offset: page * pageSize,
+            limit: pageSize,
+          },
+          {
+            userId: user.user?.id as number,
+            name: searchFilter,
+          },
+          getApiConfig()
+        );
+
+        // Append results for subsequent pages; replace only on first page
+        setProblems((prev) => (page === 0 ? response.data : [...prev, ...response.data]));
+      } catch (err: any) {
+        if (err.status === 401) {
+          navigate('/');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    console.log(problems);
+    fetch();
+  }, [searchFilter, page, user]);
+
   return (
-    <BaseLayout>
-      <BaseLayout.Menu>
-        <Header route={[{ pageTitle: 'Browser', pageRoute: '/browser' }]} />
-      </BaseLayout.Menu>
-      <BaseLayout.Content>s</BaseLayout.Content>
-    </BaseLayout>
+    <>
+      <WarningModal
+        Open={isOpen}
+        onResolve={async (result) => {
+          setIsOpen(false);
+
+          if (result) {
+            setProblems((prev) => prev.filter((p) => p.id !== pendingId));
+            await deleteMathProblem(pendingId as number, getApiConfig());
+            setPendingId(null);
+          }
+        }}
+      ></WarningModal>
+      <BaseLayout>
+        <BaseLayout.Menu>
+          <Header route={[{ pageTitle: 'Browser', pageRoute: '/browser' }]} />
+        </BaseLayout.Menu>
+        <BaseLayout.Content className="flex flex-col items-center p-6">
+          <Paper className="mb-8  mt-5 w-full h-fit !p-[10px] !pb-[16px] bg-white-50 border border-white-800 rounded-xl">
+            <Paper.Content className="grid grid-cols-1 md:grid-cols-2 place-items-end px-6 pb-2">
+              <div className="flex flex-row w-full gap-4">
+                <div className="w-full xl:w-[40%] ">
+                  <InputField
+                    required={false}
+                    className=" w-full bg-white-50"
+                    label={t('filters.search') as string}
+                    placeholder={t('filters.searchPlaceholder') as string}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    type="text"
+                    value={searchInput}
+                  />
+                </div>
+                <div className="w-full xl:w-[300px] relative">
+                  <InputWrapper label={t('filters.date') as string} required={false}>
+                    <Datepicker
+                      className="bg-white-50"
+                      mode="range"
+                      value={date}
+                      onChange={(newDate) => setDate(newDate as RangeDate)}
+                    ></Datepicker>
+                  </InputWrapper>
+                </div>
+                <Button
+                  outline={'primary'}
+                  onClick={() => {
+                    setSearchInput('');
+                    setDate({});
+                  }}
+                  className="gap-2 h-[46px] mr-4 mt-[28px]"
+                >
+                  <Icon name="arrows-rotate" />
+                  {t('filters.reset')}
+                </Button>
+              </div>
+
+              <Button
+                onClick={() => {
+                  navigate('/browser/editor');
+                }}
+                className="gap-2 w-fit h-[46px] mr-4 mt-[28px] self-end"
+              >
+                <Icon name="gear" />
+                {t('edtitor')}
+              </Button>
+            </Paper.Content>
+          </Paper>
+          <div
+            ref={divRef}
+            className="m-4 w-full !max-h-[1100px] md:!max-h-[750px] overflow-y-scroll grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
+            onScroll={(e) => handleInfiniteScroll(e, loading, () => setPage((prev) => prev + 1))}
+          >
+            {problems.map((problem, index) => (
+              <BrowserItem
+                key={index}
+                id={problem.id}
+                name={problem.name}
+                description={problem.description}
+                created={problem.created}
+                updated={problem.updated}
+                onDelete={(id) => {
+                  setIsOpen(true);
+                  setPendingId(id);
+                }}
+                onView={(id) => {
+                  navigate(`/browser/editor/${id}`);
+                }}
+              />
+            ))}
+          </div>
+          {problems.length === 0 && (
+            <div className="flex flex-col items-center gap-2 mt-[100px]">
+              <Icon name="magnifying-glass" size="xl" className="text-text-grey"></Icon>
+
+              <Label className="text-text-black" size="lg">{t('emptyResult.all')}</Label>
+              <Label className="text-text-grey text-center" size="md">
+                {t('emptyResult.all2')}
+              </Label>
+            </div>
+          )}
+        </BaseLayout.Content>
+      </BaseLayout>
+    </>
   );
 }

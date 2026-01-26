@@ -8,6 +8,7 @@ import {
   Tags,
   Request,
   Security,
+  Get,
 } from 'tsoa';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -17,7 +18,9 @@ import { type LoginResponse } from '../dto/LoginResponse';
 import { getAppConfig } from '../appConfig';
 import { UserRepository } from 'db';
 import { type ExpressRequest } from '../types/expressRequest';
-import { UserProfile } from '@/types/userProfile';
+import { type UserProfile } from '../types/userProfile';
+import { UserMapper } from '../mappers/UserMapper';
+import { type User } from '../dto/User';
 
 const ACCESS_TOKEN_EXPIRATION = '4h';
 const REFRESH_TOKEN_EXPIRATION = '7d';
@@ -102,6 +105,29 @@ export class AuthController extends Controller {
       console.log(err);
       return { errorCode: 'Invalid refresh token' };
     }
+  }
+
+  /**
+   * Returns the currently authenticated user
+   */
+  @Get('me')
+  @Security('jwt')
+  public async me(@Request() request: ExpressRequest): Promise<User | null> {
+    const profile = request.userProfile;
+
+    if (!profile?.id) {
+      this.setStatus(401);
+      throw new Error('Unauthorized');
+    }
+
+    const user = await this.userRepository.getUserById(profile.id);
+
+    if (!user) {
+      this.setStatus(404);
+      throw new Error('User not found');
+    }
+
+    return UserMapper.toDto(user);
   }
 
   @Post('logout')

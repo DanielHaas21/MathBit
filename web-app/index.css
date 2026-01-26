@@ -1,1 +1,32 @@
 @import './libs/ui/assets/styles/index.css';
+
+/* Hide scrollbar arrows  */
+::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+/* Scrollbar track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Scrollbar itself */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Scrollbar thumb  */
+::-webkit-scrollbar-thumb {
+  background-color: #e9eaeb;
+  border-radius: 8px;
+  border: none;
+}
+
+/* Firefox support */
+* {
+  scrollbar-color: #e9eaeb transparent;
+  scrollbar-width: thin;
+}

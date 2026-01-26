@@ -1,5 +1,19 @@
 {
   "pages": {
+    "browser": {
+      "title": "Problem Browser",
+      "filters": {
+        "searchPlaceholder": "Search problems...",
+        "search": "Search",
+        "date": "Date",
+        "reset": "Reset Filters"
+      },
+      "edtitor": "Go to Editor",
+      "emptyResult": {
+        "all": "No problems found",
+        "all2": "You haven't created any problems yet, or your search did not match any problems."
+      }
+    },
     "editor": {
       "solve": "Solve",
       "save": "Save as new problem",
@@ -26,6 +40,24 @@
       "signup": "Sign Up",
       "logout": "Logout",
       "settings": "Settings"
+    },
+    "warningModal": {
+      "areYouSure": "Are you sure?",
+      "thisActionCannotBeUndone": "This action cannot be undone.",
+      "warning": "Warning",
+      "warningText": "Please confirm that you want to proceed with this action.",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "browserItem": {
+      "createdAt": "Created at:",
+      "updatedAt": "Last updated at:",
+      "noName": "Unnamed Problem",
+      "noDescription": "No description provided",
+      "actions": {
+        "view": "View",
+        "delete": "Delete"
+      }
     },
     "inputModal": {
       "editor": {
