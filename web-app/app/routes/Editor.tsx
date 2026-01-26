@@ -1,14 +1,16 @@
 import {
   createMathProblem,
-  CreateMathProblemRequest,
-  getAllUsers,
-  MathEngineSolveRequest,
+  CreateMathProblem201,
+  getMathProblemById,
+  GetMathProblemById200,
   MathEngineSolveResponse,
   MathEngineSolveStep,
-  refresh,
+  MathProblem,
+  updateMathProblem,
 } from 'web-api-client';
 import login from '../../middleware/auth/login';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import getApiConfig from '@/apiConfig';
 import {
   Button,
@@ -18,49 +20,116 @@ import {
   ResolveValue,
   SolveStep,
   InputModal,
+  useToast,
 } from '@/libs/ui/components';
-import { ComputeEngine } from '@cortex-js/compute-engine';
 import { BaseLayout, Paper } from '@/libs/ui/layouts';
-import { latexToMathJson } from '@/libs/math';
 import { evaluateLatexNumeric } from '@/libs/math/evaluateExpression';
 import solve from '@/middleware/actions/solve';
 import { Header } from '@/libs/ui/components/Header';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { BreadcrumbItem } from '@/libs/ui/types';
+import { useTranslation } from '@/libs/ui/provider';
 
 export default function Editor() {
-  // useEffect(() => {
-  //   async function d() {
-  //     const auth = await login({ email: 'e.procházková4@example.com', password: 'test' });
-  //   }
-
-  //   d();
-  // }, []);
-  // const test = async () => {
-  //   async function testRefresh() {
-  //     try {
-  //       const response = await refresh(getApiConfig());
-
-  //       console.log('Refresh response:', response);
-  //     } catch (err) {
-  //       console.error('Refresh request failed:', err);
-  //     }
-  //   }
-
-  //   testRefresh();
-  // };
+  const user = useSelector((state: RootState) => state.User);
+  const t = useTranslation('pages.editor');
+  const ui_t = useTranslation('ui');
+  // Router hooks
+  const navigate = useNavigate();
+  const { id: routeId } = useParams();
+  const route = useLocation().pathname;
+  // parsed as string turned to falsy if not present
+  const hasExistingId = !!routeId;
+  // Toast hook
+  const { show } = useToast();
+  const [currentSavedProblem, setCurrentSavedProblem] = useState<MathProblem | null>(null);
+  // latex state
   const [latex, setLatex] = useState<string>('');
+  // solved result state
   const [final, setFinal] = useState<string>('');
+  // solved steps state
   const [finalSteps, setFinalSteps] = useState<MathEngineSolveStep[]>([]);
+  // modal states
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false);
 
+  useEffect(() => {
+    async function d() {
+      const auth = await login({ email: 'e.procházková4@example.com', password: 'test' });
+    }
+
+    d();
+  }, []);
+
+  // Redirect to /editor if not logged in
+  useEffect(() => {
+    // Avoid preemptive redirect before refresh completes.
+    // If viewing a specific problem, attempt fetch and redirect only on failure.
+    if (routeId) {
+      (async () => {
+        try {
+          const problem: GetMathProblemById200 = await getMathProblemById(
+            parseInt(routeId),
+            getApiConfig()
+          );
+          if (!problem?.id) {
+            navigate('/*');
+          }
+          if (!problem) return;
+
+          setCurrentSavedProblem(problem);
+          setLatex(problem.originalExpression);
+          setFinal(problem.simplifiedExpression ?? '');
+        } catch (err: any) {
+          const status = err?.status ?? err?.response?.status;
+
+          if (status === 401) {
+            navigate('/browser/editor'); // return to editor without id and auth
+
+            show({
+              icon: 'triangle-exclamation',
+              variant: 'error',
+              title: t('messages.notAuthenticated'),
+              description: t('messages.notAuthenticatedDescription'),
+            });
+          } else {
+            navigate('/*');
+          }
+        }
+      })();
+    }
+  }, [routeId, navigate, show]);
+
+  // used for responsive design
+  const [width, setWidth] = useState<number | null>(null);
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // solve expression handler
   const solveExpression = async () => {
-    console.log(latexToMathJson(latex));
+    const evaluate = evaluateLatexNumeric(latex);
+
+    // if its a numeric expression, skip processing via engine and return final directly
+    if (evaluate !== null) {
+      setFinal(evaluate.toString());
+      setFinalSteps([]);
+      return;
+    }
+
     const solved: MathEngineSolveResponse = await solve(latex);
 
     setFinal(solved.finalExpression);
     setFinalSteps(solved.steps);
-    console.log(solved);
   };
 
+  // render solved steps and final
   const renderedSteps =
     finalSteps &&
     finalSteps.map((m, i) => <SolveStep step={m} index={i} isFinal={false}></SolveStep>);
@@ -68,43 +137,134 @@ export default function Editor() {
   const renderFinal = final && (
     <SolveStep step={final} isFinal={true} index={finalSteps.length}></SolveStep>
   );
+
+  // Handle if  we are editing an existing problem or creating a new one, cant be annotated due to length
+  const BreadcrumbProblem =
+    currentSavedProblem &&
+    route &&
+    ({
+      pageTitle: currentSavedProblem.name ?? t('breadcrumb.unnamed'),
+      pageRoute: '/browser/editor/' + currentSavedProblem.id,
+    } as BreadcrumbItem);
+
   return (
     <>
       <InputModal
         Open={isOpen}
-        title="Create New Problem"
+        title={ui_t('inputModal.editor.create.title')}
         onResolve={async (value: ResolveValue | false) => {
           setIsOpen(false);
+          if (!value || !user.user?.id) return; // Cancelled action
 
-          if (!value) return;
-
-          const newProblem = await createMathProblem(
-            {
-              userId: 1,
-              problem: {
-                name: value.name,
-                originalExpression: latex,
-                //stdescription: value.description,
+          try {
+            const newProblem: CreateMathProblem201 = await createMathProblem(
+              {
+                userId: user.user?.id, // Assumes user is logged in, he would be already redirected if not
+                problem: {
+                  name: value.name,
+                  originalExpression: latex,
+                  simplifiedExpression: final,
+                  description: value.description,
+                },
               },
-            },
-            getApiConfig(true)
-          );
+              getApiConfig()
+            );
+            setCurrentSavedProblem(newProblem as MathProblem);
+
+            const createdId = newProblem?.id;
+
+            if (createdId) {
+              show({
+                icon: 'circle-check',
+                variant: 'success',
+                title: t('messages.saveSuccess'),
+              });
+
+              navigate(`/browser/editor/${createdId}`);
+            }
+          } catch (error) {
+            show({
+              icon: 'triangle-exclamation',
+              variant: 'error',
+              title: t('messages.saveError'),
+            });
+            console.error('Error creating math problem:', error);
+          }
         }}
       ></InputModal>
+      {currentSavedProblem && routeId && (
+        <InputModal
+          Open={isOpenUpdate}
+          title={ui_t('inputModal.editor.update.title')}
+          data={{
+            name: currentSavedProblem?.name ?? '',
+            description: currentSavedProblem?.description ?? '',
+          }}
+          onResolve={async (value: ResolveValue | false) => {
+            setIsOpenUpdate(false);
+            if (!value || !user.user?.id || !currentSavedProblem.id) return; // Cancelled action
+
+            try {
+              await updateMathProblem(
+                {
+                  id: currentSavedProblem.id,
+                  problem: {
+                    name: value.name,
+                    originalExpression: latex,
+                    simplifiedExpression: final,
+                    description: value.description,
+                  },
+                },
+                getApiConfig()
+              );
+              console.log(value);
+              setCurrentSavedProblem({
+                ...currentSavedProblem,
+                name: value.name,
+                description: value.description,
+                originalExpression: latex,
+                simplifiedExpression: final,
+              });
+
+              show({
+                icon: 'circle-check',
+                variant: 'success',
+                title: t('messages.updateSuccess'),
+              });
+            } catch (error) {
+              show({
+                icon: 'triangle-exclamation',
+                variant: 'error',
+                title: t('messages.updateError'),
+              });
+              console.error('Error updating math problem:', error);
+            }
+          }}
+        ></InputModal>
+      )}
+
       <BaseLayout className="overflow-hidden">
         <BaseLayout.Menu>
           <Header
-            route={[
-              { pageTitle: 'Browser', pageRoute: '/browser' },
-              { pageTitle: 'Editor', pageRoute: '/browser/editor' },
-            ]}
+            route={
+              BreadcrumbProblem
+                ? [
+                    { pageTitle: 'Browser', pageRoute: '/browser' },
+                    { pageTitle: 'Editor', pageRoute: '/browser/editor' },
+                    BreadcrumbProblem,
+                  ]
+                : [
+                    { pageTitle: 'Browser', pageRoute: '/browser' },
+                    { pageTitle: 'Editor', pageRoute: '/browser/editor' },
+                  ]
+            }
           />
         </BaseLayout.Menu>
         <BaseLayout.Content>
           <div className="relative w-full h-full bg-white-800 overflow-hidden">
             <FunctionPlot
               latex={latex}
-              xRange={[-100, 100]}
+              xRange={[-50, 50]}
               className="absolute h-full w-full pointer-events-none"
             />
             <Paper
@@ -114,7 +274,8 @@ export default function Editor() {
               <Paper.Title className="flex flex-row items-start gap-3">
                 <MathField initialLatex={latex} onChange={(newLatex) => setLatex(newLatex)} />
                 <Button size="lg" className="mt-5 gap-2" onClick={solveExpression}>
-                  <Icon name="paper-plane"></Icon>Solve
+                  <Icon name="paper-plane"></Icon>
+                  {t('solve')}
                 </Button>
               </Paper.Title>
               <Paper.Content className="flex flex-col flex-1 min-h-0">
@@ -123,9 +284,26 @@ export default function Editor() {
                   {renderFinal}
                 </div>
                 <div className="w-full flex-shrink-0 pt-2 flex justify-end gap-4">
-                  <Button className="gap-2">
-                    <Icon name="download"></Icon>Save as new
+                  <Button
+                    className="gap-2"
+                    onClick={() => {
+                      setIsOpen(true);
+                    }}
+                  >
+                    <Icon name="download"></Icon>
+                    {t('save')}
                   </Button>
+                  {hasExistingId && (
+                    <Button
+                      className="gap-2"
+                      onClick={() => {
+                        setIsOpenUpdate(true);
+                      }}
+                    >
+                      <Icon name="arrows-rotate"></Icon>
+                      {t('update')}
+                    </Button>
+                  )}
                 </div>
               </Paper.Content>
             </Paper>

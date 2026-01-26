@@ -3,6 +3,7 @@ import Layout from './Layout';
 import Editor from './routes/Editor';
 import Browser from './routes/Browser';
 import Home from './routes/Home';
+import { NotFound } from './routes/NotFound';
 
 export const router = createBrowserRouter([
   {
@@ -10,8 +11,10 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: '/browser/editor', element: <Editor /> },
+      { path: '/browser/editor/:id', element: <Editor /> },
       { path: '/browser', element: <Browser /> },
-      { index: true, element: <Home  /> },
+      { path: '*', element: <NotFound /> },
+      { index: true, element: <Home /> },
     ],
   },
 ]);

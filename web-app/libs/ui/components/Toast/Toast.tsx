@@ -137,7 +137,7 @@ type ToastItemVariantProps = VariantProps<typeof ToastItemVariants>;
 export interface ToastItemProps extends ToastItemVariantProps {
   icon?: IconName;
   children: React.ReactNode;
-  description?: string;
+  description?: React.ReactNode;
   actions?: React.ReactNode;
   progressBar?: number;
   onRemove?: () => void;

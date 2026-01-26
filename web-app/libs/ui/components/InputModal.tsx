@@ -19,8 +19,8 @@ export interface InputModalProps {
   className?: string;
   onResolve?: (value: ResolveValue | false) => void;
   Open: boolean;
-  title?: string;
-  subtitle?: string; 
+  title?: React.ReactNode;
+  subtitle?: string;
   data?: ResolveValue;
 }
 
@@ -34,44 +34,55 @@ export const InputModal: React.FC<InputModalProps> = ({
   const [name, setName] = React.useState<string>(data?.name ?? '');
   const [description, setDescription] = React.useState<string>(data?.description ?? '');
 
-  const t = useTranslation('ui');
+  const t = useTranslation(data ? 'ui.inputModal.editor.update' : 'ui.inputModal.editor.create');
 
   return (
-    <Modal layout="vertical" open={Open} onClose={() => onResolve?.(false)} size="xs">
-      <Modal.Content size="sm" className="flex flex-col justify-between items-center gap-2">
+    <Modal layout="vertical" open={Open} onClose={() => onResolve?.(false)} size="sm">
+      <Modal.Content size="md" className="flex flex-col justify-between items-center gap-2">
         <div className="flex justify-end w-full">
           <Icon name="xmark" className="cursor-pointer" onClick={() => onResolve?.(false)} />
         </div>
 
         <Label size="lg" className="font-medium">
-          {title}
+          {title ?? t('title')}
         </Label>
-        {subtitle && (
-          <Label className="text-center text-text-grey" size="xs">
-            {subtitle}
-          </Label>
-        )}
+        {subtitle && <Label className="text-center text-text-grey" size="xs"></Label>}
 
-        <InputWrapper required label="Problem name">
-          <InputBase onChange={(e) => setName(e.target.value)} value={name}></InputBase>
-        </InputWrapper>
-        <InputWrapper label="Problem description">
-          <Textarea
-            onInput={(e) => setDescription(e.currentTarget.value)}
-            value={description}
-            resizable={false}
-          ></Textarea>
-        </InputWrapper>
+        <div className="px-10 w-full flex flex-col gap-4">
+          <InputWrapper required label="Problem name" className="w-full">
+            <InputBase
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              placeholder={t('placeholderName') as string}
+            ></InputBase>
+          </InputWrapper>
+          <InputWrapper label="Problem description" required={false} className="w-full">
+            <Textarea
+              size="full"
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
+              resizable={false}
+            ></Textarea>
+          </InputWrapper>
+        </div>
 
         <div className="!mt-[20px] flex gap-3">
-          <Button size="sm" className="w-[150px]" onClick={() => onResolve?.(false)}>
+          <Button
+            size="md"
+            className="w-[150px]"
+            onClick={() => {
+              onResolve?.(false);
+            }}
+          >
             {t('no')}
           </Button>
           <Button
             outline="primary"
-            size="sm"
+            size="md"
             className="w-[150px]"
-            onClick={() => onResolve?.({ name, description })}
+            onClick={() => {
+              onResolve?.({ name, description });
+            }}
           >
             {t('yes')}
           </Button>

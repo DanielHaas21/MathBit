@@ -13,7 +13,7 @@ export const useTranslation = (root: string) => {
       ? (i18n.t(
           `${root}.${key}`,
           options as TOptionsBase & Record<string, unknown>
-        ) as React.ReactNode)
+        ) as React.ReactNode | string)
       : `${root}.${key}`;
 };
 

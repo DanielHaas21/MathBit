@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button } from './Button';
 import { BreadcrumbItem } from '../types';
 import { useTranslation } from '../provider';
+import { logout } from '@/store/slices/UserState';
+import { useNavigate } from 'react-router-dom';
 export interface HeaderProps {
   route: BreadcrumbItem[];
 }
@@ -16,10 +18,10 @@ export interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ route }) => {
   const Dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.User);
+  const navigate = useNavigate();
+  const t = useTranslation('ui');
 
-  const t = useTranslation("ui");
-
-  const isLoggedIn = user.accessToken === undefined ? true : false;
+  const isLoggedIn = user.accessToken !== undefined ? true : false;
   const userSection = isLoggedIn ? (
     <DropdownMenu
       align="bottom"
@@ -47,7 +49,14 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
       <Dropdown.Item icon="gear" className="text-text-black m-2 hover:bg-brand-blue-50">
         {t('header.settings')}
       </Dropdown.Item>
-      <Dropdown.Item icon="user" className="text-error-text m-2 hover:bg-error-bg">
+      <Dropdown.Item
+        icon="user"
+        onClick={() => {
+          Dispatch(logout());
+          navigate('/');
+        }}
+        className="text-error-text m-2 hover:bg-error-bg"
+      >
         {t('header.logout')}
       </Dropdown.Item>
     </DropdownMenu>

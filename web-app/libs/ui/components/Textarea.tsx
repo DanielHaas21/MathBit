@@ -4,7 +4,15 @@ import { cn } from '../utils';
 
 type BaseTextareaAtrributes = Pick<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  'id' | 'className' | 'onInput' | 'onFocus' | 'value' | 'placeholder' | 'disabled' | 'onBlur'
+  | 'id'
+  | 'className'
+  | 'onInput'
+  | 'onFocus'
+  | 'value'
+  | 'placeholder'
+  | 'disabled'
+  | 'onBlur'
+  | 'onChange'
 >;
 
 const TextareaVariants = cva(
@@ -13,31 +21,31 @@ const TextareaVariants = cva(
     variants: {
       hasError: {
         true: '!border-error-text focus:ring-error-bg',
-        false: '!border-white-800 focus:!border-brand-blue-400'
+        false: '!border-white-800 focus:!border-brand-blue-400',
       },
       variant: {
         light: 'bg-white-50',
-        grey: 'bg-background-inputs'
+        grey: 'bg-background-inputs',
       },
       size: {
         sm: 'w-[240px] h-24',
         md: 'w-[320px] h-28',
         lg: 'w-[400px] h-32',
-        full: 'w-full h-32'
+        full: 'w-full h-32',
       },
       resizable: {
         true: '!resize',
         x: '!resize-x',
         y: '!resize-y',
-        false: '!resize-none'
-      }
+        false: '!resize-none',
+      },
     },
     defaultVariants: {
       resizable: 'y',
       hasError: false,
       variant: 'grey',
-      size: 'md'
-    }
+      size: 'md',
+    },
   }
 );
 
@@ -56,7 +64,9 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>((pr
     value,
     className,
     disabled,
-    onBlur
+    onBlur,
+    onChange,
+    onInput,
   } = props;
 
   return (
@@ -67,6 +77,8 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>((pr
       placeholder={placeholder ?? 'Enter a description'}
       defaultValue={value}
       onBlur={onBlur}
+      onChange={onChange}
+      onInput={onInput}
       className={cn(TextareaVariants({ hasError, resizable, size, variant }), className)}
     />
   );

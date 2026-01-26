@@ -1,11 +1,47 @@
 {
-  "pages": {},
+  "pages": {
+    "editor": {
+      "solve": "Solve",
+      "save": "Save as new problem",
+      "update": "Update Problem",
+      "breadcrumb": {
+        "browser": "Browser",
+        "editor": "Editor",
+        "unnamed": "Unnamed Problem"
+      },
+      "messages": {
+        "loadError": "Failed to load the problem.",
+        "saveSuccess": "Problem saved successfully.",
+        "saveError": "Failed to save the problem.",
+        "notAuthenticated": "Not authenticated",
+        "notAuthenticatedDescription": "You must be logged in to edit problems.",
+        "updateSuccess": "Problem updated successfully.",
+        "updateError": "Failed to update the problem."
+      }
+    }
+  },
   "ui": {
     "header": {
       "login": "Login",
       "signup": "Sign Up",
       "logout": "Logout",
       "settings": "Settings"
+    },
+    "inputModal": {
+      "editor": {
+        "create": {
+          "title": "Create New Problem",
+          "no": "Cancel",
+          "yes": "Save",
+          "placeholderName": "Enter problem name"
+        },
+        "update": {
+          "title": "Update Problem",
+          "no": "Cancel",
+          "yes": "Update",
+          "placeholderName": "Enter problem name"
+        }
+      }
     }
   }
 }

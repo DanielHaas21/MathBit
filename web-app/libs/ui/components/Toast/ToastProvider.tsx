@@ -6,8 +6,8 @@ import { uid } from 'uid';
 
 type ToastMessage = {
   id: string;
-  title: string;
-  description?: string;
+  title: React.ReactNode;
+  description?: React.ReactNode;
   variant?: 'default' | 'success' | 'error' | 'warning';
   tint?: boolean;
   icon?: IconName;
@@ -45,7 +45,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={{ show }}>
       {children}
-      <div className="fixed top-4 right-4 z-50">
+      <div className="fixed bottom-8 right-4 z-50">
         <Toast>
           {toasts.map((t) => (
             <Toast.Item

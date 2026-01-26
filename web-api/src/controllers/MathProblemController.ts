@@ -56,7 +56,7 @@ export class MathProblemController extends Controller {
       if (!newMathProblem) {
         throw new Error('Math problem not found');
       }
-      return MathProblemMapper.toCreateModel(newMathProblem);
+      return MathProblemMapper.toDto(newMathProblem);
     }
 
     throw new Error('Math problem not created');

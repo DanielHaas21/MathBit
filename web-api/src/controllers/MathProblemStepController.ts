@@ -58,7 +58,7 @@ export class MathProblemStepController extends Controller {
       if (!newMathProblemStep) {
         throw new Error('Math problem step not found');
       }
-      return MathProblemStepMapper.toCreateModel(newMathProblemStep);
+      return MathProblemStepMapper.toDto(newMathProblemStep);
     }
 
     throw new Error('Math problem step not created');
