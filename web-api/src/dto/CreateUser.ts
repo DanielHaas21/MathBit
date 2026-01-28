@@ -7,16 +7,6 @@ export interface CreateUser {
    */
   username: string;
   /**
-   * User's first name
-   */
-  firstName: string;
-
-  /**
-   * User's last name
-   */
-  lastName: string;
-
-  /**
    * User's email address
    */
   email: string;

@@ -11,16 +11,6 @@ export interface UpadteUser {
    */
   username: string;
   /**
-   * User's first name
-   */
-  firstName: string;
-
-  /**
-   * User's last name
-   */
-  lastName: string;
-
-  /**
    * User's password
    */
   password: string;

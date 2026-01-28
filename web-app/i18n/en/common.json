@@ -1,5 +1,10 @@
 {
   "pages": {
+    "login": {
+      "errors": {
+        "Invalid credentials": "Invalid email or password."
+      }
+    },
     "browser": {
       "title": "Problem Browser",
       "filters": {
@@ -35,6 +40,36 @@
     }
   },
   "ui": {
+    "loginForm": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      },
+      "submit": "Login"
+    },
+    "signupForm": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "username": {
+        "label": "Username",
+        "placeholder": "Enter your username"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      },
+      "confirmPassword": {
+        "label": "Confirm password",
+        "placeholder": "Confirm your password"
+      },
+      "submit": "Submit"
+    },
     "header": {
       "login": "Login",
       "signup": "Sign Up",

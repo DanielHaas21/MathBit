@@ -1,5 +1,4 @@
 import MathInput, { KeyId, KeyProps } from 'react-math-keyboard';
-import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { useEffect, useRef, useState } from 'react';
 import { Select } from './Select';
 import { KeyGroupIds, SelectInputOption } from '../types';
@@ -168,7 +167,6 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
   return (
     <div className="flex flex-col justify-between p-4 w-fit gap-2 [&>div:first-child>span]:!border-xl ">
       <MathInput
-        key={latex}
         style={{
           minWidth: '300px',
           borderColor: '#E3E5EA',

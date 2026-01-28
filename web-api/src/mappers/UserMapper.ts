@@ -10,8 +10,6 @@ export class UserMapper {
     return {
       id: model.id,
       username: model.username,
-      firstName: model.firstName,
-      lastName: model.lastName,
       email: model.email,
       created: model.created,
     };
@@ -23,8 +21,6 @@ export class UserMapper {
     }
     return {
       username: dto.username,
-      firstName: dto.firstName,
-      lastName: dto.lastName,
       email: dto.email,
       password: dto.password,
     };

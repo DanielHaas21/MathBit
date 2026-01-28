@@ -14,7 +14,7 @@ export interface BreadcrumbProps {
 
 export const Breadcrumb = React.forwardRef<HTMLDivElement, BreadcrumbProps>(
   ({ className, route, ...props }, ref) => {
-    const t = useTranslation();
+    const t = useTranslation("");
     return (
       <div
         ref={ref}

@@ -4,8 +4,6 @@ export interface UserProfile {
   username?: string | null | undefined;
   email?: string | null | undefined;
   id?: number | null;
-  firstName?: string | null | undefined;
-  lastName?: string | null | undefined;
 }
 
 export interface UserState {
@@ -16,8 +14,6 @@ export interface UserState {
 const initialState: UserState = {
   user: {
     id: null,
-    firstName: undefined,
-    lastName: undefined,
     email: undefined,
     username: undefined,
   },

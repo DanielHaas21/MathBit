@@ -37,7 +37,7 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
           </div>
           <div className="flex flex-col gap-0">
             <Label size="md" className="font-medium">
-              {user.user?.firstName ?? 'name'} {user.user?.lastName}
+              {user.user?.username ?? 'username'}
             </Label>
             <Label size="xs" className="text-text-grey">
               {user.user?.email ?? 'example@example.com'}
@@ -62,10 +62,10 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
     </DropdownMenu>
   ) : (
     <div className="flex gap-2 mt-6">
-      <Button variant="primary" size="md">
+      <Button variant="primary" onClick={() => navigate('/login')} size="md">
         {t('header.login')}
       </Button>
-      <Button variant="primary" outline={'primary'} size="md">
+      <Button variant="primary" onClick={() => navigate('/signup')} outline={'primary'} size="md">
         {t('header.signup')}
       </Button>
     </div>

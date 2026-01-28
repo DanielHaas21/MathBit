@@ -7,27 +7,38 @@ import { InputWrapper } from './InputWrapper';
 import { useTranslation } from '../provider';
 import { Label } from './Label';
 
-export interface LoginFormProps {
-  onSubmit: (email: string, password: string) => void;
+export interface SignupFormProps {
+  onSubmit: (username: string, email: string, password: string) => void;
   serverError?: string | null;
   isSubmitting?: boolean;
 }
 
-export function LoginForm(props: LoginFormProps) {
-  const t = useTranslation('ui.loginForm');
+export function SignupForm(props: SignupFormProps) {
+  const t = useTranslation('ui.signupForm');
   const { onSubmit, serverError, isSubmitting } = props;
 
+  const [username, setUsername] = React.useState<string>('');
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
+  const [confirmPassword, setConfirmPassword] = React.useState<string>('');
 
   const [emailError, setEmailError] = React.useState<string | null>(null);
   const [passwordError, setPasswordError] = React.useState<string | null>(null);
+  const [confirmPasswordError, setConfirmPasswordError] = React.useState<string | null>(null);
+  const [usernameError, setUsernameError] = React.useState<string | null>(null);
+
   const [submitted, setSubmitted] = React.useState<boolean>(false);
-  console.log(!!serverError);
   const isValidEmail = (value: string) => {
     // Simple RFC5322-like email check suitable for client validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(value);
+  };
+
+  const validateUsername = (value: string) => {
+    if (!value.trim()) {
+      return 'Username is required';
+    }
+    return null;
   };
 
   const validateEmail = (value: string) => {
@@ -44,13 +55,23 @@ export function LoginForm(props: LoginFormProps) {
     if (!value.trim()) {
       return 'Password is required';
     }
+
+    if (value.trim().length < 8) {
+      return 'Password must be at least 8 characters long';
+    }
+
+    if (password.trim() !== confirmPassword.trim()) {
+      return 'Passwords do not match';
+    }
     return null;
   };
 
   const handleSubmit = () => {
     const eErr = validateEmail(email);
     const pErr = validatePassword(password);
+    const uErr = validateUsername(username);
 
+    setUsernameError(uErr);
     setEmailError(eErr);
     setPasswordError(pErr);
     setSubmitted(true);
@@ -59,7 +80,7 @@ export function LoginForm(props: LoginFormProps) {
       return;
     }
 
-    onSubmit(email, password);
+    onSubmit(username, email, password);
   };
   return (
     <div className="flex flex-col items-center gap-8">
@@ -86,6 +107,29 @@ export function LoginForm(props: LoginFormProps) {
               }}
             ></InputBase>
           </InputWrapper>
+
+          <InputWrapper
+            label={t('username.label')}
+            className="w-full"
+            required={false}
+            isError={submitted && !!usernameError}
+            errorText={submitted ? usernameError : null}
+          >
+            <InputBase
+              leftContent={<Icon name="user"></Icon>}
+              type="text"
+              className="bg-white-50"
+              placeholder={t('username.placeholder')}
+              name="username"
+              id="signup-username"
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                if (submitted) setSubmitted(false);
+              }}
+            ></InputBase>
+          </InputWrapper>
+
           <InputWrapper
             label={t('password.label')}
             className="w-full"
@@ -103,6 +147,28 @@ export function LoginForm(props: LoginFormProps) {
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
+                if (submitted) setSubmitted(false);
+              }}
+            ></InputBase>
+          </InputWrapper>
+
+          <InputWrapper
+            label={t('confirmPassword.label')}
+            className="w-full"
+            required={false}
+            isError={(submitted && !!passwordError) || !!serverError}
+            errorText={submitted ? passwordError : null}
+          >
+            <InputBase
+              leftContent={<Icon name="lock"></Icon>}
+              placeholder={t('confirmPassword.placeholder')}
+              type="password"
+              className="bg-white-50"
+              name="confirmPassword"
+              id="signup-confirm-password"
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
                 if (submitted) setSubmitted(false);
               }}
             ></InputBase>

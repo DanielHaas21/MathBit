@@ -14,51 +14,59 @@ import { BaseLayout, Paper } from '@/libs/ui/layouts';
 import { useTranslation } from '@/libs/ui/provider/UiProvider';
 import { RangeDate } from '@/libs/ui/types/RangeDate';
 import { RootState } from '@/store/store';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { deleteMathProblem, getMathProblems, MathProblem, refresh } from 'web-api-client';
+import { useNavigate } from 'react-router-dom';
+import { deleteMathProblem, getMathProblems, MathProblem } from 'web-api-client';
 
 export default function Browser() {
   const user = useSelector((state: RootState) => state.User);
-  const t = useTranslation('pages.browser');
   const navigate = useNavigate();
 
-  const divRef = useRef<HTMLDivElement | null>(null);
   const [problems, setProblems] = useState<MathProblem[]>([]);
   const [searchInput, setSearchInput] = useState<string>('');
   const [searchFilter, setSearchFilter] = useState('');
-  const [pendingId, setPendingId] = useState<number | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [date, setDate] = useState<RangeDate>({});
-  const [page, setPage] = useState(0);
-  const pageSize = 20;
+  // Filter states
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null); // for debouncing search input
+  const divRef = useRef<HTMLDivElement | null>(null); // ref to the scrollable div
+  const [page, setPage] = useState(0); // pagination state
+  const pageSize = 20; // fixed limit
+  // to avoid duplicate fetches
   const lastQueryRef = useRef<{
     searchFilter: string;
     page: number;
   } | null>(null);
 
+  // modal states and utils
+  const [pendingId, setPendingId] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const t = useTranslation('pages.browser');
+
+  // Infinite scroll handler
   const handleInfiniteScroll = (
     e: React.UIEvent<HTMLElement, UIEvent>,
     loading: boolean,
     callback: () => void
   ) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget; // Get scroll metrics
 
-    if (loading || scrollHeight === clientHeight) return;
-    const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100;
+    if (loading || scrollHeight === clientHeight) return; // if already loading or no scrollable content, exit
+    const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100; // Calculate scroll percentage
 
     if (scrollPercent > 80) {
+      // If scrolled more than 80%, trigger loading more content
       callback();
     }
   };
 
+  // debounce search input
   useEffect(() => {
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
 
+    // when timeout completes, set the search filter and reset to first page
     debounceTimeout.current = setTimeout(() => {
       setSearchFilter(searchInput);
       setPage(0);
@@ -68,17 +76,19 @@ export default function Browser() {
     }, 500);
   }, [searchInput]);
 
+  // fetch problems when filter or page changes
   useEffect(() => {
     if (!user.accessToken || !user.user?.id) {
       return;
     }
 
+    // this is a query comparator to avoid duplicate fetches
     const currentQuery = {
       searchFilter,
       page,
     };
 
-    // Prevent duplicate fetch for same query
+    // on each query change, compare with last query and if same, skip fetch
     if (
       lastQueryRef.current &&
       lastQueryRef.current.searchFilter === currentQuery.searchFilter &&
@@ -87,12 +97,11 @@ export default function Browser() {
       return;
     }
 
-    lastQueryRef.current = currentQuery;
+    lastQueryRef.current = currentQuery; // update last query ref
 
     setLoading(true);
     const fetch = async () => {
       try {
-        console.log(page);
         const response = await getMathProblems(
           {
             offset: page * pageSize,
@@ -115,7 +124,6 @@ export default function Browser() {
         setLoading(false);
       }
     };
-    console.log(problems);
     fetch();
   }, [searchFilter, page, user]);
 
@@ -145,15 +153,15 @@ export default function Browser() {
                   <InputField
                     required={false}
                     className=" w-full bg-white-50"
-                    label={t('filters.search') as string}
-                    placeholder={t('filters.searchPlaceholder') as string}
+                    label={t('filters.search')}
+                    placeholder={t('filters.searchPlaceholder')}
                     onChange={(e) => setSearchInput(e.target.value)}
                     type="text"
                     value={searchInput}
                   />
                 </div>
                 <div className="w-full xl:w-[300px] relative">
-                  <InputWrapper label={t('filters.date') as string} required={false}>
+                  <InputWrapper label={t('filters.date')} required={false}>
                     <Datepicker
                       className="bg-white-50"
                       mode="range"
@@ -213,7 +221,9 @@ export default function Browser() {
             <div className="flex flex-col items-center gap-2 mt-[100px]">
               <Icon name="magnifying-glass" size="xl" className="text-text-grey"></Icon>
 
-              <Label className="text-text-black" size="lg">{t('emptyResult.all')}</Label>
+              <Label className="text-text-black" size="lg">
+                {t('emptyResult.all')}
+              </Label>
               <Label className="text-text-grey text-center" size="md">
                 {t('emptyResult.all2')}
               </Label>

@@ -23,7 +23,5 @@ export interface LoginResponse {
     id?: number | null;
     username?: string | null | undefined;
     email?: string | null | undefined;
-    firstName?: string | null | undefined;
-    lastName?: string | null | undefined;
   };
 }

@@ -25,15 +25,11 @@ export function expressAuthentication(request: ExpressRequest, securityName: str
             id: number;
             username: string;
             email: string;
-            firstName: string;
-            lastName: string;
           };
           request.userProfile = {
             id: data.id,
             username: data.username,
             email: data.email,
-            firstName: data.firstName,
-            lastName: data.lastName,
           };
           request.token = token;
           return resolve(decoded);

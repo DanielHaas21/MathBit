@@ -3,18 +3,23 @@ import React, { createContext, useContext } from 'react';
 import { ToastProvider } from '../components/Toast/ToastProvider';
 import type { i18n as I18nInstance, TOptionsBase } from 'i18next';
 
+export type TranslationValue = string | number | React.ReactNode;
+type TranslationOptions = TOptionsBase & Record<string, unknown>;
 // I18n context
 const I18nContext = createContext<I18nInstance | null>(null);
 
 export const useTranslation = (root: string) => {
   const i18n = useContext(I18nContext);
-  return (key: string, options?: unknown) =>
-    i18n
-      ? (i18n.t(
-          `${root}.${key}`,
-          options as TOptionsBase & Record<string, unknown>
-        ) as React.ReactNode | string)
-      : `${root}.${key}`;
+
+  function t(key: string): string;
+  function t(key: string, options: TranslationOptions): TranslationValue;
+  function t(key: string, options?: TranslationOptions): TranslationValue {
+    if (!i18n) return `${root}.${key}`;
+
+    return i18n.t(`${root}.${key}`, options);
+  }
+
+  return t;
 };
 
 export const useI18n = () => {

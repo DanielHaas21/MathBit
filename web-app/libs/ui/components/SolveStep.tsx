@@ -13,7 +13,7 @@ export interface SolveStepProps {
   index: number;
   isFinal: boolean;
 }
-//5x\times \left(5-d\right)
+
 /**
  * Component to display a single solve step with toggleable LaTeX view and collapsible content.
  */
@@ -21,6 +21,7 @@ export const SolveStep: React.FC<SolveStepProps> = ({ step, isFinal, index, ...p
   const [showAsLatex, setShowAsLatex] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const handleToggle = () => setIsOpen((prev) => !prev);
+  
 
   // Determine the content to display based on whether it's a final step or not
   const displayedContent = !showAsLatex ? (

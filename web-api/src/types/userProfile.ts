@@ -14,12 +14,4 @@ export interface UserProfile {
    * Unique identifier for the user
    */
   id?: number | null;
-  /**
-   * User's first name
-   */
-  firstName?: string | null | undefined;
-  /**
-   * User's last name
-   */
-  lastName?: string | null | undefined;
 }

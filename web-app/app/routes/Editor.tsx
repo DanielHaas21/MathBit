@@ -8,7 +8,6 @@ import {
   MathProblem,
   updateMathProblem,
 } from 'web-api-client';
-import login from '../../middleware/auth/login';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import getApiConfig from '@/apiConfig';
@@ -55,12 +54,14 @@ export default function Editor() {
   const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false);
 
   useEffect(() => {
-    async function d() {
-      const auth = await login({ email: 'e.procházková4@example.com', password: 'test' });
+    if (route === '/browser/editor') {
+      setCurrentSavedProblem(null);
+      setLatex('');
+      setFinal('');
+      setFinalSteps([]);
+      return;
     }
-
-    d();
-  }, []);
+  }, [route]);
 
   // Redirect to /editor if not logged in
   useEffect(() => {
@@ -143,7 +144,7 @@ export default function Editor() {
     currentSavedProblem &&
     route &&
     ({
-      pageTitle: currentSavedProblem.name ?? t('breadcrumb.unnamed'),
+      pageTitle: !!currentSavedProblem.name ? currentSavedProblem.name : t('breadcrumb.unnamed'),
       pageRoute: '/browser/editor/' + currentSavedProblem.id,
     } as BreadcrumbItem);
 
@@ -217,7 +218,7 @@ export default function Editor() {
                 },
                 getApiConfig()
               );
-              console.log(value);
+
               setCurrentSavedProblem({
                 ...currentSavedProblem,
                 name: value.name,

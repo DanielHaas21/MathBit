@@ -51,7 +51,7 @@ export class UserController extends Controller {
       if (!newUser) {
         throw new Error('User not found');
       }
-      return UserMapper.toCreateModel(newUser); // can never be null
+      return UserMapper.toDto(newUser); // can never be null
     }
 
     throw new Error('User not created');

@@ -64,7 +64,7 @@ export interface ButtonProps extends BaseButtonAttributes, ButtonVariants {
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const { variant, size, className, outline, locKey, disabled, children, onClick } = props;
-  const t = useTranslation();
+  const t = useTranslation("");
 
   return (
     <button

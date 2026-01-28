@@ -31,8 +31,6 @@ async function seed() {
     users.push({
       id: i + 1,
       username: peopleUserNames[i] as string,
-      firstName,
-      lastName,
       email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${i + 1}@example.com`,
       password: 'test',
       created: new Date(),

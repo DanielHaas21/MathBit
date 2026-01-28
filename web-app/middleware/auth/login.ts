@@ -3,9 +3,11 @@ import { type LoginResponse, type LoginRequest, login as loginAPI } from 'web-ap
 import { login as loginState } from '@/store/slices/UserState';
 import getApiConfig from '@/apiConfig';
 
-async function login(args: LoginRequest): Promise<boolean | { errorCode?: string } | undefined> {
+type LoginResult = { ok: true } | { ok: false; errorCode: string };
+
+async function login(args: LoginRequest): Promise<LoginResult> {
   try {
-    const response: LoginResponse = await loginAPI(args, getApiConfig(false)); // Typescript somehow complains, yet the refreshToken cookie is set correctly
+    const response: LoginResponse = await loginAPI(args, getApiConfig(false));
 
     if (!response.errorCode && response.accessToken && response.userProfile) {
       const userProfile = response.userProfile;
@@ -15,17 +17,15 @@ async function login(args: LoginRequest): Promise<boolean | { errorCode?: string
           accessToken: response.accessToken,
           user: {
             id: userProfile.id,
-            firstName: userProfile.firstName,
-            lastName: userProfile.lastName,
             email: userProfile.email,
             username: userProfile.username,
           },
         })
       );
 
-      return true;
+      return { ok: true };
     } else {
-      return { errorCode: response.errorCode };
+      return { ok: false, errorCode: response.errorCode ?? 'UNKNOWN_ERROR' };
     }
   } catch (error) {
     throw new Error('Login failed', error as ErrorOptions);
