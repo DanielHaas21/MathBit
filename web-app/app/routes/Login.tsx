@@ -1,4 +1,4 @@
-import { Label, LoginForm, MathField } from '@/libs/ui/components';
+import { Label, LoginForm, Logo, MathField } from '@/libs/ui/components';
 import { BaseLayout } from '@/libs/ui/layouts';
 import logo from '../../libs/ui/assets/images/dark/logo_medium.svg';
 import { useTranslation } from '@/libs/ui/provider';
@@ -40,12 +40,7 @@ export default function Login() {
 
   return (
     <BaseLayout className="justify-center items-center">
-      <div className="flex flex-row pt-5 pb-4">
-        <Label size="lg" className="text-[46px] font-bold select-none ps-4">
-          Mathbit
-        </Label>
-        <img src={logo} alt="Mathbit Logo" className="ps-2 " />
-      </div>
+      <Logo className='pb-4'></Logo>
       <LoginForm
         serverError={serverError}
         isSubmitting={loading}

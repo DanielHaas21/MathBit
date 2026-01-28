@@ -44,6 +44,13 @@ export class UserController extends Controller {
     const hashedPassword = await bcrypt.hash(user.password, 10);
     const dbUser: DBuser = { ...user, password: hashedPassword };
 
+    // to prevent duplicate emails
+    const existingUser = await this.userRepository.getUserByEmail(user.email);
+    if (existingUser) {
+      this.setStatus(409); 
+      return null;
+    }
+
     const id = await this.userRepository.createUser(dbUser);
     if (id) {
       const newUser = await this.userRepository.getUserById(id);

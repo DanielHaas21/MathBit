@@ -25,12 +25,12 @@ export default function Browser() {
 
   const [problems, setProblems] = useState<MathProblem[]>([]);
   const [searchInput, setSearchInput] = useState<string>('');
-  const [searchFilter, setSearchFilter] = useState('');
+  const [searchFilter, setSearchFilter] = useState<string>('');
   const [date, setDate] = useState<RangeDate>({});
   // Filter states
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null); // for debouncing search input
   const divRef = useRef<HTMLDivElement | null>(null); // ref to the scrollable div
-  const [page, setPage] = useState(0); // pagination state
+  const [page, setPage] = useState<number>(0); // pagination state
   const pageSize = 20; // fixed limit
   // to avoid duplicate fetches
   const lastQueryRef = useRef<{

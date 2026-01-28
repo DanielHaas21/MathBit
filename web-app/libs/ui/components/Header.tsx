@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../assets/images/dark/logo_medium.svg';
+
 import { Label } from './Label';
 import { Icon } from './Icon';
 import { Breadcrumb } from './Breadcrumb';
@@ -11,6 +11,7 @@ import { BreadcrumbItem } from '../types';
 import { useTranslation } from '../provider';
 import { logout } from '@/store/slices/UserState';
 import { useNavigate } from 'react-router-dom';
+import { Logo } from './Logo';
 export interface HeaderProps {
   route: BreadcrumbItem[];
 }
@@ -74,12 +75,7 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
   return (
     <header className="w-full flex flex-col bg-white-50">
       <div className="w-full flex flex-row justify-between items-center px-5">
-        <div className="flex flex-row pt-5">
-          <Label size="lg" className="text-[46px] font-bold select-none ps-4">
-            Mathbit
-          </Label>
-          <img src={logo} alt="Mathbit Logo" className="ps-2 " />
-        </div>
+        <Logo></Logo>
         <div className="pt-6 pr-[6vw]">{userSection}</div>
       </div>
       <Breadcrumb

@@ -23,7 +23,8 @@ const buttonVariants = cva(
           'bg-warn-text text-white-50 hover:bg-warn-icon active:bg-warn-icon disabled:bg-warn-bg',
         success:
           'bg-success-text text-white-50 hover:bg-success-icon active:bg-success-icon disabled:bg-success-bg',
-        neutral: '' //TBA
+        neutral:
+          'bg-text-black text-white-50 hover:bg-black-900 active:bg-black-900 disabled:bg-black-700',
       },
       outline: {
         primary:
@@ -34,20 +35,21 @@ const buttonVariants = cva(
           'border border-warn-text bg-transparent text-warn-text hover:bg-warn-text active:bg-warn-icon hover:text-white-50',
         success:
           'border border-success-text bg-transparent text-success-text hover:bg-success-text active:bg-success-icon hover:text-white-50',
-        neutral: ''
+        neutral:
+          'border border-black-900 bg-transparent text-text-black hover:bg-black-900 active:bg-black-900 hover:text-white-50',
       },
       size: {
         sm: 'h-8 px-4 text-sm rounded-md',
         md: 'h-9 px-4 text-base rounded-lg',
         lg: 'h-10 px-5 text-xl rounded-lg',
         xl: 'h-12 px-6 text-2xl rounded-xl',
-        full: 'w-full h-10 rounded-lg'
-      }
+        full: 'w-full h-10 rounded-lg',
+      },
     },
     defaultVariants: {
       variant: 'primary',
-      size: 'md'
-    }
+      size: 'md',
+    },
   }
 );
 
@@ -64,7 +66,7 @@ export interface ButtonProps extends BaseButtonAttributes, ButtonVariants {
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const { variant, size, className, outline, locKey, disabled, children, onClick } = props;
-  const t = useTranslation("");
+  const t = useTranslation('');
 
   return (
     <button
