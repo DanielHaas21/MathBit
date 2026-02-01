@@ -9,10 +9,9 @@ import {
 } from 'web-api-client';
 import { login as loginState } from '@/store/slices/UserState';
 import getApiConfig from '@/apiConfig';
+import { ActionResult } from '../types/ActionResult';
 
-type SignupResult = { ok: true } | { ok: false; errorCode: string };
-
-async function signup(args: CreateUser): Promise<SignupResult> {
+async function signup(args: CreateUser): Promise<ActionResult> {
   try {
     const user: CreateUser201 = await createUser(args, getApiConfig(true));
 

@@ -10,6 +10,11 @@
         "Invalid credentials": "Invalid email or password."
       }
     },
+    "settings": {
+      "messages": {
+        "updateSuccess": "User settings updated successfully."
+      }
+    },
     "notfound": {
       "title": "404 - Page Not Found",
       "description": "The page you are looking for does not exist.",
@@ -78,7 +83,27 @@
         "label": "Confirm password",
         "placeholder": "Confirm your password"
       },
-      "submit": "Submit"
+      "submit": "Register"
+    },
+    "settingsForm": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Update your email"
+      },
+      "username": {
+        "label": "Username",
+        "placeholder": "Update your username"
+      },
+      "newPassword": {
+        "label": "New password",
+        "placeholder": "Enter a new password"
+      },
+      "confirmNewPassword": {
+        "label": "Confirm new password",
+        "placeholder": "Confirm your new password"
+      },
+      "submit": "Save changes",
+      "title": "Update User Credentials"
     },
     "header": {
       "login": "Login",

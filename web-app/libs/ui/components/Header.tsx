@@ -47,7 +47,11 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
         </div>
       }
     >
-      <Dropdown.Item icon="gear" className="text-text-black m-2 hover:bg-brand-blue-50">
+      <Dropdown.Item
+        icon="gear"
+        onClick={() => navigate('/settings')}
+        className="text-text-black m-2 hover:bg-brand-blue-50"
+      >
         {t('header.settings')}
       </Dropdown.Item>
       <Dropdown.Item

@@ -2,10 +2,10 @@ import { store } from '@/store/store';
 import { type LoginResponse, type LoginRequest, login as loginAPI } from 'web-api-client';
 import { login as loginState } from '@/store/slices/UserState';
 import getApiConfig from '@/apiConfig';
+import { ActionResult } from '../types/ActionResult';
 
-type LoginResult = { ok: true } | { ok: false; errorCode: string };
 
-async function login(args: LoginRequest): Promise<LoginResult> {
+async function login(args: LoginRequest): Promise<ActionResult> {
   try {
     const response: LoginResponse = await loginAPI(args, getApiConfig(false));
 

@@ -13,7 +13,7 @@ export interface UpadteUser {
   /**
    * User's password
    */
-  password: string;
+  password?: string;
 
   /**
    * User's email address

@@ -83,7 +83,6 @@
 				},
 				"required": [
 					"username",
-					"password",
 					"email"
 				],
 				"type": "object",

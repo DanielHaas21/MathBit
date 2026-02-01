@@ -47,7 +47,7 @@ export class UserController extends Controller {
     // to prevent duplicate emails
     const existingUser = await this.userRepository.getUserByEmail(user.email);
     if (existingUser) {
-      this.setStatus(409); 
+      this.setStatus(409);
       return null;
     }
 
@@ -102,6 +102,12 @@ export class UserController extends Controller {
   @Put()
   @Security('jwt')
   public async updateUser(@Body() body: UpdateUserRequest): Promise<void> {
+    const existingUser = await this.userRepository.getUserByEmail(body.user.email);
+    if (existingUser && existingUser.id !== body.id) {
+      this.setStatus(409);
+      throw new Error('Email already in use');
+    }
+
     await this.userRepository.updateUser(body.id, body.user);
   }
 

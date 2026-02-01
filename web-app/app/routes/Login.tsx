@@ -11,13 +11,6 @@ export default function Login() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   async function d() {
-  //     const auth = await login({ email: 'e.procházková4@example.com', password: 'test' });
-  //   }
-
-  //   d();
-  // }, []);
 
   const handleLogin = async (email: string, password: string) => {
     setLoading(true);

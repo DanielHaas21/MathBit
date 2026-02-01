@@ -7,20 +7,29 @@ import { InputWrapper } from './InputWrapper';
 import { useTranslation } from '../provider';
 import { Label } from './Label';
 
-export interface SignupFormProps {
+export interface SettingsFormProps {
   onSubmit: (username: string, email: string, password: string) => void;
+  data: {
+    username: string;
+    email: string;
+  };
   serverError?: string | null;
   isSubmitting?: boolean;
 }
 
-export function SignupForm(props: SignupFormProps) {
-  const t = useTranslation('ui.signupForm');
-  const { onSubmit, serverError, isSubmitting } = props;
+export function SettingsForm(props: SettingsFormProps) {
+  const t = useTranslation('ui.settingsForm');
+  const { onSubmit, serverError, isSubmitting, data } = props;
 
-  const [username, setUsername] = React.useState<string>('');
-  const [email, setEmail] = React.useState<string>('');
+  const [username, setUsername] = React.useState<string>(data.username);
+  const [email, setEmail] = React.useState<string>(data.email);
   const [password, setPassword] = React.useState<string>('');
   const [confirmPassword, setConfirmPassword] = React.useState<string>('');
+
+  React.useEffect(() => {
+    setUsername(data.username);
+    setEmail(data.email);
+  }, [data]);
 
   const [emailError, setEmailError] = React.useState<string | null>(null);
   const [passwordError, setPasswordError] = React.useState<string | null>(null);
@@ -51,8 +60,9 @@ export function SignupForm(props: SignupFormProps) {
   };
 
   const validatePassword = (value: string) => {
+    // no password means it wont be changed
     if (!value.trim()) {
-      return 'Password is required';
+      return null;
     }
 
     if (value.trim().length < 8) {
@@ -83,12 +93,17 @@ export function SignupForm(props: SignupFormProps) {
   };
   return (
     <div className="flex flex-col items-center gap-8">
-      <Paper className="flex flex-col items-center gap-2 shadow-lg border border-white-800 rounded-xl !min-w-[480px]  p-10">
+      <Paper
+        className="flex flex-col items-center gap-2 shadow-lg border border-white-800 rounded-xl !min-w-[680px] mt-[-40px] p-10"
+        showDivider={true}
+      >
+        <Paper.Title>{t('title')}</Paper.Title>
         <Paper.Content className="w-full flex flex-col items-center gap-4">
           <InputWrapper
             label={t('email.label')}
             className="w-full"
             required={false}
+            hint="Emails must be unique"
             isError={submitted && !!emailError}
             errorText={submitted ? emailError : null}
           >
@@ -130,19 +145,20 @@ export function SignupForm(props: SignupFormProps) {
           </InputWrapper>
 
           <InputWrapper
-            label={t('password.label')}
+            label={t('newPassword.label')}
             className="w-full"
+            hint="Leave the two fields blank to keep the current password"
             required={false}
             isError={(submitted && !!passwordError) || !!serverError}
             errorText={submitted ? passwordError : null}
           >
             <InputBase
               leftContent={<Icon name="lock"></Icon>}
-              placeholder={t('password.placeholder')}
+              placeholder={t('newPassword.placeholder')}
               type="password"
               className="bg-white-50"
               name="password"
-              id="login-password"
+              id="settings-new-password"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -152,7 +168,7 @@ export function SignupForm(props: SignupFormProps) {
           </InputWrapper>
 
           <InputWrapper
-            label={t('confirmPassword.label')}
+            label={t('confirmNewPassword.label')}
             className="w-full"
             required={false}
             isError={(submitted && !!passwordError) || !!serverError}
@@ -160,11 +176,11 @@ export function SignupForm(props: SignupFormProps) {
           >
             <InputBase
               leftContent={<Icon name="lock"></Icon>}
-              placeholder={t('confirmPassword.placeholder')}
+              placeholder={t('confirmNewPassword.placeholder')}
               type="password"
               className="bg-white-50"
               name="confirmPassword"
-              id="signup-confirm-password"
+              id="settings-confirm-new-password"
               value={confirmPassword}
               onChange={(e) => {
                 setConfirmPassword(e.target.value);

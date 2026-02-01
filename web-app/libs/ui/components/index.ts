@@ -34,3 +34,5 @@ export * from './InputModal';
 export * from './BrowserItem';
 export * from './WarningModal';
 export * from './LoginForm';
+export * from './SignupForn';
+export * from './SettingsForm';
