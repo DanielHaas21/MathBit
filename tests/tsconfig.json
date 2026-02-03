@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "display": "Tests Library",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "web-api-client": ["../web-api-client/src"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

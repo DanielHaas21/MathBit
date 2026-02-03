@@ -1,5 +1,8 @@
+import getApiConfig from '@/apiConfig';
 import { Header } from '@/libs/ui/components/Header';
 import { BaseLayout } from '@/libs/ui/layouts';
+import { Button } from '@headlessui/react';
+import { refresh } from 'web-api-client';
 
 export default function Home() {
   return (
@@ -7,7 +10,15 @@ export default function Home() {
       <BaseLayout.Menu>
         <Header route={[]} />
       </BaseLayout.Menu>
-      <BaseLayout.Content>s</BaseLayout.Content>
+      <BaseLayout.Content>
+        <Button
+          onClick={async () => {
+            console.log(await refresh(getApiConfig(true)));
+          }}
+        >
+          bombo
+        </Button>
+      </BaseLayout.Content>
     </BaseLayout>
   );
 }
