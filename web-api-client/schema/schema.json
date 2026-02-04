@@ -400,6 +400,14 @@
 					},
 					"bookmark": {
 						"type": "boolean"
+					},
+					"dateFrom": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"dateTo": {
+						"type": "string",
+						"format": "date-time"
 					}
 				},
 				"type": "object",

@@ -4,7 +4,6 @@ import { login as loginState } from '@/store/slices/UserState';
 import getApiConfig from '@/apiConfig';
 import { ActionResult } from '../types/ActionResult';
 
-
 async function login(args: LoginRequest): Promise<ActionResult> {
   try {
     const response: LoginResponse = await loginAPI(args, getApiConfig(false));
@@ -20,6 +19,7 @@ async function login(args: LoginRequest): Promise<ActionResult> {
             email: userProfile.email,
             username: userProfile.username,
           },
+          authStatus: 'authenticated',
         })
       );
 

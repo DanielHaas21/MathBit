@@ -34,7 +34,9 @@ async function performRefresh(): Promise<string | null> {
         const currentUser = store.getState().User?.user ?? null;
 
         // update store and axios defaults
-        store.dispatch(loginState({ accessToken: newToken, user: currentUser }));
+        store.dispatch(
+          loginState({ accessToken: newToken, user: currentUser, authStatus: 'authenticated' })
+        );
         api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
         return newToken;
       }

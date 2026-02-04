@@ -6,6 +6,7 @@ import { InputBase } from './InputBase';
 import { InputWrapper } from './InputWrapper';
 import { useTranslation } from '../provider';
 import { Label } from './Label';
+import { Link } from 'react-router-dom';
 
 export interface LoginFormProps {
   onSubmit: (email: string, password: string) => void;
@@ -23,7 +24,6 @@ export function LoginForm(props: LoginFormProps) {
   const [emailError, setEmailError] = React.useState<string | null>(null);
   const [passwordError, setPasswordError] = React.useState<string | null>(null);
   const [submitted, setSubmitted] = React.useState<boolean>(false);
-  console.log(!!serverError);
   const isValidEmail = (value: string) => {
     // Simple RFC5322-like email check suitable for client validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -63,7 +63,7 @@ export function LoginForm(props: LoginFormProps) {
   };
   return (
     <div className="flex flex-col items-center gap-8">
-      <Paper className="flex flex-col items-center gap-2 shadow-lg border border-white-800 rounded-xl !min-w-[480px]  p-10">
+      <Paper className="flex flex-col items-center gap-2 shadow-lg border border-white-800 rounded-xl w-[90vw] md:w-[480px]  p-10">
         <Paper.Content className="w-full flex flex-col items-center gap-4">
           <InputWrapper
             label={t('email.label')}
@@ -116,6 +116,15 @@ export function LoginForm(props: LoginFormProps) {
             {t('submit')}
           </Button>
           {serverError && <Label className="text-error-text text-center mt-2">{serverError}</Label>}
+          <Label className="text-sm  mt-4">
+            {t('noAccount')}
+            <Link
+              to="/signup"
+              className="text-primary-base hover:text-primary-hover hover:underline"
+            >
+              {t('registerLink')}
+            </Link>
+          </Label>
         </Paper.Content>
       </Paper>
     </div>

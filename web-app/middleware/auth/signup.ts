@@ -34,6 +34,7 @@ async function signup(args: CreateUser): Promise<ActionResult> {
               email: userProfile.email,
               username: userProfile.username,
             },
+            authStatus: 'authenticated',
           })
         );
 

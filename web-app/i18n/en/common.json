@@ -1,16 +1,19 @@
 {
   "pages": {
     "login": {
+      "goBack": "Go back",
       "errors": {
         "Invalid credentials": "Invalid email or password."
       }
     },
     "signup": {
+      "goBack": "Go back",
       "errors": {
         "Invalid credentials": "Invalid email or password."
       }
     },
     "settings": {
+      "goBack": "Go back",
       "messages": {
         "updateSuccess": "User settings updated successfully."
       }
@@ -24,11 +27,16 @@
       "title": "Problem Browser",
       "filters": {
         "searchPlaceholder": "Search problems...",
+        "datePlaceholder": "Select date range",
         "search": "Search",
         "date": "Date",
         "reset": "Reset Filters"
       },
-      "edtitor": "Go to Editor",
+      "messages": {
+        "notAuthenticated": "Not authenticated",
+        "notAuthenticatedDescription": "You must be logged to access the problem browser."
+      },
+      "editor": "Go to Editor",
       "emptyResult": {
         "all": "No problems found",
         "all2": "You haven't created any problems yet, or your search did not match any problems."
@@ -64,7 +72,9 @@
         "label": "Password",
         "placeholder": "Enter your password"
       },
-      "submit": "Login"
+      "submit": "Login",
+      "noAccount": "Don't have an account? ",
+      "registerLink": "Register here"
     },
     "signupForm": {
       "email": {
@@ -83,9 +93,13 @@
         "label": "Confirm password",
         "placeholder": "Confirm your password"
       },
-      "submit": "Register"
+      "submit": "Register",
+      "alreadyHaveAccount": " Already have an account? ",
+      "loginLink": "Login"
     },
     "settingsForm": {
+      "emailHint": "Emails must be unique",
+      "passwordHint": "Leave blank to keep current password",
       "email": {
         "label": "Email",
         "placeholder": "Update your email"

@@ -1,9 +1,149 @@
 {
-  "pages": {},
+  "pages": {
+    "login": {
+      "errors": {
+        "Invalid credentials": "Neplatný e‑mail nebo heslo."
+      }
+    },
+    "signup": {
+      "errors": {
+        "Invalid credentials": "Neplatný e‑mail nebo heslo."
+      }
+    },
+    "settings": {
+      "messages": {
+        "updateSuccess": "Uživatelská nastavení byla úspěšně aktualizována."
+      }
+    },
+    "notfound": {
+      "title": "404 - Stránka nenalezena",
+      "description": "Stránka, kterou hledáte, neexistuje.",
+      "returnHome": "Zpět na domovskou stránku"
+    },
+    "browser": {
+      "title": "Prohlížeč úloh",
+      "filters": {
+        "searchPlaceholder": "Hledat úlohy...",
+        "search": "Hledat",
+        "date": "Datum",
+        "reset": "Resetovat filtry"
+      },
+      "editor": "Přejít do editoru",
+      "emptyResult": {
+        "all": "Nenalezena žádná úloha",
+        "all2": "Zatím jste nevytvořili žádné úlohy, nebo vašemu vyhledávání neodpovídají žádné úlohy."
+      }
+    },
+    "editor": {
+      "solve": "Vyřešit",
+      "save": "Uložit jako novou úlohu",
+      "update": "Aktualizovat úlohu",
+      "breadcrumb": {
+        "browser": "Prohlížeč",
+        "editor": "Editor",
+        "unnamed": "Nepojmenovaná úloha"
+      },
+      "messages": {
+        "loadError": "Nepodařilo se načíst úlohu.",
+        "saveSuccess": "Úloha byla úspěšně uložena.",
+        "saveError": "Nepodařilo se uložit úlohu.",
+        "notAuthenticated": "Nepřihlášen",
+        "notAuthenticatedDescription": "Pro úpravu úloh musíte být přihlášeni.",
+        "updateSuccess": "Úloha byla úspěšně aktualizována.",
+        "updateError": "Nepodařilo se aktualizovat úlohu."
+      }
+    }
+  },
   "ui": {
+    "loginForm": {
+      "email": {
+        "label": "E‑mail",
+        "placeholder": "Zadejte svůj e‑mail"
+      },
+      "password": {
+        "label": "Heslo",
+        "placeholder": "Zadejte své heslo"
+      },
+      "submit": "Přihlásit se"
+    },
+    "signupForm": {
+      "email": {
+        "label": "E‑mail",
+        "placeholder": "Zadejte svůj e‑mail"
+      },
+      "username": {
+        "label": "Uživatelské jméno",
+        "placeholder": "Zadejte své uživatelské jméno"
+      },
+      "password": {
+        "label": "Heslo",
+        "placeholder": "Zadejte své heslo"
+      },
+      "confirmPassword": {
+        "label": "Potvrzení hesla",
+        "placeholder": "Potvrďte své heslo"
+      },
+      "submit": "Registrovat se"
+    },
+    "settingsForm": {
+      "email": {
+        "label": "E‑mail",
+        "placeholder": "Aktualizujte svůj e‑mail"
+      },
+      "username": {
+        "label": "Uživatelské jméno",
+        "placeholder": "Aktualizujte své uživatelské jméno"
+      },
+      "newPassword": {
+        "label": "Nové heslo",
+        "placeholder": "Zadejte nové heslo"
+      },
+      "confirmNewPassword": {
+        "label": "Potvrzení nového hesla",
+        "placeholder": "Potvrďte nové heslo"
+      },
+      "submit": "Uložit změny",
+      "title": "Aktualizace přístupových údajů uživatele"
+    },
     "header": {
       "login": "Přihlásit se",
-      "signup": "Zaregistrovat se"
+      "signup": "Zaregistrovat se",
+      "logout": "Odhlásit se",
+      "settings": "Nastavení"
+    },
+    "warningModal": {
+      "areYouSure": "Jste si jisti?",
+      "thisActionCannotBeUndone": "Tuto akci nelze vrátit zpět.",
+      "warning": "Varování",
+      "warningText": "Prosím potvrďte, že chcete pokračovat v této akci.",
+      "yes": "Ano",
+      "no": "Ne"
+    },
+    "browserItem": {
+      "createdAt": "Vytvořeno:",
+      "updatedAt": "Naposledy aktualizováno:",
+      "noName": "Nepojmenovaná úloha",
+      "noDescription": "Bez popisu",
+      "actions": {
+        "view": "Zobrazit",
+        "delete": "Smazat"
+      }
+    },
+    "inputModal": {
+      "editor": {
+        "create": {
+          "title": "Vytvořit novou úlohu",
+          "no": "Zrušit",
+          "yes": "Uložit",
+          "placeholderName": "Zadejte název úlohy"
+        },
+        "update": {
+          "title": "Aktualizovat úlohu",
+          "no": "Zrušit",
+          "yes": "Aktualizovat",
+          "placeholderName": "Zadejte název úlohy"
+        }
+      }
     }
   }
 }

@@ -9,6 +9,7 @@ export interface UserProfile {
 export interface UserState {
   accessToken: string | undefined;
   user: UserProfile | null;
+  authStatus: 'unknown' | 'authenticated' | 'unauthenticated';
 }
 
 const initialState: UserState = {
@@ -18,6 +19,7 @@ const initialState: UserState = {
     username: undefined,
   },
   accessToken: undefined,
+  authStatus: 'unknown',
 };
 
 const UserSlice = createSlice({
@@ -27,10 +29,12 @@ const UserSlice = createSlice({
     login: (state, action: PayloadAction<UserState>) => {
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
+      state.authStatus = 'authenticated';
     },
     logout: (state) => {
       state.user = null;
       state.accessToken = undefined;
+      state.authStatus = 'unauthenticated';
     },
   },
 });

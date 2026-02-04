@@ -1,17 +1,16 @@
-import { Label, LoginForm, Logo, MathField } from '@/libs/ui/components';
+import { Button, Icon, Logo } from '@/libs/ui/components';
 import { BaseLayout } from '@/libs/ui/layouts';
-import logo from '../../libs/ui/assets/images/dark/logo_medium.svg';
 import { useTranslation } from '@/libs/ui/provider';
 import { useState } from 'react';
-import login from '@/middleware/auth/login';
 import { useNavigate } from 'react-router-dom';
 import signup from '@/middleware/auth/signup';
 import { SignupForm } from '@/libs/ui/components/SignupForn';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Signup() {
   const t = useTranslation('pages.signup');
   const [serverError, setServerError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleSignup = async (username: string, email: string, password: string) => {
@@ -34,12 +33,30 @@ export default function Signup() {
   };
   return (
     <BaseLayout className="justify-center items-center">
-      <Logo className="pb-4"></Logo>
-      <SignupForm
-        serverError={serverError}
-        isSubmitting={loading}
-        onSubmit={handleSignup}
-      ></SignupForm>
+      <Button
+        onClick={() => navigate('/')}
+        outline={'primary'}
+        size="md"
+        className="absolute top-8 gap-2 left-8"
+      >
+        <Icon name="arrow-right"></Icon> {t('goBack')}
+      </Button>
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          className="flex flex-col items-center"
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <Logo className="pb-4"></Logo>
+          <SignupForm
+            serverError={serverError}
+            isSubmitting={loading}
+            onSubmit={handleSignup}
+          ></SignupForm>
+        </motion.div>
+      </AnimatePresence>
     </BaseLayout>
   );
 }

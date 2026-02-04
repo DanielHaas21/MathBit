@@ -131,8 +131,14 @@ export class AuthController extends Controller {
   @Post('logout')
   @Security('jwt')
   @SuccessResponse('200', 'Logout successful')
-  public async logout(@Request() _req: ExpressRequest): Promise<void> {
-    // Stateless JWT logout = client just deletes token
+  public async logout(@Request() req: ExpressRequest): Promise<void> {
+    req.res?.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: false, // MUST match login
+      sameSite: 'lax', // MUST match login
+      path: '/',
+    });
+
     return;
   }
 }

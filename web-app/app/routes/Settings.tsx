@@ -1,33 +1,23 @@
-import {
-  Header,
-  Label,
-  LoginForm,
-  Logo,
-  MathField,
-  SettingsForm,
-  useToast,
-} from '@/libs/ui/components';
+import { Button, Header, Icon, SettingsForm, useToast } from '@/libs/ui/components';
 import { BaseLayout } from '@/libs/ui/layouts';
-import logo from '../../libs/ui/assets/images/dark/logo_medium.svg';
 import { useTranslation } from '@/libs/ui/provider';
-import { use, useEffect, useState } from 'react';
-import login from '@/middleware/auth/login';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import signup from '@/middleware/auth/signup';
-import { SignupForm } from '@/libs/ui/components/SignupForn';
 import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { refresh } from 'web-api-client';
 import getApiConfig from '@/apiConfig';
 import update from '@/middleware/actions/update';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Settings() {
   const user = useSelector((state: RootState) => state.User);
   const t = useTranslation('pages.settings');
   const [serverError, setServerError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const { show } = useToast();
+
   useEffect(() => {
     const tryRefresh = async () => {
       const response = await refresh(getApiConfig(true));
@@ -65,13 +55,33 @@ export default function Settings() {
       <BaseLayout.Menu>
         <Header route={[{ pageTitle: 'Settings', pageRoute: '/settings' }]} />
       </BaseLayout.Menu>
+      <div>
+        <Button
+          onClick={() => navigate(-1)}
+          outline={'primary'}
+          size="md"
+          className=" gap-2 ms-8 mt-8 mb-8"
+        >
+          <Icon name="arrow-right"></Icon> {t('goBack')}
+        </Button>
+      </div>
       <BaseLayout.Content className="justify-center items-center">
-        <SettingsForm
-          data={{ username: user.user?.username!, email: user.user?.email! }}
-          serverError={serverError}
-          isSubmitting={loading}
-          onSubmit={handleSignup}
-        ></SettingsForm>
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="flex flex-col items-center"
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
+            <SettingsForm
+              data={{ username: user.user?.username!, email: user.user?.email! }}
+              serverError={serverError}
+              isSubmitting={loading}
+              onSubmit={handleSignup}
+            ></SettingsForm>
+          </motion.div>
+        </AnimatePresence>
       </BaseLayout.Content>
     </BaseLayout>
   );

@@ -11,6 +11,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .addColumn('email', 'varchar(255)', (col) => col.notNull())
     .addColumn('password', 'varchar(255)', (col) => col.notNull())
     .addColumn('created', 'timestamp', (col) => col.notNull().defaultTo(new Date()))
+    .addColumn('updated', 'timestamp', (col) => col.notNull().defaultTo(new Date()))
     .execute();
 }
 

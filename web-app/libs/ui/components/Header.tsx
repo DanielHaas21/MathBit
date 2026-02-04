@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { logout as logoutAPI } from 'web-api-client';
 import { Label } from './Label';
 import { Icon } from './Icon';
 import { Breadcrumb } from './Breadcrumb';
@@ -12,6 +12,8 @@ import { useTranslation } from '../provider';
 import { logout } from '@/store/slices/UserState';
 import { useNavigate } from 'react-router-dom';
 import { Logo } from './Logo';
+import { fi } from 'date-fns/locale';
+import getApiConfig from '@/apiConfig';
 export interface HeaderProps {
   route: BreadcrumbItem[];
 }
@@ -21,6 +23,15 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
   const user = useSelector((state: RootState) => state.User);
   const navigate = useNavigate();
   const t = useTranslation('ui');
+
+  const logoutHandler = async () => {
+    try {
+      await logoutAPI(getApiConfig(false));
+    } finally {
+      Dispatch(logout());
+      navigate('/');
+    }
+  };
 
   const isLoggedIn = user.accessToken !== undefined ? true : false;
   const userSection = isLoggedIn ? (
@@ -56,10 +67,7 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
       </Dropdown.Item>
       <Dropdown.Item
         icon="user"
-        onClick={() => {
-          Dispatch(logout());
-          navigate('/');
-        }}
+        onClick={logoutHandler}
         className="text-error-text m-2 hover:bg-error-bg"
       >
         {t('header.logout')}
@@ -83,7 +91,7 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
         <div className="pt-6 pr-[6vw]">{userSection}</div>
       </div>
       <Breadcrumb
-        className="ps-10 pt-3"
+        className="ps-10 pt-2 pb-2 md:pt-4 md:pb-0"
         route={[{ pageRoute: '/', pageTitle: <Icon name="house"></Icon> }, ...route]}
       ></Breadcrumb>
     </header>

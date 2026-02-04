@@ -6,6 +6,7 @@ import { InputBase } from './InputBase';
 import { InputWrapper } from './InputWrapper';
 import { useTranslation } from '../provider';
 import { Label } from './Label';
+import { Link } from 'react-router-dom';
 
 export interface SettingsFormProps {
   onSubmit: (username: string, email: string, password: string) => void;
@@ -21,14 +22,14 @@ export function SettingsForm(props: SettingsFormProps) {
   const t = useTranslation('ui.settingsForm');
   const { onSubmit, serverError, isSubmitting, data } = props;
 
-  const [username, setUsername] = React.useState<string>(data.username);
-  const [email, setEmail] = React.useState<string>(data.email);
+  const [username, setUsername] = React.useState<string>(data.username ?? '');
+  const [email, setEmail] = React.useState<string>(data.email ?? '');
   const [password, setPassword] = React.useState<string>('');
   const [confirmPassword, setConfirmPassword] = React.useState<string>('');
 
   React.useEffect(() => {
-    setUsername(data.username);
-    setEmail(data.email);
+    setUsername(data.username ?? '');
+    setEmail(data.email ?? '');
   }, [data]);
 
   const [emailError, setEmailError] = React.useState<string | null>(null);
@@ -94,7 +95,7 @@ export function SettingsForm(props: SettingsFormProps) {
   return (
     <div className="flex flex-col items-center gap-8">
       <Paper
-        className="flex flex-col items-center gap-2 shadow-lg border border-white-800 rounded-xl !min-w-[680px] mt-[-40px] p-10"
+        className="flex flex-col items-center gap-2 shadow-lg border border-white-800 rounded-xl w-[90vw] md:w-[680px] mt-[-40px] p-10"
         showDivider={true}
       >
         <Paper.Title>{t('title')}</Paper.Title>
@@ -103,7 +104,7 @@ export function SettingsForm(props: SettingsFormProps) {
             label={t('email.label')}
             className="w-full"
             required={false}
-            hint="Emails must be unique"
+            hint={t('emailHint')}
             isError={submitted && !!emailError}
             errorText={submitted ? emailError : null}
           >
@@ -147,7 +148,7 @@ export function SettingsForm(props: SettingsFormProps) {
           <InputWrapper
             label={t('newPassword.label')}
             className="w-full"
-            hint="Leave the two fields blank to keep the current password"
+            hint={t('passwordHint')}
             required={false}
             isError={(submitted && !!passwordError) || !!serverError}
             errorText={submitted ? passwordError : null}

@@ -5,7 +5,8 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "web-api-client": ["../web-api-client/src"]
+      "web-api-client": ["../web-api-client/src"],
+      "web-app": ["../web-app"]
     }
   },
   "include": ["src"],

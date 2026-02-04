@@ -28,6 +28,8 @@ export class MathProblemRepository {
       .insertInto('math_problem')
       .values({
         ...(problem as MathProblem),
+        created: new Date(),
+        updated: new Date(),
         userId: userId,
         name: problem.name ?? defaultName,
       })
@@ -53,12 +55,18 @@ export class MathProblemRepository {
     if (filters.userId) query = query.where('userId', '=', filters.userId);
     if (filters.bookmark) query = query.where('bookmark', '=', true);
     if (filters.name) query = query.where('name', 'like', `%${filters.name}%`);
+    if (filters.dateFrom) query = query.where('created', '>=', filters.dateFrom);
+    if (filters.dateTo) query = query.where('created', '<=', filters.dateTo);
 
     return await query.limit(limit).offset(offset).execute();
   }
 
   async updateMathProblem(id: number, problem: Partial<MathProblem>): Promise<void> {
-    await this.db.updateTable('math_problem').set(problem).where('id', '=', id).execute();
+    await this.db
+      .updateTable('math_problem')
+      .set({ ...problem, updated: new Date() })
+      .where('id', '=', id)
+      .execute();
   }
 
   async deleteMathProblemById(id: number): Promise<void> {

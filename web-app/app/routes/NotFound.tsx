@@ -1,11 +1,11 @@
 import { Button, Icon, Label, Logo } from '@/libs/ui/components';
-import { BaseLayout, Paper } from '@/libs/ui/layouts';
-import logo from '../../libs/ui/assets/images/dark/logo_medium.svg';
+import { BaseLayout} from '@/libs/ui/layouts';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '@/libs/ui/provider/UiProvider';
 export function NotFound() {
   const navigate = useNavigate();
   const t = useTranslation('pages.notfound');
+  
   return (
     <BaseLayout className="">
       <Logo></Logo>
