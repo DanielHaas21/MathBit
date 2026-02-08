@@ -1,8 +1,12 @@
 import {
   createMathProblem,
   CreateMathProblem201,
+  createMathProblemStep,
+  deleteMathProblemStepsByProblemId,
   getMathProblemById,
   GetMathProblemById200,
+  getMathProblemStepsByProblemId,
+  GetMathProblemStepsByProblemId200,
   MathEngineSolveResponse,
   MathEngineSolveStep,
   MathProblem,
@@ -79,6 +83,21 @@ export default function Editor() {
           }
           if (!problem) return;
 
+          const steps: GetMathProblemStepsByProblemId200 = await getMathProblemStepsByProblemId(
+            problem.id as number,
+            getApiConfig(false)
+          );
+          setFinalSteps(
+            (steps?.data ?? [])
+              .slice()
+              .sort((a, b) => a.stepIndex - b.stepIndex)
+              .map((s) => ({
+                stepBefore: s.stepBefore ?? '',
+                stepAfter: s.stepAfter ?? '',
+                stepRuleDescription: s.description,
+              }))
+          );
+
           setCurrentSavedProblem(problem);
           setLatex(problem.originalExpression);
           setFinal(problem.simplifiedExpression ?? '');
@@ -133,10 +152,10 @@ export default function Editor() {
   // render solved steps and final
   const renderedSteps =
     finalSteps &&
-    finalSteps.map((m, i) => <SolveStep step={m} index={i} isFinal={false}></SolveStep>);
+    finalSteps.map((m, i) => <SolveStep step={m} key={i} index={i} isFinal={false}></SolveStep>);
 
   const renderFinal = final && (
-    <SolveStep step={final} isFinal={true} index={finalSteps.length}></SolveStep>
+    <SolveStep step={final} key="final" isFinal={true} index={finalSteps.length}></SolveStep>
   );
 
   // Handle if  we are editing an existing problem or creating a new one, cant be annotated due to length
@@ -175,6 +194,22 @@ export default function Editor() {
             const createdId = newProblem?.id;
 
             if (createdId) {
+              for (const step of finalSteps) {
+                await createMathProblemStep(
+                  {
+                    problemId: createdId,
+                    step: {
+                      stepBefore: step.stepBefore,
+                      stepAfter: step.stepAfter,
+                      description: step.stepRuleDescription,
+                      problemId: createdId,
+                      stepIndex: finalSteps.indexOf(step),
+                    },
+                  },
+                  getApiConfig(false)
+                );
+              }
+
               show({
                 icon: 'circle-check',
                 variant: 'success',
@@ -219,6 +254,24 @@ export default function Editor() {
                 getApiConfig()
               );
 
+              await deleteMathProblemStepsByProblemId(currentSavedProblem.id, getApiConfig(false));
+
+              for (const step of finalSteps) {
+                await createMathProblemStep(
+                  {
+                    problemId: currentSavedProblem.id,
+                    step: {
+                      stepBefore: step.stepBefore,
+                      stepAfter: step.stepAfter,
+                      description: step.stepRuleDescription,
+                      problemId: currentSavedProblem.id,
+                      stepIndex: finalSteps.indexOf(step),
+                    },
+                  },
+                  getApiConfig(false)
+                );
+              }
+
               setCurrentSavedProblem({
                 ...currentSavedProblem,
                 name: value.name,
@@ -262,17 +315,20 @@ export default function Editor() {
           />
         </BaseLayout.Menu>
         <BaseLayout.Content>
-          <div className="relative w-full h-full bg-white-800 overflow-hidden">
-            <FunctionPlot
-              latex={latex}
-              xRange={[-50, 50]}
-              className="absolute h-full w-full pointer-events-none"
-            />
+          <div className="relative w-full h-full bg-white-800 overflow-scroll md:overflow-hidden">
+            {width && width >= 1024 && (
+              <FunctionPlot
+                latex={latex}
+                xRange={[-50, 50]}
+                className="absolute h-full w-full pointer-events-none"
+              />
+            )}
+
             <Paper
               thickness="sm"
-              className="border border-white-800 relative left-5 top-10 w-[600px] h-[85%] p-3 flex flex-col"
+              className="border border-white-800 ms-2 mt-2 md:mt-0 md:ms-0 md:relative md:left-5 md:top-10  md:w-[600px] h-[85%] p-3 flex flex-col"
             >
-              <Paper.Title className="flex flex-row items-start gap-3">
+              <Paper.Title className="flex flex-col md:flex-row items-start gap-3">
                 <MathField initialLatex={latex} onChange={(newLatex) => setLatex(newLatex)} />
                 <Button size="lg" className="mt-5 gap-2" onClick={solveExpression}>
                   <Icon name="paper-plane"></Icon>
@@ -308,6 +364,13 @@ export default function Editor() {
                 </div>
               </Paper.Content>
             </Paper>
+            {width && width < 1024 && (
+              <FunctionPlot
+                latex={latex}
+                xRange={[-50, 50]}
+                className="h-full w-full pointer-events-none mt-10"
+              />
+            )}
           </div>
         </BaseLayout.Content>
       </BaseLayout>

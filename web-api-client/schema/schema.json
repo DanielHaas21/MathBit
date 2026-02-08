@@ -1012,6 +1012,37 @@
 				]
 			}
 		},
+		"/math_problem_steps/problemId/{problemId}": {
+			"delete": {
+				"operationId": "DeleteMathProblemStepsByProblemId",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Deletes Math problem steps by problem id.\r\n\r\nThis endpoint accepts a problem id to delete all math problem steps related to that problem in the system\r\n *",
+				"tags": [
+					"MathProblemSteps"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "id of the problem",
+						"in": "path",
+						"name": "problemId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/math_problems": {
 			"post": {
 				"operationId": "CreateMathProblem",

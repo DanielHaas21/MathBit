@@ -74,7 +74,7 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
       </Dropdown.Item>
     </DropdownMenu>
   ) : (
-    <div className="flex gap-2 mt-6">
+    <div className="flex flex-col md:flex-row gap-2 mt-6">
       <Button variant="primary" onClick={() => navigate('/login')} size="md">
         {t('header.login')}
       </Button>

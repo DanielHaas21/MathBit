@@ -137,4 +137,18 @@ export class MathProblemStepController extends Controller {
   public async deleteMathProblemStep(@Path() id: number): Promise<void> {
     await this.MathProblemStepRepository.deleteMathProblemStepByProblemId(id);
   }
+
+  /**
+   * Deletes Math problem steps by problem id.
+   *
+   * This endpoint accepts a problem id to delete all math problem steps related to that problem in the system
+   *  *
+   * @param problemId id of the problem
+   * @returns {void} no return value
+   * */
+  @Delete('problemId/{problemId}')
+  @Security('jwt')
+  public async deleteMathProblemStepsByProblemId(@Path() problemId: number): Promise<void> {
+    await this.MathProblemStepRepository.deleteMathProblemStepByProblemId(problemId);
+  }
 }

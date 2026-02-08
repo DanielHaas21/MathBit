@@ -19,7 +19,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { deleteMathProblem, getMathProblems, MathProblem } from 'web-api-client';
+import {
+  deleteMathProblem,
+  deleteMathProblemStepsByProblemId,
+  getMathProblems,
+  MathProblem,
+} from 'web-api-client';
 
 export default function Browser() {
   const user = useSelector((state: RootState) => state.User);
@@ -157,6 +162,7 @@ export default function Browser() {
           if (result) {
             setProblems((prev) => prev.filter((p) => p.id !== pendingId));
             await deleteMathProblem(pendingId as number, getApiConfig());
+            await deleteMathProblemStepsByProblemId(pendingId as number, getApiConfig());
             setPendingId(null);
           }
         }}
