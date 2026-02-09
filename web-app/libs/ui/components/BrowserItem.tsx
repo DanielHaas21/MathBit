@@ -36,7 +36,9 @@ export const BrowserItem: React.FC<BrowserItemProps> = ({
           <Icon size="xl" name={'pen'} className="text-primary-base"></Icon>
         </div>
         <div className="flex flex-col">
-          <Label size="md">{name || t('noName')}</Label>
+          <Label data-testid={`head-label-${name}`} size="md">
+            {name || t('noName')}
+          </Label>
           <Label size="sm" className="text-text-grey">
             {description || t('noDescription')}
           </Label>

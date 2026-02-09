@@ -42,6 +42,7 @@ Project consists of four pnpm packages and one standalone package
 - **web-api-client** API client that generates typed routes used on the frontend from the Swagger SDK
 - **db** Kysely based db library that contains table, and repository specifications used to make requests to a Postgres db container
 - **haskell-engine** Standalone HTTP-microservice that handles math computations, it exposes a simple GET/POST API
+- **tests** Test suites for the whole application, including unit tests, integration tests, and end-to-end tests
 
 App folder structure
 
@@ -51,6 +52,7 @@ App folder structure
 ├───web-api-client
 ├───db
 ├───haskell-engine
+├───tests
 ```
 
 each package has a `/docs` folder at root that contains more specific documentation & instuctions for each package
