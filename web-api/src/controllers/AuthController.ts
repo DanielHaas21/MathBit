@@ -79,6 +79,8 @@ export class AuthController extends Controller {
   @Post('refresh')
   @Response<Error>('400', 'Invalid refresh token')
   public async refresh(@Request() req: ExpressRequest) {
+    console.log(req.cookies);
+
     const config = getAppConfig();
 
     const token = req.cookies?.refreshToken;
