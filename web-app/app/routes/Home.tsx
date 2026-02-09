@@ -2,7 +2,7 @@ import getApiConfig from '@/apiConfig';
 import { Header } from '@/libs/ui/components/Header';
 import { BaseLayout } from '@/libs/ui/layouts';
 import { Button } from '@headlessui/react';
-import { refresh } from 'web-api-client';
+import { MathEngineSolveResponse, refresh } from 'web-api-client';
 
 export default function Home() {
   return (
@@ -13,7 +13,7 @@ export default function Home() {
       <BaseLayout.Content>
         <Button
           onClick={async () => {
-            console.log(await refresh(getApiConfig(true)));
+          
           }}
         >
           bombo

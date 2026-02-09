@@ -145,6 +145,7 @@ export default function Editor() {
 
     const solved: MathEngineSolveResponse = await solve(latex);
 
+    console.log('Solved response:', solved);
     setFinal(solved.finalExpression);
     setFinalSteps(solved.steps);
   };

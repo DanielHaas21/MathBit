@@ -9,6 +9,7 @@
     "dev:web-app": "pnpm --filter web-app dev",
     "dev:web-api": "pnpm --filter web-api dev",
     "generate": "pnpm --filter web-api-client generate",
+    "api:generate": "cd web-api && pnpm generate && cd .. && pnpm generate",
     "dev:db": "pnpm --filter db dev",
     "format": "prettier --write .",
     "engine": "cd haskell-engine && stack run",

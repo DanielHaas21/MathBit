@@ -38,3 +38,12 @@ export interface MathEngineSolveResponse {
    */
   steps: MathEngineSolveStep[];
 }
+
+/**
+ * Error shape returned by the Haskell engine when it rejects the request.
+ */
+export interface MathEngineErrorResponse {
+  errHTTPCode: number;
+  errReason: string;
+  errMessage: string;
+}

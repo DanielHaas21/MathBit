@@ -510,6 +510,28 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"MathEngineErrorResponse": {
+				"description": "Error shape returned by the Haskell engine when it rejects the request.",
+				"properties": {
+					"errHTTPCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"errReason": {
+						"type": "string"
+					},
+					"errMessage": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"errHTTPCode",
+					"errReason",
+					"errMessage"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"MathEngineSolveRequest": {
 				"description": "Represents the request payload for solving a math expression.",
 				"properties": {
@@ -1270,11 +1292,21 @@
 				"operationId": "SolveMathExpression",
 				"responses": {
 					"200": {
-						"description": "Solved math expression",
+						"description": "Solved",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/MathEngineSolveResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MathEngineErrorResponse"
 								}
 							}
 						}

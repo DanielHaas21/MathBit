@@ -37,7 +37,10 @@ parseSymbol :: T.Text -> Parser Expr
 parseSymbol s =
   case s of
     "Pi"             -> pure ConstantPi
-    "ExponentialE"   -> pure ConstantE
+    "ExponentialE"   -> pure ConstantE 
+    "ComplexInfinity" -> fail "Complex numbers arent supported" -- why is this parsed as string in the first place?
+    "NaN"            -> fail "NaN is not supported" -- why is this parsed as string in the first place?
+    "EmptySet"        -> fail "Sets are not supported" -- why is this parsed as string in the first place?
     _                -> pure (Var (T.unpack s))
 
 -- Parses a limit if it has a tuple inside it, tuple is mainly used as a structure block 
@@ -149,7 +152,6 @@ parseOp op args = case op of
     "Tuple" -> fail "Tuple is only allowed inside structured operators"
     "List" -> fail "Lists are not supported in expressions"
     "Set"  -> fail "Sets are not supported in expressions"
-    "ComplexInfinity" -> fail "Complex numbers arent supported"
     "PreDecrement" -> fail "No idea what this is but its not supported"
     "PreIncrement" -> fail "No idea what this is but its not supported"
     "Decrement" -> fail "No idea what this is but its not supported"
