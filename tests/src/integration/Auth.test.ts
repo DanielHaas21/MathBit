@@ -1,9 +1,6 @@
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect} from 'vitest';
 import { login, refresh, me, logout, type LoginResponse, Refresh200 } from 'web-api-client';
 import * as dotenv from 'dotenv';
-import axios from 'axios';
-import { CookieJar } from 'tough-cookie';
-import { wrapper } from 'axios-cookiejar-support';
 import { getApiConfig } from 'src/utils/getApiConfig';
 
 dotenv.config();

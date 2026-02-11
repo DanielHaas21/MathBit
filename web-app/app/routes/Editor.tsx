@@ -10,6 +10,7 @@ import {
   MathEngineSolveResponse,
   MathEngineSolveStep,
   MathProblem,
+  SolveMathExpression400,
   updateMathProblem,
 } from 'web-api-client';
 import { useEffect, useState } from 'react';
@@ -24,6 +25,7 @@ import {
   SolveStep,
   InputModal,
   useToast,
+  Label,
 } from '@/libs/ui/components';
 import { BaseLayout, Paper } from '@/libs/ui/layouts';
 import { evaluateLatexNumeric } from '@/libs/math/evaluateExpression';
@@ -56,7 +58,8 @@ export default function Editor() {
   // modal states
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false);
-
+  // error state for fetch problem, if error occurs we redirect to 404 or editor depending on error, so we need to track it to avoid showing toast twice on auth error (once here and once in layout on refresh)
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     if (route === '/browser/editor') {
       setCurrentSavedProblem(null);
@@ -131,7 +134,7 @@ export default function Editor() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+  console.log(navigator.language);
   // solve expression handler
   const solveExpression = async () => {
     const evaluate = evaluateLatexNumeric(latex);
@@ -143,11 +146,22 @@ export default function Editor() {
       return;
     }
 
-    const solved: MathEngineSolveResponse = await solve(latex);
-
-    console.log('Solved response:', solved);
-    setFinal(solved.finalExpression);
-    setFinalSteps(solved.steps);
+    setError(null);
+    try {
+      const solved: MathEngineSolveResponse = await solve(latex);
+      setError(null);
+      setFinal(solved.finalExpression);
+      setFinalSteps(solved.steps);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
+      show({
+        icon: 'triangle-exclamation',
+        variant: 'error',
+        title: t('messages.solveError'),
+        description: t('messages.solveErrorDescription'),
+      });
+      return;
+    }
   };
 
   // render solved steps and final
@@ -159,6 +173,11 @@ export default function Editor() {
     <SolveStep step={final} key="final" isFinal={true} index={finalSteps.length}></SolveStep>
   );
 
+  const renderError = error && (
+    <div className="w-full flex p-4 items-center justify-center">
+      <Label className="text-error-text">{error}</Label>
+    </div>
+  );
   // Handle if  we are editing an existing problem or creating a new one, cant be annotated due to length
   const BreadcrumbProblem =
     currentSavedProblem &&
@@ -304,13 +323,13 @@ export default function Editor() {
             route={
               BreadcrumbProblem
                 ? [
-                    { pageTitle: 'Browser', pageRoute: '/browser' },
-                    { pageTitle: 'Editor', pageRoute: '/browser/editor' },
+                    { locKey: 'browser', pageRoute: '/browser' },
+                    { locKey: 'editor', pageRoute: '/browser/editor' },
                     BreadcrumbProblem,
                   ]
                 : [
-                    { pageTitle: 'Browser', pageRoute: '/browser' },
-                    { pageTitle: 'Editor', pageRoute: '/browser/editor' },
+                    { locKey: 'browser', pageRoute: '/browser' },
+                    { locKey: 'editor', pageRoute: '/browser/editor' },
                   ]
             }
           />
@@ -338,8 +357,14 @@ export default function Editor() {
               </Paper.Title>
               <Paper.Content className="flex flex-col flex-1 min-h-0">
                 <div className="w-full flex-1 min-h-0 flex flex-col overflow-y-auto">
-                  {renderedSteps}
-                  {renderFinal}
+                  {error ? (
+                    <> {renderError}</>
+                  ) : (
+                    <>
+                      {renderedSteps}
+                      {renderFinal}
+                    </>
+                  )}
                 </div>
                 <div className="w-full flex-shrink-0 pt-2 flex justify-end gap-4">
                   <Button

@@ -1,37 +1,45 @@
 {
   "pages": {
     "login": {
+      "goBack": "Zpět",
       "errors": {
-        "Invalid credentials": "Neplatný e‑mail nebo heslo."
+        "Invalid credentials": "Neplatný e-mail nebo heslo."
       }
     },
     "signup": {
+      "goBack": "Zpět",
       "errors": {
-        "Invalid credentials": "Neplatný e‑mail nebo heslo."
+        "Invalid credentials": "Neplatný e-mail nebo heslo."
       }
     },
     "settings": {
+      "goBack": "Zpět",
       "messages": {
-        "updateSuccess": "Uživatelská nastavení byla úspěšně aktualizována."
+        "updateSuccess": "Nastavení uživatele bylo úspěšně aktualizováno."
       }
     },
     "notfound": {
-      "title": "404 - Stránka nenalezena",
+      "title": "404 - Stránka nebyla nalezena",
       "description": "Stránka, kterou hledáte, neexistuje.",
-      "returnHome": "Zpět na domovskou stránku"
+      "returnHome": "Zpět na hlavní stránku"
     },
     "browser": {
       "title": "Prohlížeč úloh",
       "filters": {
         "searchPlaceholder": "Hledat úlohy...",
+        "datePlaceholder": "Vyberte časové období",
         "search": "Hledat",
         "date": "Datum",
         "reset": "Resetovat filtry"
       },
+      "messages": {
+        "notAuthenticated": "Nejste přihlášeni",
+        "notAuthenticatedDescription": "Pro přístup k prohlížeči úloh musíte být přihlášeni."
+      },
       "editor": "Přejít do editoru",
       "emptyResult": {
-        "all": "Nenalezena žádná úloha",
-        "all2": "Zatím jste nevytvořili žádné úlohy, nebo vašemu vyhledávání neodpovídají žádné úlohy."
+        "all": "Nebyly nalezeny žádné úlohy",
+        "all2": "Ještě jste nevytvořili žádné úlohy, nebo váš dotaz neodpovídá žádné úloze."
       }
     },
     "editor": {
@@ -44,32 +52,41 @@
         "unnamed": "Nepojmenovaná úloha"
       },
       "messages": {
+        "solveError": "Nepodařilo se vyřešit úlohu.",
+        "solveErrorDescription": "Při řešení úlohy došlo k chybě. Zkontrolujte prosím výraz a zkuste to znovu.",
         "loadError": "Nepodařilo se načíst úlohu.",
         "saveSuccess": "Úloha byla úspěšně uložena.",
-        "saveError": "Nepodařilo se uložit úlohu.",
-        "notAuthenticated": "Nepřihlášen",
+        "saveError": "Úlohu se nepodařilo uložit.",
+        "notAuthenticated": "Nejste přihlášeni",
         "notAuthenticatedDescription": "Pro úpravu úloh musíte být přihlášeni.",
         "updateSuccess": "Úloha byla úspěšně aktualizována.",
-        "updateError": "Nepodařilo se aktualizovat úlohu."
+        "updateError": "Úlohu se nepodařilo aktualizovat."
       }
     }
   },
   "ui": {
+    "breadcrumb": {
+      "browser": "Prohlížeč",
+      "editor": "Editor",
+      "settings": "Nastavení"
+    },
     "loginForm": {
       "email": {
-        "label": "E‑mail",
-        "placeholder": "Zadejte svůj e‑mail"
+        "label": "E-mail",
+        "placeholder": "Zadejte svůj e-mail"
       },
       "password": {
         "label": "Heslo",
         "placeholder": "Zadejte své heslo"
       },
-      "submit": "Přihlásit se"
+      "submit": "Přihlásit se",
+      "noAccount": "Nemáte účet? ",
+      "registerLink": "Zaregistrujte se zde"
     },
     "signupForm": {
       "email": {
-        "label": "E‑mail",
-        "placeholder": "Zadejte svůj e‑mail"
+        "label": "E-mail",
+        "placeholder": "Zadejte svůj e-mail"
       },
       "username": {
         "label": "Uživatelské jméno",
@@ -80,15 +97,19 @@
         "placeholder": "Zadejte své heslo"
       },
       "confirmPassword": {
-        "label": "Potvrzení hesla",
+        "label": "Potvrdit heslo",
         "placeholder": "Potvrďte své heslo"
       },
-      "submit": "Registrovat se"
+      "submit": "Zaregistrovat se",
+      "alreadyHaveAccount": " Už máte účet? ",
+      "loginLink": "Přihlásit se"
     },
     "settingsForm": {
+      "emailHint": "E-maily musí být jedinečné",
+      "passwordHint": "Ponechte prázdné pro zachování aktuálního hesla",
       "email": {
-        "label": "E‑mail",
-        "placeholder": "Aktualizujte svůj e‑mail"
+        "label": "E-mail",
+        "placeholder": "Aktualizujte svůj e-mail"
       },
       "username": {
         "label": "Uživatelské jméno",
@@ -99,23 +120,23 @@
         "placeholder": "Zadejte nové heslo"
       },
       "confirmNewPassword": {
-        "label": "Potvrzení nového hesla",
+        "label": "Potvrdit nové heslo",
         "placeholder": "Potvrďte nové heslo"
       },
       "submit": "Uložit změny",
-      "title": "Aktualizace přístupových údajů uživatele"
+      "title": "Aktualizace uživatelských údajů"
     },
     "header": {
       "login": "Přihlásit se",
-      "signup": "Zaregistrovat se",
+      "signup": "Registrace",
       "logout": "Odhlásit se",
       "settings": "Nastavení"
     },
     "warningModal": {
       "areYouSure": "Jste si jisti?",
       "thisActionCannotBeUndone": "Tuto akci nelze vrátit zpět.",
-      "warning": "Varování",
-      "warningText": "Prosím potvrďte, že chcete pokračovat v této akci.",
+      "warning": "Upozornění",
+      "warningText": "Potvrďte prosím, že chcete v této akci pokračovat.",
       "yes": "Ano",
       "no": "Ne"
     },
@@ -123,7 +144,7 @@
       "createdAt": "Vytvořeno:",
       "updatedAt": "Naposledy aktualizováno:",
       "noName": "Nepojmenovaná úloha",
-      "noDescription": "Bez popisu",
+      "noDescription": "Nebyl uveden žádný popis",
       "actions": {
         "view": "Zobrazit",
         "delete": "Smazat"

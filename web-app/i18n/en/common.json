@@ -52,6 +52,8 @@
         "unnamed": "Unnamed Problem"
       },
       "messages": {
+        "solveError": "Failed to solve the problem.",
+        "solveErrorDescription": "There was an error while solving the problem. Please check your expression and try again.",
         "loadError": "Failed to load the problem.",
         "saveSuccess": "Problem saved successfully.",
         "saveError": "Failed to save the problem.",
@@ -63,6 +65,11 @@
     }
   },
   "ui": {
+    "breadcrumb": {
+      "browser": "Browser",
+      "editor": "Editor",
+      "settings": "Settings "
+    },
     "loginForm": {
       "email": {
         "label": "Email",

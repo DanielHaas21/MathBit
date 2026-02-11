@@ -169,7 +169,7 @@ export default function Browser() {
       ></WarningModal>
       <BaseLayout>
         <BaseLayout.Menu>
-          <Header route={[{ pageTitle: 'Browser', pageRoute: '/browser' }]} />
+          <Header route={[{ locKey: 'browser', pageRoute: '/browser' }]} />
         </BaseLayout.Menu>
         <BaseLayout.Content className="flex flex-col items-center p-6">
           <AnimatePresence>

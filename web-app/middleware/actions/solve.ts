@@ -1,34 +1,39 @@
 import {
   solveMathExpression,
   MathEngineSolveResponse,
-  SolveMathExpressionMutationRequest,
-  RequestConfig,
+  SolveMathExpression400,
+  SolveMathExpressionMutationResponse,
+  SolveMathExpression200,
 } from 'web-api-client';
-import { ComputeEngine, type Expression } from '@cortex-js/compute-engine';
+import { ComputeEngine } from '@cortex-js/compute-engine';
 import getApiConfig from '@/apiConfig';
 
 async function solve(expr: string): Promise<MathEngineSolveResponse> {
   const ce = new ComputeEngine();
+
   if (expr.trim() === '') {
-    throw new Error('Expression cannot be empty');
+    throw new Error('Failed to solve expression: Expression cannot be empty');
   }
 
-  const MathJSONe = ce.parse(expr).json;
-  console.log('Parsed MathJSON:', MathJSONe);
-
   if (JSON.stringify(ce.parse(expr).json).includes('Error')) {
-    throw new Error('Invalid expression');
+    throw new Error('Failed to solve expression: Invalid expression');
   }
 
   const MathJSON = ce.parse(expr).json;
-  console.log('Parsed MathJSON:', MathJSON);
-  const response = await solveMathExpression(
-    { rawExpression: MathJSON },
-    getApiConfig() // Non-auth requests seem to have a different config type, on function level its the same, hence why we cast it
-  );
-  console.log('Raw response from solveMathExpression:', response);
-
-  return response;
+  try {
+    const response: SolveMathExpression200 | SolveMathExpression400 = await solveMathExpression(
+      { rawExpression: MathJSON },
+      getApiConfig()
+    );
+    return response;
+  } catch (error) {
+    console.log('Error solving expression:', error);
+    if (error instanceof Error && !error.message.includes('Network Error')) {
+      throw new Error(`Failed to solve expression: "Unknown symbols used"`);
+    } else {
+      throw new Error('Failed to solve expression: There has been a problem with the request');
+    }
+  }
 }
 
 export default solve;

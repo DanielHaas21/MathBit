@@ -53,7 +53,7 @@ export default function Settings() {
   return (
     <BaseLayout>
       <BaseLayout.Menu>
-        <Header route={[{ pageTitle: 'Settings', pageRoute: '/settings' }]} />
+        <Header route={[{ locKey: 'settings', pageRoute: '/settings' }]} />
       </BaseLayout.Menu>
       <div>
         <Button

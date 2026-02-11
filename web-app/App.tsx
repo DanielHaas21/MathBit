@@ -10,7 +10,9 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 
 (async () => {
-  const i18n = await initI18n('en', false);
+  const lang = navigator.language === 'cs-CZ' ? 'cs' : 'en';
+
+  const i18n = await initI18n(lang, false);
   createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <I18nextProvider i18n={i18n}>
