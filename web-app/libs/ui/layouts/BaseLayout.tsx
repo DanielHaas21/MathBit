@@ -34,7 +34,7 @@ const BaseLayoutRoot: React.FC<BaseLayoutProps> = ({ children, className }) => {
 BaseLayoutRoot.displayName = 'BaseLayout';
 
 const Menu: React.FC<BaseLayoutMenuProps> = ({ children, className }) => (
-  <div className={cn('bg-white-50  h-1/7 w-full flex', className)}>{children}</div>
+  <div className={cn('bg-white-50  h-2/10 md:h-1/7 w-full flex', className)}>{children}</div>
 );
 Menu.displayName = 'BaseLayout.Menu';
 

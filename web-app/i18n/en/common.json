@@ -52,7 +52,7 @@
         "unnamed": "Unnamed Problem"
       },
       "errors": {
-        "other":"An unknown error occurred while solving the problem.",
+        "other": "An unknown error occurred while solving the problem.",
         "empty": "Failed to solve expression: Expression cannot be empty",
         "invalid": "Failed to solve expression: Invalid expression",
         "unkown": "Failed to solve expression: Unknown symbols used",
@@ -68,6 +68,52 @@
         "notAuthenticatedDescription": "You must be logged in to edit problems.",
         "updateSuccess": "Problem updated successfully.",
         "updateError": "Failed to update the problem."
+      }
+    },
+    "home": {
+      "hero": {
+        "title": "Welcome to MathBit",
+        "description": "A math problem solver that shows you step by step solutions. Get started by opening the editor and entering a math problem. You can also browse saved problems if you have an account.",
+        "beginSolving": "Begin solving",
+        "browseSavedProblems": "Browse saved problems"
+      },
+      "sections": {
+        "features": "Features",
+        "quickTutorial": "Quick Tutorial"
+      },
+      "features": {
+        "latex": {
+          "title": "Input is LaTeX-like",
+          "descriptionBeforeExamples": "The editor produces LaTeX-style math (e.g.",
+          "descriptionAfterExamples": "). You can type normally or use the function tabs."
+        },
+        "oneClick": {
+          "title": "One click to solve",
+          "descriptionBeforeSolve": "Press ",
+          "solveWord": "Solve",
+          "descriptionAfterSolve": " to send your expression to the engine and see each transformation as a step."
+        },
+        "saveLoggedIn": {
+          "title": "Save when logged in",
+          "description": "If you create an account, you can save solutions and find them later in the browser."
+        }
+      },
+      "tutorial": {
+        "steps": {
+          "step1Title": "1. Enter your problem",
+          "step1Description": "Open the editor and build your expression. The on-screen keyboard helps with fractions, roots, trig and combinatorics.",
+          "step2Title": "2. Click Solve",
+          "step2Description": "You’ll get a step list explaining what changed. If something looks wrong, adjust the input and solve again.",
+          "step3Title": "3. Save (optional)",
+          "step3Description": "Log in to save problems and revisit them later from the browser."
+        },
+        "examples": {
+          "title": "Examples to try",
+          "fraction": "Fraction:",
+          "root": "Root:",
+          "trig": "Trig:",
+          "functions": "Functions:"
+        }
       }
     }
   },

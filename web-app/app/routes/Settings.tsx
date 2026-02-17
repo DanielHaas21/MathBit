@@ -20,8 +20,12 @@ export default function Settings() {
 
   useEffect(() => {
     const tryRefresh = async () => {
-      const response = await refresh(getApiConfig(true));
-      if (response.errorCode) navigate('/login');
+      try {
+        const response = await refresh(getApiConfig(true));
+        if (response.errorCode) navigate('/login');
+      } catch (error) {
+        navigate('/login');
+      }
     };
     tryRefresh();
   }, [user]);

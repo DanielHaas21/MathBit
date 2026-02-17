@@ -69,6 +69,52 @@
         "updateSuccess": "Úloha byla úspěšně aktualizována.",
         "updateError": "Úlohu se nepodařilo aktualizovat."
       }
+    },
+    "home": {
+      "hero": {
+        "title": "Vítejte v MathBit",
+        "description": "Řešič matematických úloh, který vám ukáže řešení krok za krokem. Začněte otevřením editoru a zadáním příkladu. Pokud máte účet, můžete si také prohlížet uložené úlohy.",
+        "beginSolving": "Začít řešit",
+        "browseSavedProblems": "Procházet uložené úlohy"
+      },
+      "sections": {
+        "features": "Funkce",
+        "quickTutorial": "Rychlý návod"
+      },
+      "features": {
+        "latex": {
+          "title": "Vstup je podobný LaTeXu",
+          "descriptionBeforeExamples": "Editor vytváří matematiku ve stylu LaTeXu (např.",
+          "descriptionAfterExamples": "). Můžete psát běžně nebo použít záložky funkcí."
+        },
+        "oneClick": {
+          "title": "Vyřešení na jedno kliknutí",
+          "descriptionBeforeSolve": "Stiskněte ",
+          "solveWord": "Vyřešit",
+          "descriptionAfterSolve": " pro odeslání výrazu do enginu a zobrazení každé transformace jako kroku."
+        },
+        "saveLoggedIn": {
+          "title": "Uložení po přihlášení",
+          "description": "Pokud si vytvoříte účet, můžete řešení ukládat a později je najít v prohlížeči."
+        }
+      },
+      "tutorial": {
+        "steps": {
+          "step1Title": "1. Zadejte úlohu",
+          "step1Description": "Otevřete editor a sestavte výraz. Klávesnice na obrazovce pomáhá se zlomky, odmocninami, trigonometrickými funkcemi i kombinatorikou.",
+          "step2Title": "2. Klikněte na Vyřešit",
+          "step2Description": "Zobrazí se seznam kroků, který vysvětluje, co se změnilo. Pokud něco nevypadá správně, upravte vstup a zkuste to znovu.",
+          "step3Title": "3. Uložte (volitelné)",
+          "step3Description": "Přihlaste se, abyste mohli úlohy ukládat a později se k nim vrátit v prohlížeči."
+        },
+        "examples": {
+          "title": "Příklady k vyzkoušení",
+          "fraction": "Zlomek:",
+          "root": "Odmocnina:",
+          "trig": "Trigonometrie:",
+          "functions": "Funkce:"
+        }
+      }
     }
   },
   "ui": {

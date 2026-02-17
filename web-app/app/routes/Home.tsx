@@ -1,12 +1,16 @@
 import { Button, Header, Icon, Label } from '@/libs/ui/components';
 import { BaseLayout } from '@/libs/ui/layouts';
 import { Paper } from '@/libs/ui/layouts';
+import { useTranslation } from '@/libs/ui/provider/UiProvider';
 import { RootState } from '@/store/store';
+import { MathJaxContext, MathJax } from 'better-react-mathjax';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const user = useSelector((state: RootState) => state.User);
+
+  const t = useTranslation('pages.home');
 
   const navigate = useNavigate();
   return (
@@ -15,12 +19,10 @@ export default function Home() {
         <Header route={[]} />
       </BaseLayout.Menu>
       <BaseLayout.Content className="bg-white-800 overflow-y-auto flex-col">
-        <div className="flex flex-col w-full pt-[60px] ps-[120px] mb-[100px] gap-10">
-          <Label className="text-[32px] text-text-black font-semibold">Welcome to MathBit</Label>
+        <div className="flex flex-col justify-center w-full min-h-[500px]  p-2 md:p-0 pt-[60px] md:ps-[120px] mb-[100px] gap-10">
+          <Label className="text-[32px] text-text-black font-semibold">{t('hero.title')}</Label>
           <Label size="md" className="text-text-grey ms-2">
-            A math problem solver that shows you step by step solutions. Get started by opening the
-            editor and entering a math problem. You can also browse saved problems if you have an
-            account.
+            {t('hero.description')}
           </Label>
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <Button
@@ -31,7 +33,7 @@ export default function Home() {
               }}
             >
               <Icon name="pen-to-square" />
-              Begin solving
+              {t('hero.beginSolving')}
             </Button>
             {user.authStatus === 'authenticated' && (
               <Button
@@ -43,16 +45,16 @@ export default function Home() {
                 }}
               >
                 <Icon name="magnifying-glass" />
-                Browse saved problems
+                {t('hero.browseSavedProblems')}
               </Button>
             )}
           </div>
         </div>
         <Label className="text-[32px] text-text-black font-semibold ms-[6%] pb-8 w-[90%] text-left">
-          Features
+          {t('sections.features')}
         </Label>
         <div className="w-full flex flex-col items-center p-6 gap-2">
-          <Paper className="bg-white-50 border border-white-800 rounded-xl !p-6 w-full max-w-[90%]">
+          <Paper className="bg-white-50 border border-white-800 rounded-xl !p-6 w-full  md:max-w-[90%]">
             <Paper.Content className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
               <div className="flex flex-col gap-4">
                 <div className="flex items-start gap-3">
@@ -61,16 +63,18 @@ export default function Home() {
                   </div>
                   <div className="flex flex-col">
                     <Label size="lg" className="text-text-black font-medium">
-                      Input is LaTeX-like
+                      {t('features.latex.title')}
                     </Label>
-                    <Label size="sm" className="text-text-grey">
-                      The editor produces LaTeX-style math (e.g.{' '}
-                      <code>
-                        \\frac{}
-                        {}{' '}
-                      </code>
-                      ,<code> \\sqrt{} </code>, <code>\\sin</code>). You can type normally or use
-                      the function tabs.
+                    <Label size="sm" className="text-text-grey pb-3 flex flex-row">
+                      {t('features.latex.descriptionBeforeExamples')}
+                      <MathJaxContext>
+                        <div className="flex flex-row gap-2">
+                          <MathJax dynamic>{`\\(\\frac{1}{2}\\)`}</MathJax>
+                          <MathJax dynamic>{'\\(\\sqrt{2}\\)'}</MathJax>
+                          <MathJax dynamic>{'\\(\\sin(\\theta)\\)'}</MathJax>
+                        </div>
+                      </MathJaxContext>
+                      {t('features.latex.descriptionAfterExamples')}
                     </Label>
                   </div>
                 </div>
@@ -78,7 +82,7 @@ export default function Home() {
             </Paper.Content>
           </Paper>
 
-          <Paper className="bg-white-50 border border-white-800 rounded-xl !p-6 w-full max-w-[90%]">
+          <Paper className="bg-white-50 border border-white-800 rounded-xl !p-6 w-full  md:max-w-[90%]">
             <Paper.Content className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
               <div className="flex flex-col gap-4">
                 <div className="flex items-start gap-3">
@@ -88,11 +92,14 @@ export default function Home() {
                     </div>
                     <div className="flex flex-col">
                       <Label size="lg" className="text-text-black font-medium">
-                        One click to solve
+                        {t('features.oneClick.title')}
                       </Label>
-                      <Label size="sm" className="text-text-grey">
-                        Press <span className="font-semibold">Solve</span> to send your expression
-                        to the engine and see each transformation as a step.
+                      <Label size="sm" className="text-text-grey pb-3">
+                        {t('features.oneClick.descriptionBeforeSolve')}
+                        <span className="font-semibold text-clip">
+                          {t('features.oneClick.solveWord')}
+                        </span>
+                        {t('features.oneClick.descriptionAfterSolve')}
                       </Label>
                     </div>
                   </div>
@@ -101,7 +108,7 @@ export default function Home() {
             </Paper.Content>
           </Paper>
 
-          <Paper className="bg-white-50 border border-white-800 rounded-xl !p-6 w-full max-w-[90%]">
+          <Paper className="bg-white-50 border border-white-800 rounded-xl !p-6 w-full  md:max-w-[90%]">
             <Paper.Content className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
               <div className="flex flex-col gap-4">
                 <div className="flex items-start gap-3">
@@ -111,11 +118,10 @@ export default function Home() {
                     </div>
                     <div className="flex flex-col">
                       <Label size="lg" className="text-text-black font-medium">
-                        Save when logged in
+                        {t('features.saveLoggedIn.title')}
                       </Label>
-                      <Label size="sm" className="text-text-grey">
-                        If you create an account, you can save solutions and find them later in the
-                        browser.
+                      <Label size="sm" className="text-text-grey pb-3">
+                        {t('features.saveLoggedIn.description')}
                       </Label>
                     </div>
                   </div>
@@ -123,72 +129,91 @@ export default function Home() {
               </div>
             </Paper.Content>
           </Paper>
-
-          <Paper className="bg-white-50 border border-white-800 rounded-xl !p-6">
-            <Paper.Title className="text-text-black font-semibold">Quick tutorial</Paper.Title>
+        </div>
+        <Label className="text-[32px] text-text-black font-semibold ms-[6%] pb-8 w-[90%] text-left">
+          {t('sections.quickTutorial')}
+        </Label>
+        <div className="w-full flex flex-col items-center p-6 gap-2">
+          <Paper className="bg-white-50 border border-white-800 rounded-xl !p-6 w-full  md:max-w-[90%]">
             <Paper.Content className="flex flex-col gap-4">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div className="flex flex-col gap-2">
                   <Label size="lg" className="text-text-black font-medium">
-                    1) Enter your problem
+                    {t('tutorial.steps.step1Title')}
                   </Label>
-                  <Label size="sm" className="text-text-grey">
-                    Open the editor and build your expression. The on-screen keyboard helps with
-                    fractions, roots, trig and combinatorics.
-                  </Label>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label size="lg" className="text-text-black font-medium">
-                    2) Click Solve
-                  </Label>
-                  <Label size="sm" className="text-text-grey">
-                    You’ll get a step list explaining what changed. If something looks wrong, adjust
-                    the input and solve again.
+                  <Label size="sm" className="text-text-grey ">
+                    {t('tutorial.steps.step1Description')}
                   </Label>
                 </div>
                 <div className="flex flex-col gap-2">
                   <Label size="lg" className="text-text-black font-medium">
-                    3) Save (optional)
+                    {t('tutorial.steps.step2Title')}
                   </Label>
                   <Label size="sm" className="text-text-grey">
-                    Log in to save problems and revisit them later from the browser.
+                    {t('tutorial.steps.step2Description')}
+                  </Label>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label size="lg" className="text-text-black font-medium">
+                    {t('tutorial.steps.step3Title')}
+                  </Label>
+                  <Label size="sm" className="text-text-grey">
+                    {t('tutorial.steps.step3Description')}
                   </Label>
                 </div>
               </div>
 
               <div className="flex flex-col gap-2">
                 <Label size="lg" className="text-text-black font-medium">
-                  Examples to try
+                  {t('tutorial.examples.title')}
                 </Label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   <div className="border border-white-800 rounded-lg bg-white-50 p-3">
                     <Label size="sm" className="text-text-grey">
-                      <span className="font-semibold text-text-black">Fraction:</span>{' '}
-                      <code>
-                        \\frac{1}
-                        {2} + \\frac{3}
-                        {4}
-                      </code>
+                      <span className="font-semibold text-text-black">
+                        {t('tutorial.examples.fraction')}
+                      </span>{' '}
+                      <MathJaxContext>
+                        <div className="flex flex-row gap-2">
+                          <MathJax dynamic>{`\\(\\frac{x}{2} + \\frac{3}{4x}\\)`}</MathJax>
+                        </div>
+                      </MathJaxContext>
                     </Label>
                   </div>
                   <div className="border border-white-800 rounded-lg bg-white-50 p-3">
                     <Label size="sm" className="text-text-grey">
-                      <span className="font-semibold text-text-black">Root:</span>{' '}
-                      <code>
-                        \\sqrt{2} + \\sqrt[3]{8}
-                      </code>
+                      <span className="font-semibold text-text-black">
+                        {t('tutorial.examples.root')}
+                      </span>{' '}
+                      <MathJaxContext>
+                        <div className="flex flex-row gap-2">
+                          <MathJax dynamic>{`\\(\\sqrt{2} + \\sqrt[3]{8}\\)`}</MathJax>
+                        </div>
+                      </MathJaxContext>
                     </Label>
                   </div>
                   <div className="border border-white-800 rounded-lg bg-white-50 p-3">
                     <Label size="sm" className="text-text-grey">
-                      <span className="font-semibold text-text-black">Trig:</span>{' '}
-                      <code>\\sin(\\pi/2) + \\cos(0)</code>
+                      <span className="font-semibold text-text-black">
+                        {t('tutorial.examples.trig')}
+                      </span>{' '}
+                      <MathJaxContext>
+                        <div className="flex flex-row gap-2">
+                          <MathJax dynamic>{`\\(\\sin(\\pi/2) + \\cos(0)\\)`}</MathJax>
+                        </div>
+                      </MathJaxContext>
                     </Label>
                   </div>
                   <div className="border border-white-800 rounded-lg bg-white-50 p-3">
                     <Label size="sm" className="text-text-grey">
-                      <span className="font-semibold text-text-black">Combinatorics:</span>{' '}
-                      <code>C(n,k) + P(n,k)</code>
+                      <span className="font-semibold text-text-black">
+                        {t('tutorial.examples.functions')}
+                      </span>{' '}
+                      <MathJaxContext>
+                        <div className="flex flex-row gap-2">
+                          <MathJax dynamic>{`\\(\\log(x) \\times \\ln(x)\\)`}</MathJax>
+                        </div>
+                      </MathJaxContext>
                     </Label>
                   </div>
                 </div>
