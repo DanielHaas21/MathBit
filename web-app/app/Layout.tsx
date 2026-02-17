@@ -14,7 +14,7 @@ export default function Layout() {
     const refreshToken = async () => {
       try {
         const accessToken = await refresh(getApiConfig(true));
- 
+
         const user = await me(getApiConfig(false));
 
         // Update Redux store with new token and user info
@@ -23,8 +23,6 @@ export default function Layout() {
         );
       } catch (error) {
         Dispatch(logout());
-        console.error('Error refreshing token:', error);
-      } finally {
       }
     };
     refreshToken();

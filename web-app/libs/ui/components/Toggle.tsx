@@ -11,71 +11,71 @@ const ToggleVariants = cva(
     variants: {
       size: {
         sm: 'w-[36px] h-[20px]',
-        md: 'w-[44px] h-[24px]'
+        md: 'w-[44px] h-[24px]',
       },
       variant: {
         defaultBackground: '',
         light: '',
         neutral: '',
         default: '',
-        background: ''
+        background: '',
       },
       IsEnabled: {
         true: '',
-        false: ''
-      }
+        false: '',
+      },
     },
     compoundVariants: [
       //DefaultBackground on-off
       {
         IsEnabled: false,
         variant: 'defaultBackground',
-        className: 'bg-white-50 [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.100)]'
+        className: 'bg-white-50 [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.100)]',
       },
       {
         IsEnabled: true,
         variant: 'defaultBackground',
-        className: 'bg-primary-base [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.600)]'
+        className: 'bg-primary-base [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.600)]',
       },
       //Default on-off
       {
         IsEnabled: false,
         variant: 'default',
-        className: 'bg-white-400  [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.100)]'
+        className: 'bg-white-400  [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.100)]',
       },
       {
         IsEnabled: true,
         variant: 'default',
-        className: 'bg-primary-base [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.600)]'
+        className: 'bg-primary-base [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.600)]',
       },
       //background on-off
       {
         IsEnabled: false,
         variant: 'background',
-        className: 'bg-white-50  [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.100)]'
+        className: 'bg-white-50  [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.100)]',
       },
       {
         IsEnabled: true,
         variant: 'background',
-        className: 'bg-white-50 [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.100)]'
+        className: 'bg-white-50 [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.100)]',
       },
       //outline
       {
         IsEnabled: false,
         variant: 'light',
-        className: 'bg-brand-blue-50  [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.100)]'
+        className: 'bg-brand-blue-50  [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.100)]',
       },
       {
         IsEnabled: true,
         variant: 'light',
-        className: 'bg-brand-blue-100 [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.200)]'
-      }
+        className: 'bg-brand-blue-100 [&>span]:shadow-[0px_1px_5px_1px_theme(colors.black.200)]',
+      },
     ],
     defaultVariants: {
       variant: 'default',
       IsEnabled: false,
-      size: 'md'
-    }
+      size: 'md',
+    },
   }
 );
 
@@ -90,17 +90,16 @@ export interface ToggleProps extends ToggleVariantProps {
 }
 
 export const Toggle = React.forwardRef<HTMLElement, ToggleProps>(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ({ variant, size = 'md', labelText, IsEnabled, onChange, value, disabled, ...props }, ref) => {
     const [enabled, setEnabled] = React.useState<boolean>(value ?? false);
 
     const thumbTranslate = {
       sm: enabled ? 'translate-x-[17px]' : 'translate-x-[2px]',
-      md: enabled ? 'translate-x-[18px]' : 'translate-x-1'
+      md: enabled ? 'translate-x-[18px]' : 'translate-x-1',
     };
     const thumbSize = {
       sm: 'h-[14px] w-[14px]',
-      md: 'h-[18px] w-[18px]'
+      md: 'h-[18px] w-[18px]',
     };
 
     return labelText ? (

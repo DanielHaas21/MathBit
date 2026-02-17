@@ -1,9 +1,5 @@
 import { store } from '@/store/store';
-import {
-  UpadteUser,
-  updateUser,
-  refresh,
-} from 'web-api-client';
+import { UpadteUser, updateUser, refresh } from 'web-api-client';
 import { login as loginState } from '@/store/slices/UserState';
 import getApiConfig from '@/apiConfig';
 import { ActionResult } from '../types/ActionResult';

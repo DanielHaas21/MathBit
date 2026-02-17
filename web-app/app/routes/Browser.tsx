@@ -145,6 +145,12 @@ export default function Browser() {
         // Append results for subsequent pages; replace only on first page
         setProblems((prev) => (page === 0 ? response.data : [...prev, ...response.data]));
       } catch (err: any) {
+        show({
+          icon: 'triangle-exclamation',
+          variant: 'error',
+          title: t('messages.notAuthenticated'),
+          description: t('messages.notAuthenticatedDescription'),
+        });
       } finally {
         setLoading(false);
       }

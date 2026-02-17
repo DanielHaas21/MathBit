@@ -18,12 +18,12 @@ const labelVariants = cva(
         sm: 'h-6 text-sm',
         md: 'h-7 text-base',
         lg: 'h-8 text-lg',
-        xl: 'h-10 text-xl'
-      }
+        xl: 'h-10 text-xl',
+      },
     },
     defaultVariants: {
-      size: 'md'
-    }
+      size: 'md',
+    },
   }
 );
 

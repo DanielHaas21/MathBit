@@ -7,12 +7,12 @@ const MenuWrapperVariants = cva(`flex flex-nowrap bg-white-50`, {
   variants: {
     orientation: {
       horizontal: 'flex-row',
-      vertical: 'flex-col'
-    }
+      vertical: 'flex-col',
+    },
   },
   defaultVariants: {
-    orientation: 'vertical'
-  }
+    orientation: 'vertical',
+  },
 });
 
 type MenuWrapperVariantProps = VariantProps<typeof MenuWrapperVariants>;

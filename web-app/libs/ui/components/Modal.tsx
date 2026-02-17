@@ -21,9 +21,9 @@ const ModalVariants = cva(``, {
       xl: 'w-[900px]',
       '2xl': 'w-[1000px]',
       half: 'w-[50vw]',
-      full: 'w-full'
-    }
-  }
+      full: 'w-full',
+    },
+  },
 });
 
 type ModalVariantProps = VariantProps<typeof ModalVariants>;
@@ -75,7 +75,7 @@ const ModalBase = React.forwardRef<HTMLElement, ModalProps>(
                   {React.Children.map(children, (child) => {
                     if (!React.isValidElement(child)) return child;
                     return React.cloneElement(child as React.ReactElement<LayoutProp>, {
-                      layout
+                      layout,
                     });
                   })}
                 </DialogPanel>
@@ -94,12 +94,12 @@ const ModalHeaderVariants = cva(``, {
   variants: {
     variant: {
       white: 'bg-white-50',
-      grey: 'bg-white-100'
-    }
+      grey: 'bg-white-100',
+    },
   },
   defaultVariants: {
-    variant: 'grey'
-  }
+    variant: 'grey',
+  },
 });
 
 type ModalHeaderVariantProps = VariantProps<typeof ModalHeaderVariants>;
@@ -119,7 +119,7 @@ const Header: React.FC<ModalHeader> = ({
   label,
   description,
   layout = 'row',
-  variant
+  variant,
 }) => {
   return (
     <div
@@ -156,12 +156,12 @@ const ModalContentVariants = cva(``, {
       lg: 'h-[600px]',
       xl: 'h-[800px]',
       half: 'h-[50vh]',
-      full: 'h-[85vh]'
-    }
+      full: 'h-[85vh]',
+    },
   },
   defaultVariants: {
-    size: 'md'
-  }
+    size: 'md',
+  },
 });
 
 type ModalContentVariantProps = VariantProps<typeof ModalContentVariants>;
@@ -190,12 +190,12 @@ const ModalFooterVariants = cva(``, {
   variants: {
     variant: {
       white: 'bg-white-50',
-      grey: 'bg-white-100'
-    }
+      grey: 'bg-white-100',
+    },
   },
   defaultVariants: {
-    variant: 'grey'
-  }
+    variant: 'grey',
+  },
 });
 
 type ModalFooterVariantProps = VariantProps<typeof ModalFooterVariants>;
@@ -237,7 +237,7 @@ const Modal = Object.assign(ModalBase, {
   Header: Header,
   Content: Content,
   Footer: Footer,
-  Action: Action
+  Action: Action,
 });
 
 export { Modal };

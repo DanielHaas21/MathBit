@@ -16,21 +16,21 @@ const tableVariants = cva('w-full text-left', {
       sm: '',
       md: '',
       lg: '',
-      xl: ''
+      xl: '',
     },
     variant: {
       default: '',
-      striped: ''
+      striped: '',
     },
     rounded: {
-      true: ''
-    }
+      true: '',
+    },
   },
   defaultVariants: {
     variant: 'default',
     size: 'lg',
-    rounded: true
-  }
+    rounded: true,
+  },
 });
 
 type TableVariantProps = VariantProps<typeof tableVariants>;
@@ -78,7 +78,7 @@ export const Table = React.forwardRef<TableVirtuosoHandle, TableProps>(
       sm: '400px',
       md: '500px',
       lg: '600px',
-      xl: '800px'
+      xl: '800px',
     }[size ?? 'md'];
     const rowRenderer = renderRow || arrayRowRenderer;
 
@@ -93,7 +93,7 @@ export const Table = React.forwardRef<TableVirtuosoHandle, TableProps>(
           data={data}
           style={{
             height: SizeValue,
-            overflow: 'auto'
+            overflow: 'auto',
           }}
           className="table-scroll-container min-w-full"
           fixedHeaderContent={() => (
@@ -172,7 +172,7 @@ export const Table = React.forwardRef<TableVirtuosoHandle, TableProps>(
                   </td>
                 </tr>
               </tbody>
-            )
+            ),
           }}
           itemContent={(index, row) => {
             const cells = rowRenderer(row, index);

@@ -75,7 +75,7 @@ export default function Settings() {
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
             <SettingsForm
-              data={{ username: user.user?.username!, email: user.user?.email! }}
+              data={{ username: user.user?.username as string, email: user.user?.email as string }}
               serverError={serverError}
               isSubmitting={loading}
               onSubmit={handleSignup}

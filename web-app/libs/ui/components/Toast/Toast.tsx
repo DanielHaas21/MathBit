@@ -12,12 +12,12 @@ const ToastWrapperVariants = cva(``, {
       sm: 'w-[300px]',
       md: 'w-[400px]',
       lg: 'w-[500px]',
-      full: 'w-full'
-    }
+      full: 'w-full',
+    },
   },
   defaultVariants: {
-    size: 'md'
-  }
+    size: 'md',
+  },
 });
 
 type ToastWrapperVariantProps = VariantProps<typeof ToastWrapperVariants>;
@@ -64,7 +64,7 @@ export const ToastWrapper = React.forwardRef<HTMLDivElement, ToastWrapperProps>(
             // Clone child with extra prop: onRemove
             return React.cloneElement(child as React.ReactElement<ToastItemProps>, {
               key: child.key || index,
-              onRemove: () => handleRemove(index)
+              onRemove: () => handleRemove(index),
             });
           })}
         </AnimatePresence>
@@ -81,54 +81,54 @@ const ToastItemVariants = cva(
         default: '',
         success: '',
         error: '',
-        warning: ''
+        warning: '',
       },
       tint: {
         true: '',
-        false: 'bg-white-50'
-      }
+        false: 'bg-white-50',
+      },
     },
     compoundVariants: [
       {
         variant: 'default',
         tint: false,
-        className: 'bg-white-50'
+        className: 'bg-white-50',
       },
       {
         variant: 'success',
         tint: false,
-        className: 'bg-white-50'
+        className: 'bg-white-50',
       },
       {
         variant: 'success',
         tint: true,
-        className: 'bg-success-bg text-success-text'
+        className: 'bg-success-bg text-success-text',
       },
       {
         variant: 'warning',
         tint: false,
-        className: 'bg-white-50 '
+        className: 'bg-white-50 ',
       },
       {
         variant: 'warning',
         tint: true,
-        className: 'bg-warn-bg text-warn-text'
+        className: 'bg-warn-bg text-warn-text',
       },
       {
         variant: 'error',
         tint: false,
-        className: 'bg-white-50'
+        className: 'bg-white-50',
       },
       {
         variant: 'error',
         tint: true,
-        className: 'bg-error-bg  text-error-text'
-      }
+        className: 'bg-error-bg  text-error-text',
+      },
     ],
     defaultVariants: {
       variant: 'default',
-      tint: false
-    }
+      tint: false,
+    },
   }
 );
 
@@ -152,14 +152,14 @@ export const ToastItem = React.forwardRef<HTMLDivElement, ToastItemProps>(
       default: 'text-text-black',
       success: 'text-success-icon',
       error: 'text-error-icon',
-      warning: 'text-warn-icon'
+      warning: 'text-warn-icon',
     }[variant!];
 
     const BarVariantColor = {
       default: 'bg-text-black',
       success: 'bg-success-icon',
       error: 'bg-error-icon',
-      warning: 'bg-warn-icon'
+      warning: 'bg-warn-icon',
     }[variant!];
 
     return (

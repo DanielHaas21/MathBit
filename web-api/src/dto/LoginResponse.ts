@@ -1,5 +1,3 @@
-import { UserProfile } from '@/types/userProfile';
-
 /**
  * Represents a login response
  */

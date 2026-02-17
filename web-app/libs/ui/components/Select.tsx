@@ -20,22 +20,22 @@ const SelectInputVariants = cva(
       size: {
         md: 'w-[320px]',
         lg: 'w-[400px]',
-        full: 'w-full'
+        full: 'w-full',
       },
       variant: {
         default: '!bg-background-inputs !border-white-950',
-        white: '!bg-white-50 !border-white-950'
+        white: '!bg-white-50 !border-white-950',
       },
       hasError: {
         true: '!border-error-text',
-        false: ''
-      }
+        false: '',
+      },
     },
     defaultVariants: {
       size: 'md',
       variant: 'default',
-      hasError: false
-    }
+      hasError: false,
+    },
   }
 );
 
@@ -200,7 +200,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectInputProps>(
         ),
         ...mergedOptions.filter(
           (option) => !option.label.toLowerCase().includes(query.toLowerCase())
-        )
+        ),
       ];
     }, [mergedOptions, query, isSearchable]);
 
@@ -237,7 +237,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectInputProps>(
     const DropdownSize = {
       md: 'w-[315px]',
       lg: 'w-[395px]',
-      full: ''
+      full: '',
     }[size ?? 'md'];
 
     return (

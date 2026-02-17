@@ -14,12 +14,12 @@ const inputWrapperVariants = cva(
         sm: '',
         md: '',
         lg: '',
-        xl: ''
-      }
+        xl: '',
+      },
     },
     defaultVariants: {
-      LabelSize: 'md'
-    }
+      LabelSize: 'md',
+    },
   }
 );
 
@@ -46,7 +46,7 @@ export function InputWrapper(props: InputWrapperProps) {
     hint,
     isError,
     errorText,
-    required = true
+    required = true,
   } = props;
 
   return (
@@ -62,7 +62,7 @@ export function InputWrapper(props: InputWrapperProps) {
         if (React.isValidElement(child)) {
           const existingClassName = (child.props as { className?: string }).className || '';
           const extraProps = {
-            className: cn(existingClassName)
+            className: cn(existingClassName),
           };
 
           // Only pass hasError to custom components

@@ -47,7 +47,7 @@ export const allowedIconNames = [
   'trash-can',
   'lock',
   'arrow-right-from-bracket',
-  'briefcase'
+  'briefcase',
 ] as const;
 
 export type IconName = (typeof allowedIconNames)[number];

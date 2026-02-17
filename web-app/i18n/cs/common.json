@@ -51,6 +51,13 @@
         "editor": "Editor",
         "unnamed": "Nepojmenovaná úloha"
       },
+      "errors": {
+        "other": "Došlo k neznámé chybě při řešení výrazu.",
+        "empty": "Nepodařilo se vyřešit výraz: Výraz nemůže být prázdný",
+        "invalid": "Nepodařilo se vyřešit výraz: Neplatný výraz",
+        "unkown": "Nepodařilo se vyřešit výraz: Použity neznámé symboly",
+        "network": "Nepodařilo se vyřešit výraz: Došlo k problému s požadavkem"
+      },
       "messages": {
         "solveError": "Nepodařilo se vyřešit úlohu.",
         "solveErrorDescription": "Při řešení úlohy došlo k chybě. Zkontrolujte prosím výraz a zkuste to znovu.",
@@ -125,6 +132,10 @@
       },
       "submit": "Uložit změny",
       "title": "Aktualizace uživatelských údajů"
+    },
+    "solveStep": {
+      "final": "Konečný výsledek",
+      "step": "Krok"
     },
     "header": {
       "login": "Přihlásit se",

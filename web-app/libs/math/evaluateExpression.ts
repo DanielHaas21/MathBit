@@ -2,8 +2,8 @@ import { ComputeEngine } from '@cortex-js/compute-engine';
 
 /**
  * Evalatues a **purely** numerical expression
- * @param latex 
- * @returns 
+ * @param latex
+ * @returns
  */
 export function evaluateLatexNumeric(latex: string): number | null {
   try {
@@ -15,11 +15,8 @@ export function evaluateLatexNumeric(latex: string): number | null {
     // If fully numeric, value is available
     const value = evaluated.re;
 
-    return typeof value === 'number' && Number.isFinite(value)
-      ? value
-      : null;
+    return typeof value === 'number' && Number.isFinite(value) ? value : null;
   } catch (e) {
-    console.error('Latex evaluation error', e);
     return null;
   }
 }

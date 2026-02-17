@@ -19,12 +19,12 @@ const DropdownMenuVariants = cva(
       size: {
         sm: 'w-[200px]',
         md: 'w-[240px]',
-        lg: 'w-[280px]'
-      }
+        lg: 'w-[280px]',
+      },
     },
     defaultVariants: {
-      size: 'md'
-    }
+      size: 'md',
+    },
   }
 );
 
@@ -46,7 +46,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
     const HeadItemSize = {
       sm: 'w-[198px]',
       md: 'w-[238px]',
-      lg: 'w-[278px]'
+      lg: 'w-[278px]',
     }[size ? size : 'md'];
 
     React.Children.forEach(children, (child) => {
@@ -163,7 +163,7 @@ const DropdownItem = React.forwardRef<HTMLDivElement, DropdownItemProps>(
 DropdownItem.displayName = 'DropdownItem';
 
 const Dropdown = Object.assign(DropdownMenu, {
-  Item: DropdownItem
+  Item: DropdownItem,
 });
 
 export { Dropdown };

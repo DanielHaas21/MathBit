@@ -15,12 +15,12 @@ const TooltipVariants = cva(
         sm: 'w-[100px]',
         md: 'w-[200px]',
         lg: 'w-[300px]',
-        xl: 'w-[350px]'
-      }
+        xl: 'w-[350px]',
+      },
     },
     defaultVariants: {
-      size: 'md'
-    }
+      size: 'md',
+    },
   }
 );
 

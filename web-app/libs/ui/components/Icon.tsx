@@ -19,18 +19,18 @@ const iconVariants = cva(
         md: 'text-md',
         lg: 'text-lg',
         xl: 'text-xl',
-        '2xl': 'text-2xl'
+        '2xl': 'text-2xl',
       },
       rotate: {
         0: '',
         90: 'fa-rotate-90',
         180: 'fa-rotate-180',
-        270: 'fa-rotate-270'
-      }
+        270: 'fa-rotate-270',
+      },
     },
     defaultVariants: {
-      size: 'md'
-    }
+      size: 'md',
+    },
   }
 );
 

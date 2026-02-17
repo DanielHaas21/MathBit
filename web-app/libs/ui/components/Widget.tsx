@@ -26,25 +26,25 @@ const WidgetVariants = cva(
         primary: 'bg-primary-base text-text-white hover:bg-brand-blue-700',
         warn: 'bg-warn-bg text-warn-text border-warn-text',
         error: ' bg-error-bg text-error-text border-error-text',
-        success: 'bg-success-bg text-success-text border-success-text'
+        success: 'bg-success-bg text-success-text border-success-text',
       },
       size: {
         sm: ' min-w-[200px]',
         md: ' min-w-[300px]',
         lg: ' min-w-[400px]',
-        fill: 'w-full'
+        fill: 'w-full',
       },
       contentAlignment: {
         left: 'justify-start',
         center: 'justify-center',
-        right: 'justify-end'
-      }
+        right: 'justify-end',
+      },
     },
     defaultVariants: {
       size: 'md',
       contentAlignment: 'center',
-      variant: 'grey'
-    }
+      variant: 'grey',
+    },
   }
 );
 
@@ -76,7 +76,7 @@ const WidgetBase = React.forwardRef<HTMLDivElement, WidgetProps>(
       size,
       contentAlignment,
       variant,
-      circle = true
+      circle = true,
     },
     ref
   ) => {
@@ -158,7 +158,7 @@ const Counter: React.FC<CounterProps> = ({ number, children, duration = 0.5 }) =
         const formattedValue =
           decimalPlaces > 0 ? latest.toFixed(decimalPlaces) : Math.round(latest).toString();
         setCurrentValue(formattedValue);
-      }
+      },
     });
 
     return controls.stop;
@@ -175,7 +175,7 @@ const Counter: React.FC<CounterProps> = ({ number, children, duration = 0.5 }) =
 Counter.displayName = 'WidgetCounter';
 
 const Widget = Object.assign(WidgetBase, {
-  Counter: Counter
+  Counter: Counter,
 });
 
 export { Widget };

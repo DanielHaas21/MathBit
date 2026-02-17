@@ -23,7 +23,6 @@ export * from './Modal';
 export * from './Widget';
 export * from './KeyValuePair';
 export * from './Tooltip';
-export * from './RadioBool';
 export * from './Avatar';
 export * from './MathField';
 export * from './FunctionPlot';

@@ -46,44 +46,44 @@ const inputVariants = cva(
     variants: {
       hasError: {
         true: '',
-        false: 'border-white-800 focus-within:!border-brand-blue-400'
+        false: 'border-white-800 focus-within:!border-brand-blue-400',
       },
       variant: {
         default: '',
         website: '[&>div:first-child]:border-r-2 [&>*:first-child]:border-r-white-800',
-        currency: ''
-      }
+        currency: '',
+      },
     },
     compoundVariants: [
       // Default / Currency focus on wrapper
       {
         hasError: false,
         variant: ['default', 'currency'],
-        className: 'focus-within:ring-4 focus-within:!ring-brand-blue-100'
+        className: 'focus-within:ring-4 focus-within:!ring-brand-blue-100',
       },
       {
         hasError: true,
         variant: ['default', 'currency'],
-        className: 'border-error-text focus-within:ring-4 focus-within:!ring-error-bg'
+        className: 'border-error-text focus-within:ring-4 focus-within:!ring-error-bg',
       },
       // WebsiteField — no focus-within, the input itself will handle focus, also note that this variant is mostly for showcase purposes and isnt actively supported
       {
         hasError: false,
         variant: 'website',
         className:
-          '[&>div:last-child:focus-within]:ring-4 [&>div:last-child:focus-within]:ring-brand-blue-100'
+          '[&>div:last-child:focus-within]:ring-4 [&>div:last-child:focus-within]:ring-brand-blue-100',
       },
       {
         hasError: true,
         variant: 'website',
         className:
-          '[&>div:last-child:focus-within]:ring-4 [&>div:last-child:focus-within]:ring-error-bg border-white-800 [&>div:last-child]:border-error-text'
-      }
+          '[&>div:last-child:focus-within]:ring-4 [&>div:last-child:focus-within]:ring-error-bg border-white-800 [&>div:last-child]:border-error-text',
+      },
     ],
     defaultVariants: {
       hasError: false,
-      variant: 'default'
-    }
+      variant: 'default',
+    },
   }
 );
 

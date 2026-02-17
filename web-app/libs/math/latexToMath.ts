@@ -11,7 +11,6 @@ export function latexToMathJson(latex: string): Expression | null {
     const expr = ce.parse(latex);
     return expr.json;
   } catch (e) {
-    console.error('Latex parse error', e);
     return null;
   }
 }

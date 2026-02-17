@@ -41,7 +41,7 @@ export function Paper(props: PaperProps) {
     showDivider = true,
     size = 'full',
     thickness = 'sm',
-    variant = 'light'
+    variant = 'light',
   } = props;
 
   const childrenArray = React.Children.toArray(children);

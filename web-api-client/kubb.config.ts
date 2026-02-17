@@ -8,29 +8,29 @@ import type { Config } from '@kubb/core';
 const config: Config = defineConfig({
   root: '.',
   input: {
-    path: './schema/schema.json'
+    path: './schema/schema.json',
   },
   output: {
     path: './generated/',
     clean: true,
     extension: {
-      '.ts': ''
-    }
+      '.ts': '',
+    },
   },
   plugins: [
     pluginOas({
-      validate: true
+      validate: true,
     }),
     pluginTs({
       enumType: 'literal',
-      dateType: 'date'
+      dateType: 'date',
     }),
     pluginClient({
       output: {
-        path: './api'
-      }
-    })
-  ]
+        path: './api',
+      },
+    }),
+  ],
 }) as Config;
 
 export default config;

@@ -51,6 +51,13 @@
         "editor": "Editor",
         "unnamed": "Unnamed Problem"
       },
+      "errors": {
+        "other":"An unknown error occurred while solving the problem.",
+        "empty": "Failed to solve expression: Expression cannot be empty",
+        "invalid": "Failed to solve expression: Invalid expression",
+        "unkown": "Failed to solve expression: Unknown symbols used",
+        "network": "Failed to solve expression: There has been a problem with the request"
+      },
       "messages": {
         "solveError": "Failed to solve the problem.",
         "solveErrorDescription": "There was an error while solving the problem. Please check your expression and try again.",
@@ -149,6 +156,10 @@
         "view": "View",
         "delete": "Delete"
       }
+    },
+    "solveStep": {
+      "final": "Final solution",
+      "step": "Step"
     },
     "inputModal": {
       "editor": {

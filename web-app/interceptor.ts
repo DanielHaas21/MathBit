@@ -42,7 +42,6 @@ async function performRefresh(): Promise<string | null> {
       }
       return null;
     } catch (err) {
-      console.error('Token refresh failed:', err);
       store.dispatch(logoutState());
       return null;
     } finally {

@@ -14,19 +14,19 @@ export interface MathEngineSolveStep {
   /*
    * Expression step
    */
-  stepBefore: String;
+  stepBefore: string;
   /*
    * Expression step
    */
-  stepAfter: String;
+  stepAfter: string;
   /*
    * Explanation of the step
    */
-  stepRuleDescription: String;
+  stepRuleDescription: string;
 }
 
 /**
- * Represents the respons for solving a math expression.
+ * Represents the response for solving a math expression.
  */
 export interface MathEngineSolveResponse {
   /**

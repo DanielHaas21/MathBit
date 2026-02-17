@@ -2,7 +2,6 @@ import {
   solveMathExpression,
   MathEngineSolveResponse,
   SolveMathExpression400,
-  SolveMathExpressionMutationResponse,
   SolveMathExpression200,
 } from 'web-api-client';
 import { ComputeEngine } from '@cortex-js/compute-engine';
@@ -12,11 +11,11 @@ async function solve(expr: string): Promise<MathEngineSolveResponse> {
   const ce = new ComputeEngine();
 
   if (expr.trim() === '') {
-    throw new Error('Failed to solve expression: Expression cannot be empty');
+    throw new Error('empty');
   }
 
   if (JSON.stringify(ce.parse(expr).json).includes('Error')) {
-    throw new Error('Failed to solve expression: Invalid expression');
+    throw new Error('invalid');
   }
 
   const MathJSON = ce.parse(expr).json;
@@ -27,11 +26,10 @@ async function solve(expr: string): Promise<MathEngineSolveResponse> {
     );
     return response;
   } catch (error) {
-    console.log('Error solving expression:', error);
     if (error instanceof Error && !error.message.includes('Network Error')) {
-      throw new Error(`Failed to solve expression: "Unknown symbols used"`);
+      throw new Error(`unkown`);
     } else {
-      throw new Error('Failed to solve expression: There has been a problem with the request');
+      throw new Error('network');
     }
   }
 }

@@ -6,66 +6,66 @@ const DividerVariants = cva('', {
   variants: {
     variant: {
       light: 'bg-black-100',
-      dark: 'bg-black-800'
+      dark: 'bg-black-800',
     },
     orientation: {
       horizontal: '',
-      vertical: ''
+      vertical: '',
     },
     size: {
       sm: '',
       half: '',
       lg: '',
-      full: ''
-    }
+      full: '',
+    },
   },
   compoundVariants: [
     {
       orientation: 'vertical',
       size: 'sm',
-      class: 'h-1/4'
+      class: 'h-1/4',
     },
     {
       orientation: 'vertical',
       size: 'lg',
-      class: 'h-3/4'
+      class: 'h-3/4',
     },
     {
       orientation: 'vertical',
       size: 'half',
-      class: 'h-[50%]'
+      class: 'h-[50%]',
     },
     {
       orientation: 'vertical',
       size: 'full',
-      class: 'h-[100%]'
+      class: 'h-[100%]',
     },
     {
       orientation: 'horizontal',
       size: 'sm',
-      class: 'w-1/4'
+      class: 'w-1/4',
     },
     {
       orientation: 'horizontal',
       size: 'lg',
-      class: 'w-3/4'
+      class: 'w-3/4',
     },
     {
       orientation: 'horizontal',
       size: 'half',
-      class: 'w-[50%]'
+      class: 'w-[50%]',
     },
     {
       orientation: 'horizontal',
       size: 'full',
-      class: 'w-[100%]'
-    }
+      class: 'w-[100%]',
+    },
   ],
   defaultVariants: {
     orientation: 'horizontal',
     size: 'full',
-    variant: 'dark'
-  }
+    variant: 'dark',
+  },
 });
 
 type DividerVariantsProps = VariantProps<typeof DividerVariants>;
@@ -81,7 +81,7 @@ export const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
       sm: '1px',
       md: '2px',
       lg: '3px',
-      xl: '4px'
+      xl: '4px',
     }[thickness];
 
     return (
@@ -89,7 +89,7 @@ export const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
         ref={ref}
         style={{
           height: orientation === 'horizontal' ? thicknessValue : undefined,
-          width: orientation === 'vertical' ? thicknessValue : undefined
+          width: orientation === 'vertical' ? thicknessValue : undefined,
         }}
         className={cn(DividerVariants({ size, variant, orientation }), className)}
       />

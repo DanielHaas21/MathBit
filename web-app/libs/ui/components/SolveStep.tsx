@@ -7,6 +7,7 @@ import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { cn } from '../utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ClipBoardCopy } from './ClipboardCopy';
+import { useTranslation } from '../provider';
 
 export interface SolveStepProps {
   step: MathEngineSolveStep | string;
@@ -21,7 +22,7 @@ export const SolveStep: React.FC<SolveStepProps> = ({ step, isFinal, index, ...p
   const [showAsLatex, setShowAsLatex] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const handleToggle = () => setIsOpen((prev) => !prev);
-  
+  const t = useTranslation('ui.solveStep');
 
   // Determine the content to display based on whether it's a final step or not
   const displayedContent = !showAsLatex ? (
@@ -78,7 +79,7 @@ export const SolveStep: React.FC<SolveStepProps> = ({ step, isFinal, index, ...p
           )}
           onClick={handleToggle}
         ></Icon>
-        <Label size="xl">{isFinal ? 'Final expression:' : `Step ${index + 1}:`}</Label>
+        <Label size="xl">{isFinal ? t('final') : `${t('step')} ${index + 1}:`}</Label>
       </div>
       <AnimatePresence initial={false}>
         {isOpen && (

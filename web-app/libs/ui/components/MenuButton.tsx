@@ -24,19 +24,19 @@ const MenuButtonVariants = cva(
     variants: {
       variant: {
         inactive: 'bg-transparent text-text-black hover:bg-brand-blue-50',
-        active: 'bg-primary-base text-white-50'
+        active: 'bg-primary-base text-white-50',
       },
       orientation: {
         vertical:
           'min-w-[100px] min-h-[70px] rounded-lg flex items-center flex-col flex-nowrap justify-center pb-1 pt-2 p-1',
         horizontal:
-          'min-w-[200px] min-h-[50px] rounded-lg flex items-center flex-row flex-nowrap justify-start text-left'
-      }
+          'min-w-[200px] min-h-[50px] rounded-lg flex items-center flex-row flex-nowrap justify-start text-left',
+      },
     },
     defaultVariants: {
       variant: 'inactive',
-      orientation: 'vertical'
-    }
+      orientation: 'vertical',
+    },
   }
 );
 

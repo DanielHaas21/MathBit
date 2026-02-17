@@ -93,6 +93,7 @@ export class AuthController extends Controller {
     try {
       const decoded = jwt.verify(token, config.app.secret);
 
+      //eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { iat, exp, ...payload } = decoded as UserProfile & jwt.JwtPayload; // jwt replaces iat and exp by itself
 
       const newAccessToken = jwt.sign(payload, config.app.secret, {

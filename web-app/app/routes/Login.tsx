@@ -46,7 +46,7 @@ export default function Login() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className='flex flex-col items-center'
+          className="flex flex-col items-center"
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <Logo className="pb-4"></Logo>

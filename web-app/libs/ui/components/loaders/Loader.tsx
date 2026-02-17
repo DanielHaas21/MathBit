@@ -6,12 +6,12 @@ const LoaderVariants = cva('', {
   variants: {
     animation: {
       spin: 'animate-ring-spin',
-      progressPulse: 'animate-ring-progress'
-    }
+      progressPulse: 'animate-ring-progress',
+    },
   },
   defaultVariants: {
-    animation: 'spin'
-  }
+    animation: 'spin',
+  },
 });
 
 type LoaderVariantProps = VariantProps<typeof LoaderVariants>;
@@ -32,7 +32,7 @@ export const Loader: React.FC<LoaderProps> = ({
   trackColor = '#DDDFE1',
   arcLength = 0.25,
   animation = 'spin',
-  speed = animation === 'spin' ? 1400 : 2500
+  speed = animation === 'spin' ? 1400 : 2500,
 }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;

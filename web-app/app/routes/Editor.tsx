@@ -134,7 +134,6 @@ export default function Editor() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  console.log(navigator.language);
   // solve expression handler
   const solveExpression = async () => {
     const evaluate = evaluateLatexNumeric(latex);
@@ -153,7 +152,7 @@ export default function Editor() {
       setFinal(solved.finalExpression);
       setFinalSteps(solved.steps);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'An unknown error occurred');
+      setError(error instanceof Error ? t(`errors.${error.message}`) : t('errors.other'));
       show({
         icon: 'triangle-exclamation',
         variant: 'error',
@@ -183,7 +182,7 @@ export default function Editor() {
     currentSavedProblem &&
     route &&
     ({
-      pageTitle: !!currentSavedProblem.name ? currentSavedProblem.name : t('breadcrumb.unnamed'),
+      pageTitle: currentSavedProblem.name ? currentSavedProblem.name : t('breadcrumb.unnamed'),
       pageRoute: '/browser/editor/' + currentSavedProblem.id,
     } as BreadcrumbItem);
 
@@ -244,7 +243,6 @@ export default function Editor() {
               variant: 'error',
               title: t('messages.saveError'),
             });
-            console.error('Error creating math problem:', error);
           }
         }}
       ></InputModal>
@@ -311,7 +309,6 @@ export default function Editor() {
                 variant: 'error',
                 title: t('messages.updateError'),
               });
-              console.error('Error updating math problem:', error);
             }
           }}
         ></InputModal>
@@ -370,6 +367,15 @@ export default function Editor() {
                   <Button
                     className="gap-2"
                     onClick={() => {
+                      if (!user.user?.id) {
+                        show({
+                          icon: 'triangle-exclamation',
+                          variant: 'error',
+                          title: t('messages.notAuthenticated'),
+                          description: t('messages.notAuthenticatedDescription'),
+                        });
+                        return;
+                      }
                       setIsOpen(true);
                     }}
                   >

@@ -15,25 +15,25 @@ const CodeInputFieldVariants = cva(
     variants: {
       color: {
         default: 'bg-white-50',
-        grey: 'bg-background-inputs'
+        grey: 'bg-background-inputs',
       },
       hasError: {
         true: '!border-error-text focus:[box-shadow:0_0_0_4px_theme(colors.error.bg)]',
-        false: '!border-white-800 focus:!border-brand-blue-400'
+        false: '!border-white-800 focus:!border-brand-blue-400',
       },
       size: {
         sm: 'w-12 h-12',
         md: 'w-14 h-14',
-        lg: 'w-16 h-16 text-4xl'
+        lg: 'w-16 h-16 text-4xl',
       },
       disabled: {
-        true: 'bg-white-50 placeholder:text-black-50 cursor-not-allowed !border-white-200'
-      }
+        true: 'bg-white-50 placeholder:text-black-50 cursor-not-allowed !border-white-200',
+      },
     },
     defaultVariants: {
       color: 'default',
-      size: 'md'
-    }
+      size: 'md',
+    },
   }
 );
 
@@ -66,12 +66,12 @@ export const CodeInputField = React.forwardRef<HTMLInputElement, CodeInputFieldP
     defaultValue,
     onChange,
     onComplete,
-    className
+    className,
   } = props;
 
   const VariantLengths = {
     '4Digit': 4,
-    '6Digit': 6
+    '6Digit': 6,
   }[variant];
 
   React.useEffect(() => {

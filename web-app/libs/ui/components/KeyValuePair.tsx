@@ -6,19 +6,19 @@ const KeyValuePairVariants = cva(`flex`, {
   variants: {
     orientation: {
       horizontal: 'flex-row gap-2',
-      vertical: 'flex-col gap-1'
+      vertical: 'flex-col gap-1',
     },
     size: {
       sm: 'text-sm',
       md: 'text-md',
       lg: 'text-lg',
-      xl: 'text-xl'
-    }
+      xl: 'text-xl',
+    },
   },
   defaultVariants: {
     orientation: 'vertical',
-    size: 'md'
-  }
+    size: 'md',
+  },
 });
 
 type KeyValuePairVaraintProps = VariantProps<typeof KeyValuePairVariants>;
@@ -40,7 +40,7 @@ export const KeyValuePair: React.FC<KeyValuePairProps> = ({
   labelClassName,
   orientation,
   divider = false,
-  size
+  size,
 }) => {
   return (
     <div className={cn(className, KeyValuePairVariants({ orientation, size }))}>

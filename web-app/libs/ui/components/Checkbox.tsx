@@ -14,89 +14,89 @@ const checkboxVariants = cva(
       variant: {
         square: 'rounded-[6px]',
         radio: 'rounded-full',
-        circle: 'rounded-full bg-primary-base'
+        circle: 'rounded-full bg-primary-base',
       },
       size: {
         sm: 'w-[18px] h-[18px]',
         md: 'w-[20px] h-[20px]',
-        lg: 'w-[22px] h-[22px]'
+        lg: 'w-[22px] h-[22px]',
       },
       state: {
         unchecked: 'border-white-800 bg-white-50  hover:bg-brand-blue-50 hover:border-primary-base',
-        checked: ''
+        checked: '',
       },
       disabledState: {
         true: 'hover:!bg-white-50 hover:!border-white-800 active:ring-0',
-        false: ''
-      }
+        false: '',
+      },
     },
     compoundVariants: [
       {
         variant: 'square',
         state: 'checked',
         disabledState: false,
-        className: 'border-primary-base bg-brand-blue-50 text-brand-blue-800'
+        className: 'border-primary-base bg-brand-blue-50 text-brand-blue-800',
       },
       {
         variant: 'square',
         state: 'checked',
         disabledState: true,
         className:
-          'border-primary-base bg-white-50 text-brand-blue-800 hover:!border-primary-base !opacity-25'
+          'border-primary-base bg-white-50 text-brand-blue-800 hover:!border-primary-base !opacity-25',
       },
       {
         variant: 'square',
         state: 'unchecked',
         disabledState: true,
-        className: 'border-white-800 bg-white-50 hover:bg-primary-base !opacity-25'
+        className: 'border-white-800 bg-white-50 hover:bg-primary-base !opacity-25',
       },
 
       {
         variant: 'radio',
         state: 'checked',
         disabledState: false,
-        className: 'border-primary-base bg-brand-blue-50 text-brand-blue-800'
+        className: 'border-primary-base bg-brand-blue-50 text-brand-blue-800',
       },
       {
         variant: 'radio',
         state: 'checked',
         disabledState: true,
         className:
-          'border-primary-base bg-white-50 text-brand-blue-800 hover:!border-primary-base !opacity-25'
+          'border-primary-base bg-white-50 text-brand-blue-800 hover:!border-primary-base !opacity-25',
       },
       {
         variant: 'radio',
         state: 'unchecked',
         disabledState: true,
-        className: 'border-white-800 bg-white-50 !opacity-25'
+        className: 'border-white-800 bg-white-50 !opacity-25',
       },
 
       {
         variant: 'circle',
         state: 'checked',
         disabledState: false,
-        className: 'border-primary-base bg-primary-base text-white'
+        className: 'border-primary-base bg-primary-base text-white',
       },
       {
         variant: 'circle',
         state: 'checked',
         disabledState: true,
         className:
-          'border-primary-base bg-primary-base hover:!border-primary-base  hover:!bg-primary-base text-white !opacity-25'
+          'border-primary-base bg-primary-base hover:!border-primary-base  hover:!bg-primary-base text-white !opacity-25',
       },
       {
         variant: 'circle',
         state: 'unchecked',
         disabledState: true,
-        className: 'border-white-800 bg-white-50 !opacity-25'
-      }
+        className: 'border-white-800 bg-white-50 !opacity-25',
+      },
     ],
     defaultVariants: {
       variant: 'square',
       size: 'md',
       state: 'unchecked',
-      disabledState: false
-    }
+      disabledState: false,
+    },
   }
 );
 

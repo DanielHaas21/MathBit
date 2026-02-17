@@ -12,7 +12,10 @@ export const ClipBoardCopy: React.FC<copyToClipBoard> = ({ text }) => {
   return (
     <Icon
       name="copy"
-      className={cn(' w-8 h-8 cursor-pointer transition', copied ? 'text-black-400' : 'text-black-800')}
+      className={cn(
+        ' w-8 h-8 cursor-pointer transition',
+        copied ? 'text-black-400' : 'text-black-800'
+      )}
       onClick={() => {
         navigator.clipboard.writeText(text);
         setCopied(true);

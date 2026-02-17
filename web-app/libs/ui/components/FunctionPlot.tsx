@@ -10,7 +10,13 @@ interface FunctionPlotProps {
   yRange?: [number, number];
 }
 
-export const FunctionPlot: React.FC<FunctionPlotProps> = ({ latex, className, style, xRange, yRange }) => {
+export const FunctionPlot: React.FC<FunctionPlotProps> = ({
+  latex,
+  className,
+  style,
+  xRange,
+  yRange,
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const [samples] = useState<number>(1000);
   const [size, setSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
@@ -108,7 +114,8 @@ export const FunctionPlot: React.FC<FunctionPlotProps> = ({ latex, className, st
         data: [...data],
       });
     } catch (err) {
-      console.error('Function-plot failed', err);
+      //eslint-disable-next-line no-console
+      console.error('Error rendering function plot:', err);
       // Keep background silent on errors
     }
   }, [latex, samples, size]);
