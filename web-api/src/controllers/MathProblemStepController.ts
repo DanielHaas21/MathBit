@@ -11,7 +11,7 @@ import {
   Put,
   Delete,
   Query,
-} from 'tsoa';
+} from '@tsoa/runtime';
 import { MathProblemStepRepository } from 'db';
 import { type MathProblemStep } from '../dto/MathProblemStep';
 import { MathProblemStepMapper } from '../mappers/MathProblemStepMapper';

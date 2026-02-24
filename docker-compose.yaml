@@ -1,15 +1,106 @@
-version: '3.3'
-
-#Externally im exposing 5433 but internally it needs to mapped to 5432 since
-#docker likes to map this internally
 services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: always
+    command:
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+      - '--entrypoints.web.http.redirections.entrypoint.to=websecure'
+      - '--entrypoints.web.http.redirections.entrypoint.scheme=https'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--certificatesresolvers.lets-encrypt.acme.email=daniel.haas07@seznam.cz'
+      - '--certificatesresolvers.lets-encrypt.acme.storage=/letsencrypt/acme.json'
+      - '--certificatesresolvers.lets-encrypt.acme.tlschallenge=true'
+      - '--log.level=DEBUG'
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - './traefik/letsencrypt:/letsencrypt'
+    networks:
+      - web
+
   postgres:
     image: postgres:14-alpine
-    ports:
-      - 5433:5432
-    volumes:
-      - ~/MathBit/postgres:/var/lib/postgresql/data
+    container_name: mathbit-postgres
+    restart: always
     environment:
-      - POSTGRES_PASSWORD=S3cret
-      - POSTGRES_USER=mtb_user
-      - POSTGRES_DB=mtb_db
+      POSTGRES_USER: mtb_user
+      POSTGRES_PASSWORD: S3cret123
+      POSTGRES_DB: mtb_db
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  haskell-engine:
+    build:
+      context: ./haskell-engine
+      dockerfile: Dockerfile.haskell-engine
+    container_name: mathbit-haskell
+    restart: always
+    networks:
+      - backend
+    depends_on:
+      - postgres
+
+  web-api:
+    build:
+      context: .
+      dockerfile: ./web-api/Dockerfile.web-api
+    container_name: mathbit-api
+    ports:
+      - '3001:3000'
+    restart: always
+    environment:
+      APP_PORT: '3000'
+      APP_SECRET: UC0Cg2+w0owwJKwzqQfG70U18Q1vsZX+DUSoPDnaBtM=
+      DB_USERNAME: mtb_user
+      DB_PASSWORD: S3cret123
+      DB_DATABASE: mtb_db
+      DB_HOST: postgres
+      DB_PORT: '5432'
+      WEB_APP_URL: https://haasdaniel.cz
+      HASKELL_ENGINE_URL: http://haskell-engine:8080
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.web-api.rule=Host(`api.haasdaniel.cz`)'
+      - 'traefik.http.routers.web-api.entrypoints=websecure'
+      - 'traefik.http.routers.web-api.tls.certresolver=lets-encrypt'
+      - 'traefik.http.services.web-api.loadbalancer.server.port=3000'
+      - 'traefik.docker.network=web'
+    networks:
+      - web
+      - backend
+    depends_on:
+      - postgres
+      - haskell-engine
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./web-app/Dockerfile.web-app
+    container_name: mathbit-frontend
+    restart: always
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.frontend.rule=Host(`haasdaniel.cz`) || Host(`www.haasdaniel.cz`)'
+      - 'traefik.http.routers.frontend.entrypoints=websecure'
+      - 'traefik.http.routers.frontend.tls.certresolver=lets-encrypt'
+      - 'traefik.http.services.frontend.loadbalancer.server.port=80'
+      - 'traefik.docker.network=web'
+    networks:
+      - web
+    depends_on:
+      - web-api
+
+networks:
+  web:
+    name: web
+    external: false
+  backend:
+    name: backend
+    external: false

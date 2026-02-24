@@ -1,0 +1,38 @@
+# Stage 1: Build
+FROM node:20-alpine AS build
+WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Copy root files for monorepo
+COPY pnpm-workspace.yaml .
+COPY pnpm-lock.yaml .
+COPY tsconfig.json .
+COPY package.json ./
+
+# Copy packages
+COPY db ./db
+COPY web-api ./web-api
+
+# Install dependencies
+RUN pnpm install
+
+# Build db first
+RUN pnpm --filter db build
+
+# Then build web-api
+RUN pnpm --filter web-api build:docker
+# Stage 2: Runtime
+FROM node:20-alpine
+WORKDIR /app
+
+# Copy everything from build stage
+COPY --from=build /app ./
+
+# Install only production deps
+RUN npm install -g pnpm && pnpm install --prod
+
+
+EXPOSE 3000
+CMD ["node", "web-api/dist/index.js"]

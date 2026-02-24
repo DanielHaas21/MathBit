@@ -9,7 +9,7 @@ import {
   Request,
   Security,
   Get,
-} from 'tsoa';
+} from '@tsoa/runtime';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 

@@ -12,7 +12,7 @@ function getApiConfig<T = unknown>(auth: boolean = false): T {
 
   const config = (auth
     ? {
-        baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4001',
+        baseURL: import.meta.env.VITE_API_URL || 'https://api.haasdaniel.cz',
         /**
          * Allows cross-origin requests to include credentials such as cookies
          */
@@ -22,7 +22,7 @@ function getApiConfig<T = unknown>(auth: boolean = false): T {
         /**
          * Base URL for API requests
          */
-        baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4001',
+        baseURL: import.meta.env.VITE_API_URL || 'https://api.haasdaniel.cz',
         /**
          * Allows cross-origin requests to include credentials such as cookies
          */

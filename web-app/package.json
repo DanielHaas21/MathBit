@@ -8,6 +8,7 @@
     "dev-styles": "postcss ./libs/ui/assets/styles/index.css -o ./dist/styles.css --watch",
     "dev-web": "vite",
     "dev": "pnpm run /^dev-.*/",
+    "build": "vite build",
     "lint": "eslint .",
     "format": "prettier --write 'app/**/*.ts' 'libs/**/components/**/*.tsx' 'libs/**/*.ts' 'modules/**/*.ts'"
   },

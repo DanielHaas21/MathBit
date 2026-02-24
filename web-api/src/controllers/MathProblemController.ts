@@ -11,7 +11,7 @@ import {
   Query,
   Put,
   Delete,
-} from 'tsoa';
+} from '@tsoa/runtime';
 import { MathProblemRepository } from 'db';
 import { MathProblemMapper } from '../mappers/MathProblemMapper';
 import { MathProblem } from '../dto/MathProblem';

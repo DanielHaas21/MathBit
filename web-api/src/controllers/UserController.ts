@@ -10,7 +10,7 @@ import {
   Security,
   Delete,
   Put,
-} from 'tsoa';
+} from '@tsoa/runtime';
 import bcrypt from 'bcrypt';
 import { type CreateUser } from '../dto/CreateUser';
 import { type User } from '../dto/User';

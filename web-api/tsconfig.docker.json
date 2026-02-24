@@ -3,26 +3,20 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "module": "NodeNext",
-    "target": "ES6",
+    "target": "ES2020",
     "moduleResolution": "nodenext",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowJs": true,
-    "composite": false,
-    "jsx": "preserve",
     "noEmit": false,
-
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "outDir": "./dist",
-    "paths": {
-      "@/*": ["./*"],
-      "@db": ["../db/src"]
-    }
+    "rootDir": "./src",
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }

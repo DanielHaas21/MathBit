@@ -1,10 +1,9 @@
 # Stage 1: Build
-FROM haskell:9.6.3 AS build
+FROM debian:bookworm-slim AS build
 WORKDIR /app
 
-# Install stack
-RUN apt-get update && apt-get install -y curl && \
-    curl -sSL https://get.haskellstack.org/ | sh
+RUN apt-get update && apt-get install -y curl git build-essential
+RUN curl -sSL https://get.haskellstack.org/ | sh
 
 # Copy project files
 COPY . .
@@ -17,5 +16,5 @@ FROM debian:bookworm-slim
 WORKDIR /app
 COPY --from=build /app/bin/haskell-engine /app/haskell-engine
 
-EXPOSE 8081
+EXPOSE 8080
 CMD ["./haskell-engine"]

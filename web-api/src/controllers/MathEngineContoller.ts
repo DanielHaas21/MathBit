@@ -8,7 +8,7 @@ import {
   SuccessResponse,
   Tags,
   type TsoaResponse,
-} from 'tsoa';
+} from '@tsoa/runtime';
 import {
   type MathEngineErrorResponse,
   type MathEngineSolveRequest,

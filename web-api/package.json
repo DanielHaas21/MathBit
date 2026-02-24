@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
+    "build:docker": "tsc -p tsconfig.docker.json",
     "generate": "ts-node src/generate.ts",
     "gen": "tsoa spec && tsoa routes",
     "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
@@ -22,7 +23,7 @@
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "db": "workspace:*",
+    "db": "file:../db",
     "dotenv": "^16.4.7",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
