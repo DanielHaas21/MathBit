@@ -118,7 +118,7 @@ importers:
         specifier: ^2.8.5
         version: 2.8.5
       db:
-        specifier: workspace:*
+        specifier: file:../db
         version: link:../db
       dotenv:
         specifier: ^16.4.7
@@ -266,6 +266,12 @@ importers:
       i18next-http-backend:
         specifier: ^3.0.2
         version: 3.0.2
+      jquery:
+        specifier: ^4.0.0
+        version: 4.0.0
+      mathquill4keyboard:
+        specifier: ^0.10.10
+        version: 0.10.10
       openapi-fetch:
         specifier: ^0.9.7
         version: 0.9.8
@@ -330,6 +336,9 @@ importers:
       '@turbo/gen':
         specifier: ^2.1.1
         version: 2.5.8(@types/node@20.19.18)(typescript@5.9.2)
+      '@types/jquery':
+        specifier: ^4.0.0
+        version: 4.0.0
       '@types/node':
         specifier: ^20.11.24
         version: 20.19.18
@@ -2123,6 +2132,9 @@ packages:
 
   '@types/inquirer@6.5.0':
     resolution: {integrity: sha512-rjaYQ9b9y/VFGOpqBEXRavc3jh0a+e6evAbI31tMda8VlPaSy0AZJfXsvmIe3wklc7W6C3zCSfleuMXR7NOyXw==}
+
+  '@types/jquery@4.0.0':
+    resolution: {integrity: sha512-Z+to+A2VkaHq1DfI2oSwsoCdhCHMpTSgjWzNcbNlRGYzksDBpPUgEcAL+RQjOBJRaLoEAOHXxqDGBVP+BblBwg==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -4252,6 +4264,9 @@ packages:
 
   jquery@3.7.1:
     resolution: {integrity: sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==}
+
+  jquery@4.0.0:
+    resolution: {integrity: sha512-TXCHVR3Lb6TZdtw1l3RTLf8RBWVGexdxL6AC8/e0xZKEpBflBsjh9/8LXw+dkNFuOyW9B7iB3O1sP7hS0Kiacg==}
 
   js-levenshtein@1.1.6:
     resolution: {integrity: sha512-X2BB11YZtrRqY4EnQcLX5Rh373zbK4alC1FW7D7MBhL2gtcC17cTnr6DmfHZeS0s2rTHjUTMMHfG7gO8SSdw+g==}
@@ -8643,6 +8658,8 @@ snapshots:
       '@types/through': 0.0.33
       rxjs: 6.6.7
 
+  '@types/jquery@4.0.0': {}
+
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
@@ -11124,6 +11141,8 @@ snapshots:
   jose@4.15.9: {}
 
   jquery@3.7.1: {}
+
+  jquery@4.0.0: {}
 
   js-levenshtein@1.1.6: {}
 

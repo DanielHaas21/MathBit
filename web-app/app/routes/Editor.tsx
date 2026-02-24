@@ -238,6 +238,7 @@ export default function Editor() {
               navigate(`/browser/editor/${createdId}`);
             }
           } catch (error) {
+            console.log(error);
             show({
               icon: 'triangle-exclamation',
               variant: 'error',
@@ -304,6 +305,7 @@ export default function Editor() {
                 title: t('messages.updateSuccess'),
               });
             } catch (error) {
+              console.log(error);
               show({
                 icon: 'triangle-exclamation',
                 variant: 'error',
@@ -343,7 +345,7 @@ export default function Editor() {
 
             <Paper
               thickness="sm"
-              className="border border-white-800 ms-2 mt-2 md:mt-0 md:ms-0 md:relative md:left-5 md:top-10  md:w-[600px] h-[85%] p-3 flex flex-col"
+              className="border border-white-800 md:ms-2 mt-2 md:mt-0 md:ms-0 md:relative md:left-5 md:top-10  md:w-[600px] h-[85%] p-3 flex flex-col"
             >
               <Paper.Title className="flex flex-col md:flex-row items-start gap-3">
                 <MathField initialLatex={latex} onChange={(newLatex) => setLatex(newLatex)} />

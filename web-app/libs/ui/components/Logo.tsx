@@ -8,7 +8,7 @@ export interface LogoProps {
 
 export const Logo = ({ className }: LogoProps) => {
   return (
-    <div className={cn('flex flex-row pt-5', className)}>
+    <div style={{ display: '-webkit-inline-box' }} className={cn('', className)}>
       <Label size="lg" className="text-[46px] font-bold select-none ps-4">
         Mathbit
       </Label>

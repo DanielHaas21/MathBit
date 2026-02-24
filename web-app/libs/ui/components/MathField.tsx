@@ -11,6 +11,53 @@ export interface MathFieldProps {
 export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) => {
   const [tab, setTab] = useState<KeyGroupIds>('functions');
   const [latex, setLatex] = useState<string>(initialLatex || '');
+  const [isMathKeyboardReady, setIsMathKeyboardReady] = useState(false);
+
+  // Dynamically import math keyboard and its dependencies to avoid SSR issues and reduce initial bundle size
+  // this is ai generated code for an issue that would normally be hard to trace
+  useEffect(() => {
+    let isMounted = true;
+
+    const initializeMathKeyboard = async () => {
+      const browserWindow = window as Window & {
+        require?: (moduleId: string) => unknown;
+        jQuery?: unknown;
+        $?: unknown;
+      };
+
+      const jqueryModule = await import('jquery');
+      const jQueryInstance = jqueryModule.default;
+
+      browserWindow.jQuery = jQueryInstance;
+      browserWindow.$ = jQueryInstance;
+
+      await import('mathquill4keyboard/build/mathquill.css');
+      await import('mathquill4keyboard/build/mathquill');
+
+      if (!browserWindow.require) {
+        browserWindow.require = (moduleId: string) => {
+          if (
+            moduleId === 'mathquill4keyboard/build/mathquill.css' ||
+            moduleId === 'mathquill4keyboard/build/mathquill'
+          ) {
+            return true;
+          }
+
+          throw new Error(`Unsupported require call in browser: ${moduleId}`);
+        };
+      }
+
+      if (isMounted) {
+        setIsMathKeyboardReady(true);
+      }
+    };
+
+    initializeMathKeyboard();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Keep internal state in sync with parent-provided latex
   useEffect(() => {
@@ -163,6 +210,10 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
   ];
 
   const keysForTab = allKeys.filter((k) => k.groups?.includes(tab));
+
+  if (!isMathKeyboardReady) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col justify-between p-4 w-fit gap-2 [&>div:first-child>span]:!border-xl ">

@@ -17,6 +17,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .addColumn('title', 'varchar(255)', (col) => col.notNull())
     .addColumn('user_id', 'integer', (col) => col.notNull())
     .addColumn('original_expression', 'varchar(255)', (col) => col.notNull())
+    .addColumn('name', 'varchar(255)', (col) => col.notNull())
     .addColumn('simplified_expression', 'varchar(255)', (col) => col.notNull())
     .addColumn('description', 'varchar(255)', (col) => col.notNull())
     .addColumn('bookmark', 'boolean', (col) => col.notNull().defaultTo(false))

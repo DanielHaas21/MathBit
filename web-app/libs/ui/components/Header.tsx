@@ -12,8 +12,8 @@ import { useTranslation } from '../provider';
 import { logout } from '@/store/slices/UserState';
 import { useNavigate } from 'react-router-dom';
 import { Logo } from './Logo';
-import { fi } from 'date-fns/locale';
 import getApiConfig from '@/apiConfig';
+import { cn } from '../utils';
 export interface HeaderProps {
   route: BreadcrumbItem[];
 }
@@ -74,11 +74,17 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
       </Dropdown.Item>
     </DropdownMenu>
   ) : (
-    <div className="flex flex-col md:flex-row gap-2 mt-6">
-      <Button variant="primary" onClick={() => navigate('/login')} size="md">
+    <div className="flex w-full flex-row gap-2 mt-6">
+      <Button variant="primary" className="w-full" onClick={() => navigate('/login')} size="md">
         {t('header.login')}
       </Button>
-      <Button variant="primary" onClick={() => navigate('/signup')} outline={'primary'} size="md">
+      <Button
+        variant="primary"
+        className="w-full"
+        onClick={() => navigate('/signup')}
+        outline={'primary'}
+        size="md"
+      >
         {t('header.signup')}
       </Button>
     </div>
@@ -86,9 +92,19 @@ export const Header: React.FC<HeaderProps> = ({ route }) => {
 
   return (
     <header className="w-full flex flex-col bg-white-50">
-      <div className="w-full flex flex-row justify-between items-center px-5">
+      <div
+        className={cn(
+          isLoggedIn
+            ? 'w-full flex flex-row justify-between items-center px-5'
+            : 'w-full flex flex-col sm:flex-row justify-between items-center px-5'
+        )}
+      >
         <Logo></Logo>
-        <div className="pt-6 pr-[6vw]">{userSection}</div>
+        <div
+          className={cn(isLoggedIn ? 'pt-6 md:pr-[6vw] ' : 'pt-6 md:pr-[6vw] w-full sm:w-auto')}
+        >
+          {userSection}
+        </div>
       </div>
       <Breadcrumb
         className="ps-10 pt-2 pb-2 md:pt-4 md:pb-0"
