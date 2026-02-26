@@ -5,11 +5,17 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y curl git build-essential
 RUN curl -sSL https://get.haskellstack.org/ | sh
 
-# Copy project files
-COPY . .
+
+COPY stack.yaml stack.yaml
+COPY package.yaml package.yaml
+
+RUN stack setup
+
+COPY src ./src
+COPY app ./app
 
 # Build static binary
-RUN stack setup && stack install --local-bin-path /app/bin
+RUN stack build --copy-bins --local-bin-path /app/bin
 
 # Stage 2: Runtime image (small!)
 FROM debian:bookworm-slim

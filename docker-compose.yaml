@@ -37,20 +37,19 @@ services:
       - backend
 
   haskell-engine:
-    build:
-      context: ./haskell-engine
-      dockerfile: Dockerfile.haskell-engine
+    image: danielhaas21/mathbit-haskell:latest
     container_name: mathbit-haskell
     restart: always
     networks:
       - backend
     depends_on:
       - postgres
+    volumes:
+      - stack-cache:/root/.stack
+      - stack-work:/app/.stack-work
 
   web-api:
-    build:
-      context: .
-      dockerfile: ./web-api/Dockerfile.web-api
+    image: danielhaas21/mathbit-api:latest
     container_name: mathbit-api
     ports:
       - '3001:3000'
@@ -80,9 +79,7 @@ services:
       - haskell-engine
 
   frontend:
-    build:
-      context: .
-      dockerfile: ./web-app/Dockerfile.web-app
+    image: danielhaas21/mathbit-frontend:latest
     container_name: mathbit-frontend
     restart: always
     labels:
@@ -104,3 +101,7 @@ networks:
   backend:
     name: backend
     external: false
+
+volumes:
+  stack-cache:
+  stack-work:
