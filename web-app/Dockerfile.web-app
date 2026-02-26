@@ -20,6 +20,9 @@ COPY ./db ./db
 # Install dependencies
 RUN pnpm install 
 
+# Generate api-client from web-api 
+RUN pnpm generate:spec
+
 # Build web-app
 RUN cd web-app && pnpm run build
 

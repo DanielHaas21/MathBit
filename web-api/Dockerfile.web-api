@@ -21,6 +21,9 @@ RUN pnpm install
 # Build db first
 RUN pnpm --filter db build
 
+# Generate routes for web-api (depends on db)
+RUN pnpm --filter web-api gen
+
 # Then build web-api
 RUN pnpm --filter web-api build:docker
 # Stage 2: Runtime
