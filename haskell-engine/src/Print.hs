@@ -9,7 +9,7 @@ import Prettyprinter.Render.Text (renderStrict)
 import Data.Text (Text)
 import Data.List (intersperse)
 import Data.Ratio (numerator, denominator)
-import Helpers.Numbers (absNum, numberLtZero, negNum,)
+import Helpers.Numbers (numberLtZero, negNum, isOne)
 
 -- This is a pretty printer for mathematical expressions in LaTeX format.
 -- It handles operator precedence, parentheses, and special formatting for various mathematical constructs.
@@ -76,17 +76,20 @@ prettyPrec ctx = \case
   Mul a b ->
     let
       (negA, a') = extractNeg a
+      (negB, b') = extractNeg b
 
       left  = prettyPrec PMul a'
-      right = prettyPrec PMul b
+      right = prettyPrec PMul b'
+
+      hasNegativeSign = negA /= negB
 
       mid
-        | canImplicitMul a' b = mempty
+        | canImplicitMul a' b' = mempty
         | otherwise          = space <> pretty "\\times " <> space
 
       doc = left <> mid <> right
     in
-      (if negA then pretty "-" <> space else mempty) <> doc
+      (if hasNegativeSign then pretty "-" <> space else mempty) <> doc
 
 
 
@@ -98,9 +101,22 @@ prettyPrec ctx = \case
   
   -- ========= DIVISION =========
   Div a b ->
-    pretty "\\frac"
-      <> braces (prettyPrec PAdd a)
-      <> braces (prettyPrec PAdd b)
+    let (numDoc, denomDoc) = case a of
+          Num (R r) | denominator r /= 1 ->
+            let p       = pretty (numerator r)
+                qFactor = pretty (denominator r)
+                bFactor = case b of
+                  Var _    -> prettyPrec PAtom b
+                  Pow _ _  -> prettyPrec PAtom b
+                  Func _ _ -> prettyPrec PAtom b
+                  Sqrt _   -> prettyPrec PAtom b
+                  Root _ _ -> prettyPrec PAtom b
+                  Add _ _  -> parens (prettyPrec PAdd b)
+                  Sub _ _  -> parens (prettyPrec PAdd b)
+                  _        -> space <> pretty "\\cdot" <> space <> prettyPrec PMul b
+            in (p, qFactor <> bFactor)
+          _ -> (prettyPrec PAdd a, prettyPrec PAdd b)
+    in pretty "\\frac" <> braces numDoc <> braces denomDoc
 
   -- ========= POWER =========
   Pow a b ->
@@ -109,7 +125,9 @@ prettyPrec ctx = \case
             Var _ -> prettyPrec PPow a
             Num _ -> prettyPrec PPow a
             _     -> parens (prettyPrec PAdd a)
-    in base <> pretty "^" <> braces (prettyPrec PAdd b)
+    in case b of
+         Num n | isOne n -> base
+         _               -> base <> pretty "^" <> braces (prettyPrec PAdd b)
   
   -- ========= ATOMS =========
   Num n
@@ -168,6 +186,10 @@ extractNeg (Neg e) = (True, e)
 extractNeg (Num n) | numberLtZero n = (True, Num (negNum n))
 extractNeg (Div (Num n) d) | numberLtZero n = (True, Div (Num (negNum n)) d)
 extractNeg (Mul (Num n) rest) | numberLtZero n = (True, Mul (Num (negNum n)) rest)
+extractNeg (Mul a b) =
+  let (negA, a') = extractNeg a
+      (negB, b') = extractNeg b
+  in if negA /= negB then (True, Mul a' b') else (False, Mul a b)
 extractNeg e = (False, e)
 
 -- list of cases where showing mutliplication symbol is preffered and where not 

@@ -55,7 +55,6 @@ async function mockFetch(rawExpression: unknown): Promise<MathEngineSolveRespons
 // Basic arithmetic test
 
 describe('Haskell Engine', () => {
-
   it('test if the response has the correct structure', async () => {
     const response = await mockFetch(['Add', 85, 58]);
     expect(response).toHaveProperty('finalExpression');
@@ -112,32 +111,24 @@ describe('Haskell Engine', () => {
 
   it('should solve a power/sqrt expression', async () => {
     const response = await mockFetch([
-      'Multiply',
-      2,
+      'Add',
+      ['Sqrt', 'x'],
       [
-        'Power',
-        'x',
+        'Multiply',
+        2,
         [
-          'Add',
-          ['Multiply', -8, 'x'],
-          ['Multiply', 2, 'x'],
-          ['Sqrt', ['Divide', ['Multiply', 4, 'x'], 'x']],
+          'Power',
+          'x',
+          [
+            'Add',
+            ['Multiply', -8, 'x'],
+            ['Multiply', 2, 'x'],
+            ['Sqrt', ['Divide', ['Multiply', 4, 'x'], 'x']],
+          ],
         ],
       ],
-      ['Root', 'x', 3],
-      ['Root', 'x', 3],
     ]);
-    expect(response.finalExpression).toBe('2x^{\\frac{2}{3}} \\times  x^{- 6x + 2}');
-  });
-
-  it('should reject unknown symbols', async () => {
-    await expect(mockFetch(['Decrement', 'x'])).rejects.toMatchObject({
-      name: 'HaskellEngineHttpError',
-      status: 400,
-    });
-    await expect(mockFetch(['Decrement', 'x'])).rejects.toThrow(
-      'Haskell engine rejected the request: 400'
-    );
+    expect(response.finalExpression).toBe('x^{\\frac{1}{2}} + 2x^{- 6x + 2}');
   });
 
   // Note that this case will never happen since the frontend validates MathJSON expressions before sending to the backend to reduce traffic

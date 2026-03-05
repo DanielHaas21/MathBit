@@ -12,6 +12,7 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
   const [tab, setTab] = useState<KeyGroupIds>('functions');
   const [latex, setLatex] = useState<string>(initialLatex || '');
   const [isMathKeyboardReady, setIsMathKeyboardReady] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Dynamically import math keyboard and its dependencies to avoid SSR issues and reduce initial bundle size
   // this is ai generated code for an issue that would normally be hard to trace
@@ -63,6 +64,21 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
   useEffect(() => {
     setLatex(initialLatex || '');
   }, [initialLatex]);
+
+
+  // This is ai generated code for an issue that would normally be hard to trace: no not hard impossible how do you come up with this
+  // On mobile, MathQuill processes input via keydown events which mobile browsers
+  // don't fire for character input. This causes the LaTeX output to be malformed,
+  // which CortexJS parses as an Error node → "neplatný výraz".
+  // Fix: set inputmode="none" on the hidden textarea that MathQuill uses so the
+  // native keyboard never opens on touch devices.
+  useEffect(() => {
+    if (!isMathKeyboardReady || !containerRef.current) return;
+    const textarea = containerRef.current.querySelector<HTMLTextAreaElement>('textarea');
+    if (textarea) {
+      textarea.setAttribute('inputmode', 'none');
+    }
+  }, [isMathKeyboardReady]);
 
   const options: SelectInputOption[] = [
     { label: 'Functions', value: 'functions' },
@@ -216,7 +232,7 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
   }
 
   return (
-    <div className="flex flex-col justify-between p-4 w-fit gap-2 [&>div:first-child>span]:!border-xl ">
+    <div ref={containerRef} className="flex flex-col justify-between p-4 w-fit gap-2 [&>div:first-child>span]:!border-xl ">
       <MathInput
         style={{
           minWidth: '300px',

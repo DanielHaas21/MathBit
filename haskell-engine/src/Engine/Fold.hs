@@ -20,6 +20,19 @@ foldNary f (x:xs) = foldl f x xs
 -- Here folding means combining numeric constants 
 foldConstants :: Expr -> Expr
 foldConstants = \case
+  Sub a b ->  -- try to fold constants in both sides of subtraction
+    let a' = foldConstants a
+        b' = foldConstants b
+    in case (a', b') of -- if both sides are numbers, we can fold them into a single number
+         (Num x, Num y) -> Num (addNum x (mulNum (R (-1)) y))
+         _              -> Sub a' b'
+
+  Neg e ->
+    let e' = foldConstants e
+    in case e' of
+         Num n -> Num (mulNum (R (-1)) n)
+         _     -> Neg e'
+
   -- N-ary Add
   Add a b ->
     let xs = collectAdd (Add a b) -- first we collect all expressions

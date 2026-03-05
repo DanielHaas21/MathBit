@@ -11,6 +11,7 @@ import Struct.Expr
 import Struct.Step
 import Validator (StepData(..), validator)
 import qualified Rules.Algebra as Algebra
+import qualified Rules.Identities as Identities
 import qualified Rules.Trigonometry as Trig
 import qualified Rules.Calculus as Calc
 import qualified Rules.Combinatorics as Comb
@@ -57,7 +58,8 @@ selectRules :: StepData -> [Rule]
 selectRules meta =
   sortOn (negate . priority) $  -- All rules have a priority prop 
     Structural.rules ++  -- Structural rules are always used, they are used mainly for normalization so that any expression is in a standard form before applying other rules
-    Algebra.rules -- Algebra rules are always used, rest is concated into the algebra rules
+    Algebra.rules ++ -- Algebra rules are always used, rest is concated into the algebra rules
+    Identities.rules -- Algebraic identities: (a+b)², (a-b)², (a+b)³, (a-b)³, (a+b)(a-b)
       ++ if hasTrigonometry meta then Trig.rules else []
       ++ if hasCalculus meta      then Calc.rules else []
       ++ if hasCombinatorics meta then Comb.rules else []

@@ -152,8 +152,23 @@ parseOp op args = case op of
     "Tuple" -> fail "Tuple is only allowed inside structured operators"
     "List" -> fail "Lists are not supported in expressions"
     "Set"  -> fail "Sets are not supported in expressions"
-    "PreDecrement" -> fail "No idea what this is but its not supported"
-    "PreIncrement" -> fail "No idea what this is but its not supported"
+
+
+    -- Happens as ++x or --x both should resolve to just x, so we make a do parse the inner expression and return it
+    -- Same as negation happens only if its not next to a number, otherwise it would be parsed as Multiply (Num (R 2)) Var for example
+    "PreDecrement" -> do
+        case V.toList args of
+            [x] -> do
+                expr <- fromMathJSON x
+                return expr 
+    "PreIncrement" -> do
+        case V.toList args of
+            [x] -> do
+                expr <- fromMathJSON x
+                return expr
+
+    -- This for some reasons happens both if we do x-- or x++, and only happens if the left part of the expression exists
+    -- Which means it would be invalid anyway 
     "Decrement" -> fail "No idea what this is but its not supported"
     _ -> fail $ "Unsupported operator: " ++ op
 

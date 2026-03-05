@@ -51,9 +51,11 @@ normalizeMul terms =
     coeff = foldl mulNum (R 1) nums  -- use mulNum to multiply all numbers together to get overall coefficient
     powerMap = foldr insertPower M.empty rest -- insert each term into a map of base -> exponent
 
-    syms = [ if isOne exp then base else Pow base (Num exp) -- rebuild each base^exponent from the map, if its exponent 1 just use base 
-           | (base, exp) <- M.toList powerMap 
-           , not (isZero exp) -- skip zero exponents
+    -- used to add two exponents together, used when we have the same base and need to combine them
+    syms = [ if isOneExpr expExpr then base else Pow base expExpr -- rebuild each base^exponent from the map, if its exponent 1 just use base
+           | (base, expRaw) <- M.toList powerMap -- we create a list of (base, exponent) pairs from the map
+           , let expExpr = normalizeExpr expRaw -- we normalize the exponent expression
+           , not (isZeroExpr expExpr) -- skip zero exponents
            ]
     final = (if not (isOne coeff) then [Num coeff] else []) ++ syms -- combine coefficient with symbolic parts and build final list
   in
@@ -63,10 +65,24 @@ normalizeMul terms =
       xs  -> foldl1 Mul xs -- else fold it back to n-ary Mul
 
 -- insert a term into the power map (base -> exponent)
-insertPower :: Expr -> M.Map Expr Number -> M.Map Expr Number
+insertPower :: Expr -> M.Map Expr Expr -> M.Map Expr Expr
 insertPower e m = case e of
-  Pow b (Num n) -> M.insertWith addNum b n m
-  _             -> M.insertWith addNum e (R 1) m
+  Pow b n -> M.insertWith addExp b n m
+  _       -> M.insertWith addExp e (Num (R 1)) m
+
+addExp :: Expr -> Expr -> Expr
+addExp new old = normalizeExpr (Add old new)
+
+-- special case for multiplying by a power with a negative exponent: x * x^(-n) -> x^(1-n)
+-- this is needed to handle cases where we have something like x * (1/x) 
+-- which would be represented as x * x^(-1) after normalization, and we want to combine them into x^(1-1) = x^0 = 1
+isZeroExpr :: Expr -> Bool
+isZeroExpr (Num n) = isZero n
+isZeroExpr _ = False
+
+isOneExpr :: Expr -> Bool
+isOneExpr (Num n) = isOne n
+isOneExpr _ = False
 
 
 -- Addition
