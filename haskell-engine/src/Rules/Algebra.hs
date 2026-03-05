@@ -29,9 +29,10 @@ rules =
 -- Distributes multiplication over addition for n-ary Add
 distributeMulN :: Rule
 distributeMulN = Rule "distributeMulN" "When multiplying a term by a sum, distribute the multiplication over each addend" 5 Rewriting $ \case
-  Mul a b
-    | containsDiv (Mul a b) -> Nothing
-    | containsNegPow (Mul a b) -> Nothing -- we want to avoid distributing over negative powers, since that would produce a positive feedback loop with cancelFracN
+  Mul a b -- we dont distribute if we have a division or negative power in the expression, as that would lead to feedback loops with the rules that turn divisions into multiplications and negative powers into positive ones
+    | containsDiv (Mul a b) -> Nothing 
+    | containsNegPow (Mul a b) -> Nothing
+    | otherwise ->
       let terms = collectMul (Mul a b)
           maybeAdd = filter isAdd terms
       in case maybeAdd of
