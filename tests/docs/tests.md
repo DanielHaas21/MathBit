@@ -1,6 +1,7 @@
 # MathBit - `tests`
 
 This package contains the test suites for MathBit, including unit tests, integration tests, and end-to-end tests.
+It exists only locally and is not published to VPS, as it is only intended for testing purposes within the development environment.
 These tests test the following functionalities:
 
 - **Unit Tests**: Focus on testing the Haskell engine's core logic, including the basic operations, problem-solving algorithms, error handling, and edge cases. These tests ensure that individual functions and modules work correctly in isolation.

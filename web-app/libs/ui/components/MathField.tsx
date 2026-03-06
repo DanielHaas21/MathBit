@@ -15,7 +15,7 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Dynamically import math keyboard and its dependencies to avoid SSR issues and reduce initial bundle size
-  // this is ai generated code for an issue that would normally be hard to trace
+  // this is ai by copilot generated code for an issue that would normally be hard to trace
   useEffect(() => {
     let isMounted = true;
 
@@ -66,12 +66,13 @@ export const MathField: React.FC<MathFieldProps> = ({ initialLatex, onChange }) 
   }, [initialLatex]);
 
 
-  // This is ai generated code for an issue that would normally be hard to trace: no not hard impossible how do you come up with this
+  // This is ai by copilot  generated code for an issue that would normally be hard to trace: no not hard impossible how do you come up with this
   // On mobile, MathQuill processes input via keydown events which mobile browsers
   // don't fire for character input. This causes the LaTeX output to be malformed,
   // which CortexJS parses as an Error node → "neplatný výraz".
   // Fix: set inputmode="none" on the hidden textarea that MathQuill uses so the
   // native keyboard never opens on touch devices.
+  // it probably doesnt work on all devices but it should work on most, and it doesnt cause any issues on desktop so its worth doing
   useEffect(() => {
     if (!isMathKeyboardReady || !containerRef.current) return;
     const textarea = containerRef.current.querySelector<HTMLTextAreaElement>('textarea');

@@ -6,7 +6,7 @@ import Struct.Expr
 import Struct.Rule
 
 
--- List of algebra rules
+-- List of calculus rules
 
 rules :: [Rule]
 rules =[]

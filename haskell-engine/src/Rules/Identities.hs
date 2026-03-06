@@ -25,12 +25,14 @@ rules =
   
 -- Helpers
 
+-- constants for the above rules
 two :: Expr
 two = Num (R 2)
 
 three :: Expr
 three = Num (R 3)
 
+-- Check if a Number is an integer equal to a given value, used for pattern matching the exponents in the identities rules.
 isIntN :: Integer -> Number -> Bool
 isIntN k (R r) = r == fromInteger k && denominator r == 1
 isIntN k (D d) = d == fromIntegral k
@@ -47,7 +49,7 @@ asDiff (Add a (Mul (Num (R (-1))) b))     = Just (a, b)
 asDiff (Add a (Mul (Num (D (-1.0))) b))   = Just (a, b)
 asDiff _                                  = Nothing
 
--- (a+b)² = a² + 2ab + b²
+-- (a+b)^2 = a^2 + 2ab + b^2
 squareOfSumN :: Rule
 squareOfSumN = Rule
   "squareOfSumN"
@@ -60,7 +62,7 @@ squareOfSumN = Rule
           (Pow b two)
     _ -> Nothing
 
--- (a-b)² = a² - 2ab + b²
+-- (a-b)^2 = a^2 - 2ab + b^2
 squareOfDiffN :: Rule
 squareOfDiffN = Rule
   "squareOfDiffN"
@@ -73,7 +75,7 @@ squareOfDiffN = Rule
           (Pow b two)
     _ -> Nothing
 
--- (a+b)³ = a³ + 3a²b + 3ab² + b³
+-- (a+b)^3 = a^3 + 3a^2b + 3ab^2 + b^3
 cubeOfSumN :: Rule
 cubeOfSumN = Rule
   "cubeOfSumN"
@@ -89,7 +91,7 @@ cubeOfSumN = Rule
     _ -> Nothing
 
 
--- (a-b)³ = a³ - 3a²b + 3ab² - b³
+-- (a-b)^3 = a^3 - 3a^2b + 3ab^2 - b^3
 cubeOfDiffN :: Rule
 cubeOfDiffN = Rule
   "cubeOfDiffN"
@@ -107,7 +109,7 @@ cubeOfDiffN = Rule
     _ -> Nothing
 
 
--- (a+b)(a-b) = a² - b²
+-- (a+b)(a-b) = a^2 - b^2
 -- Recognises the product in any order and in any Sub/Add(Neg) form.
 diffOfSquaresProductN :: Rule
 diffOfSquaresProductN = Rule

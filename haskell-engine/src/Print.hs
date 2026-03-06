@@ -161,15 +161,15 @@ prettyPrec ctx = \case
   e ->
     error ("Unhandled in pretty printer: " ++ show e)
 
-
-
+-- Precedence levels for operators
+-- PAdd < PMul < PPow < PAtom
 data Prec = PAdd | PMul | PPow | PAtom
   deriving (Eq, Ord)
 parensIf :: Bool -> Doc ann -> Doc ann
 parensIf True  = parens
 parensIf False = id
 
-
+-- Helper function to pretty print numbers, handling both rational and decimal forms
 prettyNumber :: Number -> Doc ann
 prettyNumber (R r)
   | denominator r == 1 =
@@ -181,12 +181,13 @@ prettyNumber (R r)
 prettyNumber (D d) =
   pretty d
 
+-- Helper functions for handling negative signs and implicit multiplication
 extractNeg :: Expr -> (Bool, Expr)
-extractNeg (Neg e) = (True, e)
-extractNeg (Num n) | numberLtZero n = (True, Num (negNum n))
-extractNeg (Div (Num n) d) | numberLtZero n = (True, Div (Num (negNum n)) d)
-extractNeg (Mul (Num n) rest) | numberLtZero n = (True, Mul (Num (negNum n)) rest)
-extractNeg (Mul a b) =
+extractNeg (Neg e) = (True, e) -- Negation case
+extractNeg (Num n) | numberLtZero n = (True, Num (negNum n)) -- Negative number case
+extractNeg (Div (Num n) d) | numberLtZero n = (True, Div (Num (negNum n)) d) -- Negative numerator in division case
+extractNeg (Mul (Num n) rest) | numberLtZero n = (True, Mul (Num (negNum n)) rest) -- Negative number in multiplication case
+extractNeg (Mul a b) = -- case where one is negative in multiplication
   let (negA, a') = extractNeg a
       (negB, b') = extractNeg b
   in if negA /= negB then (True, Mul a' b') else (False, Mul a b)

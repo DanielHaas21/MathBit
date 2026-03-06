@@ -30,23 +30,24 @@ rules =
 distributeMulN :: Rule
 distributeMulN = Rule "distributeMulN" "When multiplying a term by a sum, distribute the multiplication over each addend" 5 Rewriting $ \case
   Mul a b -- we dont distribute if we have a division or negative power in the expression, as that would lead to feedback loops with the rules that turn divisions into multiplications and negative powers into positive ones
-    | containsDiv (Mul a b) -> Nothing 
+    | containsDiv (Mul a b) -> Nothing  
     | containsNegPow (Mul a b) -> Nothing
     | otherwise ->
-      let terms = collectMul (Mul a b)
-          maybeAdd = filter isAdd terms
+      let terms = collectMul (Mul a b) -- we collect the terms into a list 
+          maybeAdd = filter isAdd terms -- then filter out the additive terms, if there are none we dont distribute, since its just a normal multiplication
       in case maybeAdd of
-          [] -> Nothing
-          (Add x y : _) ->
-            let before = takeWhile (/= Add x y) terms
+          [] -> Nothing 
+          (Add x y : _) -> --
+            let before = takeWhile (/= Add x y) terms -- we then take the terms before and after the additive term, and for each term in the additive we build a new multiplication with the before and after terms, then we add all those together
                 after  = drop (length before + 1) terms
-                expanded = map (\t -> foldl1 Mul (before ++ [t] ++ after)) [x, y]
+                expanded = map (\t -> foldl1 Mul (before ++ [t] ++ after)) [x, y] -- we then fold each of those back into a single expression and add them together
             in Just (foldl1 Add expanded)
   _ -> Nothing
-  where
+  where 
     isAdd (Add _ _) = True
     isAdd _ = False
 
+-- Helper functions for addFractionsN that flags whether an expression contains a division or negative power
 containsDiv :: Expr -> Bool
 containsDiv = \case
   Div _ _ -> True
@@ -66,8 +67,8 @@ addFractionsN = Rule "addFractionsN"
   "Add fractions by finding a common denominator: a/b + c/d = (a·d + c·b)/(b·d)"
   10 Rewriting $ \case
     Add a b ->
-      case (extractFrac a, extractFrac b) of
-        (Just (nA, dA), Just (nB, dB)) ->
+      case (extractFrac a, extractFrac b) of -- we try to extract the numerator and denominator from both sides, if we cant then we dont apply the rule
+        (Just (nA, dA), Just (nB, dB)) -> -- if we can extract them, we check if the denominators are the same, if they are we can just add the numerators and keep the same denominator, otherwise we do the general case of cross multiplying
           if dA == dB
             then Just (Mul (Add nA nB) (Pow dA (Num (R (-1))))) -- same denominator case
             else Just (Mul (Add (Mul nA dB) (Mul nB dA)) (Pow (Mul dA dB) (Num (R (-1))))) -- general case
@@ -75,16 +76,17 @@ addFractionsN = Rule "addFractionsN"
     _ -> Nothing
 
 -- Decompose an expression into (numerator, denominator) if it contains negative-exponent factors.
+-- This is useful for rules that need to recognize and manipulate fractions, since after normalization they are represented as multiplications by negative powers rather than explicit Div nodes.
 -- Works on the internal form produced by divToMul:
 --   5 * (x-4)^(-1)     ->  Just (5, x-4)
 --   (x+2)^(-1)         ->  Just (1, x+2)
 --   5 * (x-4)^(-1) * (x+2)^(-1)  ->  Just (5, (x-4)*(x+2))
 extractFrac :: Expr -> Maybe (Expr, Expr)
 extractFrac e =
-  let factors = collectMul e
+  let factors = collectMul e -- we collect the factors of the expression, which will give us a list of terms that are multiplied together
       (denPows, numFactors) = partition isNegPow factors
-  in if null denPows
-       then Nothing
+  in if null denPows -- if the power is negative, we have a fraction, if there are no negative powers then its not a fraction and we return Nothing
+       then Nothing 
        else
          let numExpr   = fracProduct numFactors
              denomExpr = fracProduct (map invertNegPow denPows)

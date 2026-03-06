@@ -45,11 +45,11 @@ cancelFracN :: Rule
 cancelFracN = Rule "cancelFracN"
   "Cancel a common factor between numerator and denominator, or simplify additive-inverse factors to -1"
   25 Structural $ \e ->
-    let factors    = collectMul e
-        (denPows, numFactors) = partition isNegOnePow factors
-    in if null denPows || null numFactors
-         then Nothing
-         else tryCancel numFactors (zip [0..] denPows)
+    let factors    = collectMul e -- we collect the factors in the expression into a list
+        (denPows, numFactors) = partition isNegOnePow factors -- we then partition them into the ones that are negative powers (denominator factors) and the rest (numerator factors)
+    in if null denPows || null numFactors -- once again if null then nothing to cancel
+         then Nothing 
+         else tryCancel numFactors (zip [0..] denPows) -- we then try to cancel any numerator factor against the denominator factors, we zip the denominator factors with their indices so we can remove them if they cancel
   where
     isNegOnePow (Pow _ (Num n)) = n == R (-1) || n == D (-1)
     isNegOnePow _               = False
@@ -61,16 +61,16 @@ cancelFracN = Rule "cancelFracN"
       where
         go [] = Nothing
         go ((ni, n) : rest) =
-          case findMatch n indexedDens of
+          case findMatch n indexedDens of -- we look for a match for the numerator factor n in the denominator factors, if we find one we get its index and whether its an additive inverse, if we dont find one we keep looking through the rest of the numerator factors
             Nothing       -> go rest
-            Just (di, inv) ->
+            Just (di, inv) -> -- if we find a match, we then build a new expression with that numerator factor and the matching denominator factor removed, and if they were additive inverses we also insert a -1 into the factors to account for that
               let sign    = [Num (R (-1)) | inv]
                   newNums = deleteAt ni nums
                   newDens = deleteAt di (map snd indexedDens)
                   combined = sign ++ newNums ++ newDens
               in Just (if null combined then Num (R 1) else foldNary Mul combined)
 
-    findMatch :: Expr -> [(Int, Expr)] -> Maybe (Int, Bool)
+    findMatch :: Expr -> [(Int, Expr)] -> Maybe (Int, Bool) -- looks for a match for a numerator factor in the denominator factors, returns the index of the matching denominator factor and whether its an additive inverse match
     findMatch _ [] = Nothing
     findMatch n ((di, Pow d _) : rest)
       | n == d                            = Just (di, False)
@@ -78,7 +78,7 @@ cancelFracN = Rule "cancelFracN"
       | otherwise                         = findMatch n rest
     findMatch n (_ : rest) = findMatch n rest
 
-    deleteAt :: Int -> [a] -> [a]
+    deleteAt :: Int -> [a] -> [a] -- helper function to delete an element at a specific index from a list
     deleteAt _ []     = []
     deleteAt 0 (_:xs) = xs
     deleteAt k (x:xs) = x : deleteAt (k-1) xs
