@@ -19,10 +19,31 @@ pnpm install
 
 ### Development
 
-To develop the app and packages, run the following command:
+To develop the app and packages locally, run the following commands:
 
+Build requiered images
+Build 
 ```bash
-pnpm dev
+docker compose up -d
+```
+
+Generate routes
+```bash
+pnpm run generate:api
+```
+
+Then rename all .env.prod files back to .env and change the URLs to localhost ports of your choosing for example, note engine should run on 8080
+```
+WEB_APP_URL=http://localhost:4000
+WEB_API_URL=http://localhost:4001
+```
+Run the packages
+```bash
+pnpm run dev
+```
+Running the engine is also needed
+```bash
+pnpm engine
 ```
 
 ### Build
